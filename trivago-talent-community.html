@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Trivago Talent Community — Anton Tolkunov</title>
+  <meta name="description" content="Case study: Redesigning hiring at scale for Trivago — a new staffing channel that reduced hiring costs by 17% per employee.">
+
+  <link rel="preconnect" href="https://api.fontshare.com">
+  <link href="https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@700,800,900&f[]=satoshi@400,500,700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --font-display: 'Cabinet Grotesk', 'Helvetica Neue', sans-serif;
+      --font-body:    'Satoshi', 'Inter', sans-serif;
+
+      --text-xs:   clamp(0.75rem,  0.7rem  + 0.25vw, 0.875rem);
+      --text-sm:   clamp(0.875rem, 0.8rem  + 0.35vw, 1rem);
+      --text-base: clamp(1rem,     0.95rem + 0.25vw, 1.125rem);
+      --text-lg:   clamp(1.125rem, 1rem    + 0.75vw, 1.5rem);
+      --text-xl:   clamp(1.5rem,   1.2rem  + 1.25vw, 2.25rem);
+      --text-2xl:  clamp(2rem,     1.2rem  + 2.5vw,  3.5rem);
+      --text-3xl:  clamp(2.5rem,   1.5rem  + 3.5vw,  4.5rem);
+
+      --space-1: 0.25rem; --space-2: 0.5rem; --space-3: 0.75rem;
+      --space-4: 1rem;    --space-5: 1.25rem; --space-6: 1.5rem;
+      --space-8: 2rem;    --space-10: 2.5rem; --space-12: 3rem;
+      --space-16: 4rem;   --space-20: 5rem;   --space-24: 6rem;
+
+      --radius-sm: 0.25rem;
+      --radius-md: 0.5rem;
+      --radius-lg: 0.75rem;
+      --radius-xl: 1rem;
+
+      --content-narrow: 720px;
+      --content-default: 1000px;
+      --content-wide: 1280px;
+
+      --ease: cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    :root, [data-theme="dark"] {
+      --color-bg:              #0f0e0d;
+      --color-surface:         #161513;
+      --color-surface-2:       #1d1b19;
+      --color-surface-offset:  #242220;
+      --color-border:          rgba(255,255,255,0.07);
+      --color-divider:         rgba(255,255,255,0.05);
+      --color-text:            #e8e4dc;
+      --color-text-muted:      #7a7873;
+      --color-text-faint:      #3d3b38;
+      --color-accent:          #c8b89a;
+      --color-accent-hover:    #d9ccb8;
+    }
+
+    [data-theme="light"] {
+      --color-bg:              #f5f4f0;
+      --color-surface:         #fafaf8;
+      --color-surface-2:       #ffffff;
+      --color-surface-offset:  #edeae5;
+      --color-border:          rgba(0,0,0,0.08);
+      --color-divider:         rgba(0,0,0,0.05);
+      --color-text:            #1a1917;
+      --color-text-muted:      #6b6a67;
+      --color-text-faint:      #c0bdb8;
+      --color-accent:          #7a5c38;
+      --color-accent-hover:    #5e4428;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html {
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      text-rendering: optimizeLegibility;
+      scroll-behavior: smooth;
+    }
+    body {
+      min-height: 100dvh;
+      font-family: var(--font-body);
+      font-size: var(--text-base);
+      color: var(--color-text);
+      background: var(--color-bg);
+      line-height: 1.6;
+      transition: background 300ms var(--ease), color 300ms var(--ease);
+    }
+    img, video { display: block; max-width: 100%; height: auto; }
+    a { color: inherit; text-decoration: none; }
+    button { cursor: pointer; background: none; border: none; font: inherit; color: inherit; }
+    ::selection { background: rgba(200,184,154,0.2); color: var(--color-text); }
+    :focus-visible { outline: 1.5px solid var(--color-accent); outline-offset: 3px; border-radius: var(--radius-sm); }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+    }
+
+    /* HEADER */
+    .site-header {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(15,14,13,0.85);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--color-border);
+      transition: background 300ms var(--ease);
+    }
+    [data-theme="light"] .site-header { background: rgba(245,244,240,0.88); }
+    .nav-inner {
+      max-width: var(--content-wide);
+      margin-inline: auto;
+      padding: var(--space-4) var(--space-8);
+      display: flex; align-items: center;
+      justify-content: space-between; gap: var(--space-8);
+    }
+    .nav-logo {
+      font-family: var(--font-display);
+      font-size: var(--text-sm); font-weight: 700;
+      letter-spacing: -0.01em; color: var(--color-text); white-space: nowrap;
+    }
+    .nav-right { display: flex; align-items: center; gap: var(--space-6); }
+    .nav-right a {
+      font-size: var(--text-sm); font-weight: 500;
+      color: var(--color-text-muted); transition: color 180ms var(--ease);
+    }
+    .nav-right a:hover { color: var(--color-text); }
+    .theme-toggle {
+      width: 36px; height: 36px;
+      display: flex; align-items: center; justify-content: center;
+      border-radius: var(--radius-md); color: var(--color-text-muted);
+      transition: color 180ms var(--ease), background 180ms var(--ease);
+    }
+    .theme-toggle:hover { color: var(--color-text); background: var(--color-surface-2); }
+
+    /* CASE HERO */
+    .case-hero {
+      max-width: var(--content-wide);
+      margin-inline: auto;
+      padding: var(--space-16) var(--space-8) var(--space-12);
+    }
+    .case-back {
+      display: inline-flex; align-items: center; gap: var(--space-2);
+      font-size: var(--text-sm); font-weight: 500;
+      color: var(--color-text-muted); margin-bottom: var(--space-10);
+      transition: color 180ms var(--ease);
+    }
+    .case-back:hover { color: var(--color-text); }
+    .case-meta-tags { display: flex; gap: var(--space-3); flex-wrap: wrap; margin-bottom: var(--space-6); }
+    .case-tag {
+      font-size: var(--text-xs); font-weight: 600;
+      letter-spacing: 0.06em; text-transform: uppercase;
+      color: var(--color-accent);
+      background: rgba(200,184,154,0.08);
+      border: 1px solid rgba(200,184,154,0.15);
+      padding: var(--space-1) var(--space-3); border-radius: 9999px;
+    }
+    [data-theme="light"] .case-tag {
+      color: var(--color-accent); background: rgba(122,92,56,0.06); border-color: rgba(122,92,56,0.15);
+    }
+    .case-title {
+      font-family: var(--font-display); font-size: var(--text-3xl);
+      font-weight: 800; letter-spacing: -0.03em; line-height: 1.05;
+      color: var(--color-text); max-width: 18ch; margin-bottom: var(--space-6);
+    }
+    .case-subtitle {
+      font-size: var(--text-lg); color: var(--color-text-muted);
+      max-width: 54ch; line-height: 1.55;
+    }
+
+    /* CASE COVER */
+    .case-cover {
+      max-width: var(--content-wide);
+      margin-inline: auto; padding: 0 var(--space-8) var(--space-12);
+    }
+    .case-cover img {
+      width: 100%; border-radius: var(--radius-xl);
+      border: 1px solid var(--color-border);
+    }
+
+    /* DETAILS BAR */
+    .case-details {
+      max-width: var(--content-wide);
+      margin-inline: auto; padding: 0 var(--space-8) var(--space-16);
+    }
+    .details-grid {
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      gap: var(--space-4); padding: var(--space-6) 0;
+      border-top: 1px solid var(--color-divider);
+      border-bottom: 1px solid var(--color-divider);
+    }
+    .detail-label {
+      font-size: var(--text-xs); font-weight: 600;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      color: var(--color-text-muted); margin-bottom: var(--space-1);
+    }
+    .detail-value { font-size: var(--text-sm); font-weight: 500; color: var(--color-text); }
+
+    /* CASE CONTENT */
+    .case-content { max-width: var(--content-narrow); margin-inline: auto; padding: 0 var(--space-8); }
+    .case-section { margin-bottom: var(--space-16); }
+    .case-section-label {
+      font-size: var(--text-xs); font-weight: 600; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--color-text-muted);
+      margin-bottom: var(--space-6);
+      display: flex; align-items: center; gap: var(--space-3);
+    }
+    .case-section-label::before {
+      content: ''; display: block; width: 24px; height: 1px; background: var(--color-text-faint);
+    }
+    .case-section h2 {
+      font-family: var(--font-display); font-size: var(--text-xl);
+      font-weight: 800; letter-spacing: -0.02em; color: var(--color-text);
+      margin-bottom: var(--space-6); line-height: 1.15;
+    }
+    .case-section p {
+      font-size: var(--text-base); color: var(--color-text-muted);
+      line-height: 1.75; margin-bottom: var(--space-5);
+    }
+    .case-section p:last-child { margin-bottom: 0; }
+    .case-section strong { color: var(--color-text); font-weight: 600; }
+    .case-section em { color: var(--color-text); font-style: italic; }
+
+    /* PULL QUOTE */
+    .pull-quote {
+      border-left: 2px solid var(--color-accent);
+      padding: var(--space-4) var(--space-6);
+      margin: var(--space-8) 0;
+      background: rgba(200,184,154,0.04);
+      border-radius: 0 var(--radius-md) var(--radius-md) 0;
+    }
+    .pull-quote p {
+      font-size: var(--text-lg) !important; font-style: italic;
+      color: var(--color-text) !important; line-height: 1.55 !important; margin: 0 !important;
+    }
+
+    /* INSIGHT BOX */
+    .insight-box {
+      background: var(--color-surface); border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg); padding: var(--space-6); margin: var(--space-8) 0;
+    }
+    .insight-box-label {
+      font-size: var(--text-xs); font-weight: 700;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--color-accent); margin-bottom: var(--space-3);
+    }
+    .insight-box p {
+      margin: 0 !important; font-size: var(--text-sm) !important;
+      color: var(--color-text-muted) !important; line-height: 1.65 !important;
+    }
+
+    /* PROCESS LIST */
+    .process-list { list-style: none; margin-top: var(--space-6); }
+    .process-item {
+      padding: var(--space-5) 0; border-bottom: 1px solid var(--color-divider);
+      display: grid; grid-template-columns: 130px 1fr;
+      gap: var(--space-4); align-items: baseline;
+    }
+    .process-item:first-child { border-top: 1px solid var(--color-divider); }
+    .process-phase { font-size: var(--text-sm); font-weight: 700; color: var(--color-accent); letter-spacing: 0.02em; }
+    .process-desc { font-size: var(--text-sm); color: var(--color-text-muted); line-height: 1.6; }
+
+    /* STAT ROW */
+    .stat-row { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-4); margin: var(--space-8) 0; }
+    .stat-card {
+      background: var(--color-surface); border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg); padding: var(--space-6);
+    }
+    .stat-number {
+      font-family: var(--font-display); font-size: var(--text-2xl); font-weight: 800;
+      letter-spacing: -0.03em; color: var(--color-text); line-height: 1; margin-bottom: var(--space-2);
+    }
+    .stat-desc {
+      font-size: var(--text-xs); color: var(--color-text-muted); line-height: 1.5;
+      text-transform: uppercase; letter-spacing: 0.06em; font-weight: 600;
+    }
+
+    /* TWO USER SPLIT */
+    .two-user-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: var(--space-4); margin: var(--space-8) 0;
+    }
+    .user-card {
+      background: var(--color-surface); border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg); padding: var(--space-6);
+    }
+    .user-card-icon {
+      font-size: var(--text-lg); margin-bottom: var(--space-3);
+      color: var(--color-accent);
+    }
+    .user-card h3 {
+      font-family: var(--font-display); font-size: var(--text-base);
+      font-weight: 700; color: var(--color-text);
+      margin-bottom: var(--space-3); letter-spacing: -0.01em;
+    }
+    .user-card p {
+      font-size: var(--text-sm) !important; color: var(--color-text-muted) !important;
+      line-height: 1.6 !important; margin: 0 !important;
+    }
+
+    /* NEXT PROJECT */
+    .next-project {
+      background: var(--color-surface); border-top: 1px solid var(--color-border);
+      padding: var(--space-16) var(--space-8); margin-top: var(--space-16);
+    }
+    .next-project-inner { max-width: var(--content-default); margin-inline: auto; text-align: center; }
+    .next-label {
+      font-size: var(--text-xs); font-weight: 600; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--color-text-muted); margin-bottom: var(--space-4);
+    }
+    .next-title {
+      font-family: var(--font-display); font-size: var(--text-2xl); font-weight: 800;
+      letter-spacing: -0.03em; color: var(--color-text); transition: color 180ms var(--ease);
+    }
+    .next-title:hover { color: var(--color-accent); }
+
+    /* FOOTER */
+    .site-footer {
+      padding: var(--space-8); max-width: var(--content-wide); margin-inline: auto;
+      display: flex; align-items: center; justify-content: space-between;
+      gap: var(--space-4); flex-wrap: wrap;
+    }
+    .footer-copy { font-size: var(--text-xs); color: var(--color-text-muted); }
+    .footer-links { display: flex; gap: var(--space-6); }
+    .footer-links a { font-size: var(--text-xs); color: var(--color-text-muted); transition: color 180ms var(--ease); }
+    .footer-links a:hover { color: var(--color-text); }
+
+    /* REVEAL */
+    .reveal { opacity: 0; transform: translateY(20px); transition: opacity 600ms var(--ease), transform 600ms var(--ease); }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .reveal-delay-1 { transition-delay: 80ms; }
+    .reveal-delay-2 { transition-delay: 160ms; }
+    .reveal-delay-3 { transition-delay: 240ms; }
+
+    /* RESPONSIVE */
+    @media (max-width: 768px) {
+      .nav-inner { padding: var(--space-3) var(--space-4); }
+      .case-hero { padding: var(--space-10) var(--space-4) var(--space-8); }
+      .case-cover { padding: 0 var(--space-4) var(--space-8); }
+      .case-details { padding: 0 var(--space-4) var(--space-10); }
+      .details-grid { grid-template-columns: 1fr 1fr; }
+      .case-content { padding: 0 var(--space-4); }
+      .next-project { padding: var(--space-12) var(--space-4); }
+      .site-footer { padding: var(--space-6) var(--space-4); }
+      .process-item { grid-template-columns: 1fr; gap: var(--space-1); }
+      .stat-row { grid-template-columns: 1fr; }
+      .two-user-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<header class="site-header">
+  <nav class="nav-inner">
+    <a href="index.html" class="nav-logo">Anton Tolkunov</a>
+    <div class="nav-right">
+      <a href="index.html#work">Work</a>
+      <a href="index.html#about">About</a>
+      <a href="index.html#contact">Contact</a>
+      <button class="theme-toggle" data-theme-toggle aria-label="Switch to light mode">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      </button>
+    </div>
+  </nav>
+</header>
+
+<main>
+
+  <section class="case-hero">
+    <a href="index.html" class="case-back reveal">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+      All projects
+    </a>
+
+    <div class="case-meta-tags reveal reveal-delay-1">
+      <span class="case-tag">Product Design</span>
+      <span class="case-tag">Service Design</span>
+      <span class="case-tag">HR Tech</span>
+      <span class="case-tag">Growth</span>
+    </div>
+
+    <h1 class="case-title reveal reveal-delay-1">Trivago Talent Community</h1>
+    <p class="case-subtitle reveal reveal-delay-2">How redesigning hiring from first principles — for both candidates and HR — proved a bold hypothesis and cut hiring costs by 17% per employee.</p>
+  </section>
+
+  <div class="case-cover reveal reveal-delay-2">
+    <img src="https://payload.cargocollective.com/1/0/9942/13345158/tc-cover_2x.jpg"
+         alt="Trivago Talent Community — platform overview"
+         width="1280" height="800" loading="eager" decoding="async"
+         onerror="this.style.minHeight='400px';this.style.background='var(--color-surface)';this.removeAttribute('src')">
+  </div>
+
+  <div class="case-details reveal reveal-delay-3">
+    <div class="details-grid">
+      <div class="detail-item">
+        <div class="detail-label">Role</div>
+        <div class="detail-value">Lead Product Designer</div>
+      </div>
+      <div class="detail-item">
+        <div class="detail-label">Company</div>
+        <div class="detail-value">Trivago</div>
+      </div>
+      <div class="detail-item">
+        <div class="detail-label">Year</div>
+        <div class="detail-value">2017–2018</div>
+      </div>
+      <div class="detail-item">
+        <div class="detail-label">Impact</div>
+        <div class="detail-value">−17% hiring cost per employee</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="case-content">
+
+    <!-- SITUATION -->
+    <div class="case-section reveal">
+      <p class="case-section-label">Situation</p>
+      <h2>500 hires a year. The old playbook wasn't keeping up.</h2>
+      <p>In 2017, Trivago was growing at a pace that most companies only dream about — <strong>500 new hires in a single year</strong>. But the traditional hiring machine wasn't built for that speed. Every open position meant hours of CV screening for HR, rounds of back-and-forth coordination between teams, and a process that judged candidates almost entirely on their past job titles rather than their actual potential.</p>
+      <p>The hypothesis was bold: <strong>what if you could remove the CV from the early stages of hiring entirely?</strong></p>
+      <p>The idea behind Talent Community was to automate candidate assessment at the top of the funnel — ask applicants to fill in a structured questionnaire about their skills, motivations and ways of working, then algorithmically match them to open roles across the company. No cover letters. No cold applications. Instead of asking <em>"what have you done before?"</em>, the question became: <em>"what kind of person are you, and where could you contribute?"</em></p>
+
+      <div class="pull-quote">
+        <p>"Soft skills are as important as hard ones. We wanted to match people to the right role — not just the right job title on their CV."</p>
+      </div>
+    </div>
+
+    <!-- TWO USERS -->
+    <div class="case-section reveal">
+      <p class="case-section-label">The Challenge</p>
+      <h2>Designing for two users at once</h2>
+      <p>The challenge wasn't just UX — it was designing a product that had to work equally well for two very different people with opposite needs and constraints.</p>
+
+      <div class="two-user-grid">
+        <div class="user-card">
+          <div class="user-card-icon">&#9786;</div>
+          <h3>The Applicant</h3>
+          <p>Sitting at home, deciding whether to spend 20 minutes on a questionnaire instead of sending a CV. Anxious about whether their answers will matter. Needs to feel the process is fair, transparent, and worth their time.</p>
+        </div>
+        <div class="user-card">
+          <div class="user-card-icon">&#128203;</div>
+          <h3>The HR Manager</h3>
+          <p>Trying to fill five open roles simultaneously without drowning in unqualified profiles. Needs signal, not noise — and a process that surfaces the right people faster than the traditional funnel.</p>
+        </div>
+      </div>
+
+      <p>Getting the balance wrong for either side would kill the product. Too much friction for applicants and nobody fills in the questionnaire. Too little filtering for HR and the tool creates more work, not less.</p>
+    </div>
+
+    <!-- APPROACH -->
+    <div class="case-section reveal">
+      <p class="case-section-label">Approach</p>
+      <h2>Research first. Opinions second.</h2>
+      <p>I partnered with HR managers and the product owner to map both sides of the experience simultaneously. For the applicant perspective, I interviewed <strong>recently hired colleagues</strong> — people who had just gone through some version of this process — and applied their stories to a Value Proposition Map. What were they anxious about? What felt like wasted effort? What would make them trust the process enough to be honest?</p>
+      <p>For the HR side, I analysed hiring experiences from market leaders — Booking.com, Airbnb, IKEA, Apple, Expedia — looking for patterns in how they balanced candidate experience with operational efficiency.</p>
+
+      <ul class="process-list">
+        <li class="process-item">
+          <span class="process-phase">Understand</span>
+          <span class="process-desc">Interviews with recently hired colleagues, Value Proposition Map, competitor hiring experience analysis (Booking, Airbnb, IKEA, Apple, Expedia), HR workflow mapping</span>
+        </li>
+        <li class="process-item">
+          <span class="process-phase">Define</span>
+          <span class="process-desc">Customer Journey Map for both applicant and HR sides, Information Architecture with linear, low-friction structure</span>
+        </li>
+        <li class="process-item">
+          <span class="process-phase">Design</span>
+          <span class="process-desc">Wireframes, interaction prototypes, questionnaire flow design — optimised to reduce uncertainty and maintain a sense of forward progress</span>
+        </li>
+        <li class="process-item">
+          <span class="process-phase">Ship & Measure</span>
+          <span class="process-desc">Phased rollout, hiring funnel analytics, qualitative feedback from HR team on candidate quality</span>
+        </li>
+      </ul>
+
+      <div class="insight-box">
+        <p class="insight-box-label">The key IA decision</p>
+        <p>The Customer Journey Map showed the biggest drop-off risk wasn't the questionnaire itself — it was the <em>feeling of uncertainty</em> during it. Applicants didn't know where they were going, how long it would take, or whether their answers actually mattered. The architecture was built around one principle: make every step feel linear, purposeful, and respectful of the applicant's time.</p>
+      </div>
+    </div>
+
+    <!-- HYPOTHESIS TESTED -->
+    <div class="case-section reveal">
+      <p class="case-section-label">Testing the Hypothesis</p>
+      <h2>It worked — and it revealed something unexpected.</h2>
+      <p>After launch, the platform did what it was designed to do — and then revealed a nuance that made the results even more useful.</p>
+      <p>Within three months, Talent Community was successfully attracting and converting <strong>students, interns, and junior-level candidates</strong>. For early-career talent, the questionnaire-first format was a genuine advantage: it gave people without impressive CVs a real chance to stand out on the basis of who they were, not just what companies they'd worked for.</p>
+      <p>But for senior experts and managers, the dynamic was different. Highly experienced professionals — the ones whose time is most scarce — were less willing to invest 20 minutes in a profile when they could send a CV in two minutes through traditional channels. Trivago's hiring brand, at that stage, wasn't yet strong enough to make that trade feel worthwhile for them.</p>
+
+      <div class="insight-box">
+        <p class="insight-box-label">This wasn't a failure</p>
+        <p>It was the hypothesis being tested honestly. The product worked for the audience it worked for — and the data clearly showed where to focus the next iteration: stronger brand signals for senior candidates, and richer assessment tools (case studies, strengths finders) to give experienced professionals a compelling reason to engage.</p>
+      </div>
+    </div>
+
+    <!-- RESULT -->
+    <div class="case-section reveal">
+      <p class="case-section-label">Result</p>
+      <h2>A new hiring channel. Proven economics.</h2>
+
+      <div class="stat-row">
+        <div class="stat-card">
+          <div class="stat-number">−17%</div>
+          <div class="stat-desc">Hiring cost per employee through the Talent Community channel</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">3 mo</div>
+          <div class="stat-desc">Time to first validated hires — students, interns and junior professionals</div>
+        </div>
+      </div>
+
+      <p>The results justified the bet. Hiring costs dropped by up to 17% per employee — a meaningful saving at the scale Trivago was operating. Time spent on early-stage screening was significantly reduced, and the quality of junior and intern hires improved because the matching algorithm surfaced candidates who wouldn't have made it past a traditional CV filter.</p>
+      <p>The core insight held: <strong>a well-designed hiring product can do more than improve the candidate experience — it can fundamentally change the economics of how a company grows.</strong> Research and deep immersion in the problem delivered a more precise solution than adapting what was already standard in the industry.</p>
+    </div>
+
+  </div><!-- /case-content -->
+
+  <section class="next-project">
+    <div class="next-project-inner reveal">
+      <p class="next-label">Next project</p>
+      <a href="real-checkout.html" class="next-title">Real.de Checkout Improvement →</a>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <p class="footer-copy">&copy; 2026 Anton Tolkunov</p>
+  <nav class="footer-links">
+    <a href="index.html#work">Work</a>
+    <a href="index.html#about">About</a>
+    <a href="mailto:hello@antontolkunov.com">Email</a>
+    <a href="https://linkedin.com/in/antontolkunov" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+  </nav>
+</footer>
+
+<script>
+  (function(){
+    const toggle = document.querySelector('[data-theme-toggle]');
+    const root = document.documentElement;
+    const sunSVG = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>';
+    const moonSVG = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>';
+    let theme = 'dark';
+    root.setAttribute('data-theme', theme);
+    if (toggle) {
+      toggle.innerHTML = moonSVG;
+      toggle.addEventListener('click', () => {
+        theme = theme === 'dark' ? 'light' : 'dark';
+        root.setAttribute('data-theme', theme);
+        toggle.innerHTML = theme === 'dark' ? moonSVG : sunSVG;
+        toggle.setAttribute('aria-label', 'Switch to ' + (theme === 'dark' ? 'light' : 'dark') + ' mode');
+      });
+    }
+  })();
+
+  const revealEls = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); }
+    });
+  }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+  revealEls.forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>
