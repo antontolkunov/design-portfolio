@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vodafone Secure Net — Anton Tolkunov</title>
+  <meta name="description" content="Case study: Vodafone Secure Net redesign that reduced drop-off from 60% to 20% and improved Android NPS.">
+
+  <link rel="preconnect" href="https://api.fontshare.com">
+  <link href="https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@700,800,900&f[]=satoshi@400,500,700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --font-display: 'Cabinet Grotesk', 'Helvetica Neue', sans-serif;
+      --font-body: 'Satoshi', 'Inter', sans-serif;
+      --text-xs: clamp(0.75rem, 0.7rem + 0.25vw, 0.875rem);
+      --text-sm: clamp(0.875rem, 0.8rem + 0.35vw, 1rem);
+      --text-base: clamp(1rem, 0.95rem + 0.25vw, 1.125rem);
+      --text-lg: clamp(1.125rem, 1rem + 0.75vw, 1.5rem);
+      --text-xl: clamp(1.5rem, 1.2rem + 1.25vw, 2.25rem);
+      --text-2xl: clamp(2rem, 1.2rem + 2.5vw, 3.5rem);
+      --text-3xl: clamp(2.5rem, 1.5rem + 3.5vw, 4.5rem);
+      --space-2: 0.5rem;
+      --space-3: 0.75rem;
+      --space-4: 1rem;
+      --space-6: 1.5rem;
+      --space-8: 2rem;
+      --space-10: 2.5rem;
+      --space-12: 3rem;
+      --space-16: 4rem;
+      --space-20: 5rem;
+      --radius-md: 0.5rem;
+      --radius-xl: 1rem;
+      --content-narrow: 760px;
+      --content-default: 1040px;
+      --content-wide: 1280px;
+      --ease: cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    :root, [data-theme="dark"] {
+      --color-bg: #0f0e0d;
+      --color-surface: #161513;
+      --color-surface-2: #1d1b19;
+      --color-border: rgba(255,255,255,0.07);
+      --color-divider: rgba(255,255,255,0.05);
+      --color-text: #e8e4dc;
+      --color-text-muted: #7a7873;
+      --color-text-faint: #3d3b38;
+      --color-accent: #c8b89a;
+      --color-accent-hover: #d9ccb8;
+    }
+    [data-theme="light"] {
+      --color-bg: #f5f4f0;
+      --color-surface: #fafaf8;
+      --color-surface-2: #fff;
+      --color-border: rgba(0,0,0,0.08);
+      --color-divider: rgba(0,0,0,0.05);
+      --color-text: #1a1917;
+      --color-text-muted: #6b6a67;
+      --color-text-faint: #c0bdb8;
+      --color-accent: #7a5c38;
+      --color-accent-hover: #5e4428;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      min-height: 100dvh;
+      font-family: var(--font-body);
+      font-size: var(--text-base);
+      color: var(--color-text);
+      background: var(--color-bg);
+      line-height: 1.6;
+    }
+    a { color: inherit; text-decoration: none; }
+    .site-header {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(15,14,13,0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--color-border);
+    }
+    .nav-inner {
+      max-width: var(--content-wide);
+      margin-inline: auto;
+      padding: var(--space-4) var(--space-8);
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .nav-logo { font-family: var(--font-display); font-weight: 700; }
+    .nav-right { display: flex; align-items: center; gap: var(--space-6); }
+    .nav-right a { color: var(--color-text-muted); font-size: var(--text-sm); }
+    .theme-toggle {
+      width: 36px; height: 36px; display: inline-flex; align-items: center; justify-content: center;
+      border-radius: var(--radius-md);
+    }
+    .case-hero {
+      max-width: var(--content-default);
+      margin-inline: auto;
+      padding: var(--space-16) var(--space-8) var(--space-10);
+    }
+    .case-back {
+      display: inline-flex; align-items: center; gap: var(--space-2);
+      font-size: var(--text-sm); color: var(--color-text-muted);
+      margin-bottom: var(--space-10);
+    }
+    .case-title {
+      font-family: var(--font-display);
+      font-size: var(--text-3xl);
+      line-height: 1.05;
+      letter-spacing: -0.03em;
+      margin-bottom: var(--space-6);
+    }
+    .case-sub {
+      color: var(--color-text-muted);
+      font-size: var(--text-lg);
+      max-width: 60ch;
+    }
+    .details {
+      max-width: var(--content-default);
+      margin: 0 auto var(--space-16);
+      padding: 0 var(--space-8);
+    }
+    .details-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: var(--space-4);
+      border-top: 1px solid var(--color-divider);
+      border-bottom: 1px solid var(--color-divider);
+      padding: var(--space-6) 0;
+    }
+    .detail-label {
+      font-size: var(--text-xs);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--color-text-muted);
+      margin-bottom: 0.25rem;
+    }
+    .detail-value { font-size: var(--text-sm); }
+    .case-content {
+      max-width: var(--content-narrow);
+      margin-inline: auto;
+      padding: 0 var(--space-8);
+    }
+    .section { margin-bottom: var(--space-16); }
+    .section-label {
+      font-size: var(--text-xs);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--color-text-muted);
+      margin-bottom: var(--space-4);
+    }
+    .section h2 {
+      font-family: var(--font-display);
+      font-size: var(--text-xl);
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      margin-bottom: var(--space-6);
+    }
+    .section p {
+      color: var(--color-text-muted);
+      margin-bottom: var(--space-4);
+      line-height: 1.75;
+    }
+    .section strong { color: var(--color-text); }
+    .decisions-list {
+      display: grid;
+      gap: var(--space-6);
+      margin-top: var(--space-6);
+    }
+    .decision-item {
+      border-top: 1px solid var(--color-divider);
+      padding-top: var(--space-4);
+    }
+    .decision-item h3 {
+      font-family: var(--font-display);
+      font-size: var(--text-lg);
+      margin-bottom: var(--space-3);
+    }
+    .placeholder {
+      border: 1px dashed var(--color-border);
+      background: var(--color-surface);
+      border-radius: var(--radius-xl);
+      padding: var(--space-8);
+      margin-top: var(--space-6);
+      color: var(--color-text-muted);
+      font-size: var(--text-sm);
+    }
+    .results-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--space-4);
+      margin-top: var(--space-6);
+    }
+    .result-card {
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-xl);
+      background: var(--color-surface);
+      padding: var(--space-6);
+    }
+    .result-title { color: var(--color-text-muted); font-size: var(--text-sm); margin-bottom: var(--space-3); }
+    .result-value {
+      font-family: var(--font-display);
+      font-size: var(--text-2xl);
+      line-height: 1;
+      letter-spacing: -0.03em;
+    }
+    .footer {
+      max-width: var(--content-wide);
+      margin: var(--space-16) auto 0;
+      padding: var(--space-8);
+      border-top: 1px solid var(--color-divider);
+      color: var(--color-text-muted);
+      display: flex; justify-content: space-between; gap: var(--space-4); flex-wrap: wrap;
+    }
+    .reveal { opacity: 0; transform: translateY(20px); transition: opacity 600ms var(--ease), transform 600ms var(--ease); }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    @media (max-width: 900px) {
+      .details-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 768px) {
+      .nav-inner, .case-hero, .details, .case-content, .footer { padding-inline: var(--space-4); }
+      .results-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <nav class="nav-inner">
+      <a href="index.html" class="nav-logo">Anton Tolkunov</a>
+      <div class="nav-right">
+        <a href="index.html#work">Work</a>
+        <a href="index.html#about">About</a>
+        <a href="index.html#contact">Contact</a>
+        <button class="theme-toggle" data-theme-toggle aria-label="Switch to light mode">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        </button>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <section class="case-hero">
+      <a href="index.html#work" class="case-back">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+        All projects
+      </a>
+      <h1 class="case-title reveal">Vodafone Secure Net: Making the Invisible Feel Powerful</h1>
+      <p class="case-sub reveal">Most security happens silently. This redesign made protection visible, actionable, and trustworthy.</p>
+    </section>
+
+    <section class="details reveal">
+      <div class="details-grid">
+        <div><p class="detail-label">Role</p><p class="detail-value">Senior UX/UI Designer (sole designer on feature)</p></div>
+        <div><p class="detail-label">Platform</p><p class="detail-value">Android</p></div>
+        <div><p class="detail-label">Timeline</p><p class="detail-value">4 months (research to rollout)</p></div>
+        <div><p class="detail-label">Reach</p><p class="detail-value">~100,000 users / 4 markets</p></div>
+        <div><p class="detail-label">Result</p><p class="detail-value">Drop-off 60% → 20%, NPS +1.5</p></div>
+      </div>
+    </section>
+
+    <section class="case-content">
+      <div class="section reveal">
+        <p class="section-label">The Problem No One Talked About</p>
+        <h2>Security was working — but users couldn’t feel it</h2>
+        <p>Most of what Secure Net does, it does silently. Threats are blocked in the background. Suspicious sites are filtered before users notice them.</p>
+        <p>That is great for security, but bad for perceived value. Users could not feel the product working, and when you cannot feel something, you stop trusting it.</p>
+        <p>The Cleaning Tool was the exception: scan device, find threats, remove them, see result. But almost nobody finished the flow.</p>
+        <p><strong>Drop-off rate: 60%.</strong></p>
+      </div>
+
+      <div class="section reveal">
+        <p class="section-label">What We Found</p>
+        <h2>Not confusion — unmet expectation</h2>
+        <p>I ran user testing in Turkey before changing the interface. Users started curious, then became uncertain and left.</p>
+        <p>The flow forced waiting through multiple steps: database update, scan, then removal. The system did not communicate how long this would take. Timing was unpredictable and depended on backend response, device model, and phone data volume.</p>
+        <div class="placeholder">Placeholder 1: Original flow screenshot — multi-step flow with no progress indication.</div>
+      </div>
+
+      <div class="section reveal">
+        <p class="section-label">The Design Decisions</p>
+        <h2>Three coordinated decisions across UX, UI, and system behavior</h2>
+        <div class="decisions-list">
+          <div class="decision-item">
+            <h3>1. Collapse the flow</h3>
+            <p>I removed the database update from the user path and moved it to a silent background pre-step. The experience became a clean two-step flow: <strong>Scan → Remove</strong>.</p>
+          </div>
+          <div class="decision-item">
+            <h3>2. Set expectations visually</h3>
+            <p>I redesigned screens to communicate progress clearly: active processing, threat detection, and clean-device confirmation became visually distinct states, not just text changes.</p>
+          </div>
+          <div class="decision-item">
+            <h3>3. Improve backend communication</h3>
+            <p>In parallel, I worked with engineering to optimize backend interaction, reducing real wait times and making the tool feel genuinely more responsive.</p>
+          </div>
+        </div>
+        <div class="placeholder">Placeholder 2: Updated 2-step flow — progress states, threat detection screen, success screen.</div>
+      </div>
+
+      <div class="section reveal">
+        <p class="section-label">Testing and Iteration</p>
+        <h2>Tested, narrowed, iterated, and revalidated</h2>
+        <p>I tested three design variations with users. One clearly outperformed the others, but moderated sessions exposed friction points that metrics alone would not reveal.</p>
+        <p>I iterated and retested until those points were resolved. Four months after the first research session in Turkey, the redesign was live.</p>
+      </div>
+
+      <div class="section reveal">
+        <p class="section-label">Rollout and Results</p>
+        <h2>Consistent performance across markets</h2>
+        <p>The feature launched first in Turkey (with baseline data), then in UK, Spain, and Italy where Cleaning Tool had not been available before.</p>
+        <p>Turkey (Q1 → Q3 2025): <strong>Drop-off 60% → 20% (–67%)</strong>, Android app NPS <strong>5.0 → 6.5</strong>.</p>
+        <p>UK, Spain, Italy: new market baseline with post-launch drop-off around <strong>20%</strong>, consistent with Turkey’s improved performance.</p>
+        <p>Total reach: approximately <strong>100,000 users across 4 markets</strong>.</p>
+
+        <div class="placeholder">Placeholder 3: Metrics comparison visual — drop-off 60→20 and NPS 5.0→6.5.</div>
+
+        <div class="results-grid">
+          <div class="result-card">
+            <p class="result-title">Drop-off rate</p>
+            <p class="result-value">60% → 20%</p>
+          </div>
+          <div class="result-card">
+            <p class="result-title">Android app NPS</p>
+            <p class="result-value">5.0 → 6.5</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="section reveal">
+        <p class="section-label">What I Learned</p>
+        <h2>Users judge reliability through communication</h2>
+        <p>Security products often prioritize reliability over communication, but users experience both at the same time.</p>
+        <p>A flow can be technically reliable and still be abandoned if it <strong>feels broken</strong>. The biggest win here was not only simplifying steps — it was designing what users needed to feel, not just what they needed to do.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>© 2026 Anton Tolkunov</p>
+    <p><a href="mailto:antontolkunov@me.com">antontolkunov@me.com</a></p>
+  </footer>
+
+  <script>
+    (function () {
+      const toggle = document.querySelector('[data-theme-toggle]');
+      const root = document.documentElement;
+      const sunSVG = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>';
+      const moonSVG = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>';
+      let theme = 'dark';
+      root.setAttribute('data-theme', theme);
+      if (toggle) {
+        toggle.innerHTML = moonSVG;
+        toggle.addEventListener('click', () => {
+          theme = theme === 'dark' ? 'light' : 'dark';
+          root.setAttribute('data-theme', theme);
+          toggle.innerHTML = theme === 'dark' ? moonSVG : sunSVG;
+        });
+      }
+    })();
+    const revealEls = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((e) => {
+        if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); }
+      });
+    }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+    revealEls.forEach((el) => observer.observe(el));
+  </script>
+</body>
+</html>

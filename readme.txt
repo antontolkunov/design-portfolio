@@ -36,3 +36,9 @@ Recent update:
   - Added `prefers-reduced-motion` fallback (animation disabled for motion-sensitive users)
 - Replaced Vodafone, trivago, and Kaufland icons with full-text SVG logo variants.
 - Switched Vodafone and Kaufland sources to Wikimedia SVG wordmark files for cleaner rendering.
+- Added new case page `vodafone-secure-net.html`:
+  - Full narrative for Vodafone Secure Net redesign
+  - Role, timeline, reach, and results
+  - 3 screenshot placeholders positioned in the requested sections
+  - Final metrics infographic block (drop-off and NPS)
+- Replaced Vodafone Cleaning Tool card on homepage with a live link to the new case.
