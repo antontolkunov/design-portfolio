@@ -25,3 +25,7 @@ Recent update:
   - Trivago card now links to `trivago-talent-community.html`
 - Updated contact email to `antontolkunov@me.com` across pages.
 - Added `Mentorship` link to desktop and mobile navigation.
+- Logo wall tuning:
+  - Panasonic logo scaled to 3x
+  - Docsvision logo scaled to 2x
+  - `space-3` set to `4rem` locally within logo wall
