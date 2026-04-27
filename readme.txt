@@ -36,8 +36,8 @@ Recent update:
   - Added `prefers-reduced-motion` fallback (animation disabled for motion-sensitive users)
 - Replaced Vodafone, trivago, and Kaufland icons with full-text SVG logo variants.
 - Switched Vodafone and Kaufland sources to Wikimedia SVG wordmark files for cleaner rendering.
-- Updated logo wall sources per latest request:
-  - Vodafone: Logo.wine SVG (`Vodafone_UK-Logo.wine.svg`)
+- Logo wall assets:
+  - Vodafone: repo file `VF_Logo_RGB_BLACK.svg`
   - Kaufland: TopPNG provided logo asset (PNG preview file)
 - Added subheader above logo wall: "Companies that trust me".
 - Styled logo-wall subheader using the same `section-label` pattern as "Selected Work".
