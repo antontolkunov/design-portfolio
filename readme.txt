@@ -35,3 +35,4 @@ Recent update:
   - Mobile version uses 2x smaller logos
   - Added `prefers-reduced-motion` fallback (animation disabled for motion-sensitive users)
 - Replaced Vodafone, trivago, and Kaufland icons with full-text SVG logo variants.
+- Switched Vodafone and Kaufland sources to Wikimedia SVG wordmark files for cleaner rendering.
