@@ -29,3 +29,7 @@ Recent update:
   - Panasonic logo scaled to 3x
   - Docsvision logo scaled to 2x
   - `space-3` set to `4rem` locally within logo wall
+- Logo wall redesigned as a single-line marquee:
+  - Continuous horizontal scrolling animation across full viewport width
+  - Kept horizontal spacing consistent with logo-wall tuning
+  - Mobile version uses 2x smaller logos
