@@ -40,6 +40,7 @@ Recent update:
   - Vodafone: Logo.wine SVG (`Vodafone_UK-Logo.wine.svg`)
   - Kaufland: TopPNG provided logo asset (PNG preview file)
 - Added subheader above logo wall: "Companies that trust me".
+- Styled logo-wall subheader using the same `section-label` pattern as "Selected Work".
 - Added new case page `vodafone-secure-net.html`:
   - Full narrative for Vodafone Secure Net redesign
   - Role, timeline, reach, and results
