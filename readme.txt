@@ -16,3 +16,10 @@ Recent update:
   - Added company logo cloud as text badges (Vodafone, Kaufland, real.de, trivago, Panasonic, obey clothing, okko.tv, oktogo, docsvision)
 - Replaced logo badges with real SVG logos where reliable sources exist:
   Vodafone, Kaufland, real.de, trivago, Panasonic, Obey, okko.tv, Docsvision.
+- Adjusted logo cloud presentation:
+  - Logos are larger
+  - Logos are rendered in a single muted gray tone for both dark and light themes
+- Updated case links on homepage:
+  - Real.de card now links to `real-checkout.html`
+  - Trivago card now links to `trivago-talent-community.html`
+- Updated contact email to `antontolkunov@me.com` across pages.
