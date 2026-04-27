@@ -36,6 +36,9 @@ Recent update:
   - Added `prefers-reduced-motion` fallback (animation disabled for motion-sensitive users)
 - Replaced Vodafone, trivago, and Kaufland icons with full-text SVG logo variants.
 - Switched Vodafone and Kaufland sources to Wikimedia SVG wordmark files for cleaner rendering.
+- Updated logo wall sources per latest request:
+  - Vodafone: Logo.wine SVG (`Vodafone_UK-Logo.wine.svg`)
+  - Kaufland: TopPNG provided logo asset (PNG preview file)
 - Added new case page `vodafone-secure-net.html`:
   - Full narrative for Vodafone Secure Net redesign
   - Role, timeline, reach, and results
