@@ -261,29 +261,45 @@
       max-width: 42ch;
       line-height: 1.5;
     }
-    .hero-meta {
-      display: flex;
-      gap: var(--space-6);
-      flex-shrink: 0;
+    .hero-intro {
+      margin-top: var(--space-10);
+      max-width: 72ch;
+      display: grid;
+      gap: var(--space-4);
     }
-    .hero-stat {
-      text-align: right;
-    }
-    .hero-stat-num {
-      font-family: var(--font-display);
-      font-size: var(--text-xl);
-      font-weight: 800;
-      color: var(--color-text);
-      line-height: 1;
-    }
-    .hero-stat-label {
-      font-size: var(--text-xs);
+    .hero-intro p {
       color: var(--color-text-muted);
+      line-height: 1.7;
+    }
+    .hero-intro strong { color: var(--color-text); font-weight: 600; }
+    .logo-cloud {
+      margin-top: var(--space-12);
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-3);
+    }
+    .logo-item {
+      border: 1px solid var(--color-border);
+      background: var(--color-surface);
+      border-radius: 9999px;
+      padding: 0.45rem 0.7rem;
+      min-height: 34px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .logo-item img {
+      height: 16px;
+      width: auto;
+      display: block;
+    }
+    .logo-item-text {
+      font-size: var(--text-xs);
+      font-weight: 600;
       letter-spacing: 0.05em;
       text-transform: uppercase;
-      margin-top: var(--space-1);
+      color: var(--color-text-muted);
     }
-
     /* ============================================
        SECTION COMMON
     ============================================ */
@@ -810,8 +826,6 @@
       .nav-mobile-toggle { display: flex; }
       .hero { padding: var(--space-20) var(--space-4) var(--space-12); min-height: 80vh; }
       .hero-bottom { flex-direction: column; align-items: flex-start; }
-      .hero-meta { gap: var(--space-6); }
-      .hero-stat { text-align: left; }
       .section-inner { padding-inline: var(--space-4); }
       .card-xl, .card-sm, .card-md, .card-wip { grid-column: span 12; }
       .work-grid { gap: var(--space-3); }
@@ -819,7 +833,6 @@
       .site-footer { padding: var(--space-6) var(--space-4); }
     }
     @media (max-width: 480px) {
-      .hero-meta { display: none; }
       .contact-actions { flex-direction: column; align-items: center; }
     }
   </style>
@@ -835,7 +848,8 @@
     <ul class="nav-links" role="list">
       <li><a href="#work">Work</a></li>
       <li><a href="#about">About</a></li>
-      <li><a href="#contact" class="nav-cta">Get in touch</a></li>
+      <li><a href="/resume.pdf" target="_blank" rel="noopener noreferrer">Resume</a></li>
+      <li><a href="https://linkedin.com/in/antontolkunov" target="_blank" rel="noopener noreferrer" class="nav-cta">LinkedIn</a></li>
     </ul>
     <div style="display:flex;align-items:center;gap:0.5rem;">
       <button class="theme-toggle" data-theme-toggle aria-label="Switch to light mode">
@@ -849,7 +863,8 @@
   <nav class="mobile-nav" id="mobileNav" aria-label="Mobile navigation">
     <a href="#work" onclick="closeMobileNav()">Work</a>
     <a href="#about" onclick="closeMobileNav()">About</a>
-    <a href="#contact" onclick="closeMobileNav()">Get in touch</a>
+    <a href="/resume.pdf" target="_blank" rel="noopener noreferrer">Resume</a>
+    <a href="https://linkedin.com/in/antontolkunov" target="_blank" rel="noopener noreferrer">LinkedIn</a>
   </nav>
 </header>
 
@@ -858,20 +873,29 @@
 
   <!-- HERO -->
   <section class="hero" aria-label="Introduction">
-    <p class="hero-label reveal">Senior Product Designer</p>
-    <h1 class="hero-headline reveal reveal-delay-1">I design solutions.<br><em>Not just screens.</em></h1>
+    <p class="hero-label reveal">Digital Product Designer</p>
+    <h1 class="hero-headline reveal reveal-delay-1">Anton Tolkunov.<br><em>Digital Product Designer.</em></h1>
     <div class="hero-bottom">
       <p class="hero-tagline reveal reveal-delay-2">
-        Specialising in complex B2B products, design systems, and 0→1 experiences. Based in Düsseldorf.
+        Bringing B2C clarity to complex product ecosystems.
       </p>
-      <div class="hero-meta reveal reveal-delay-3">
-        <div class="hero-stat">
-          <div class="hero-stat-num">10+</div>
-          <div class="hero-stat-label">Years</div>
-        </div>
-        <div class="hero-stat">
-          <div class="hero-stat-num">5</div>
-          <div class="hero-stat-label">Projects</div>
+      <div class="hero-intro reveal reveal-delay-3">
+        <p>
+          I am a Senior Digital Product Designer with 10+ years of experience bridging the gap between intricate technical requirements and seamless user journeys. My expertise lies in leading redesigns and optimizing flows that directly impact business metrics — like significantly reducing drop-off rates and increasing product satisfaction.
+        </p>
+        <p>
+          I take ownership of the design process, from solitary deep work on complex architecture to mentoring and scaling design practices within a team.
+        </p>
+        <div class="logo-cloud" aria-label="Companies">
+          <span class="logo-item"><img src="https://cdn.simpleicons.org/vodafone" alt="Vodafone logo" loading="lazy" decoding="async"></span>
+          <span class="logo-item"><img src="https://cdn.simpleicons.org/kaufland" alt="Kaufland logo" loading="lazy" decoding="async"></span>
+          <span class="logo-item"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Real%2C-Logo.svg" alt="real.de logo" loading="lazy" decoding="async"></span>
+          <span class="logo-item"><img src="https://cdn.simpleicons.org/trivago" alt="trivago logo" loading="lazy" decoding="async"></span>
+          <span class="logo-item"><img src="https://cdn.simpleicons.org/panasonic" alt="Panasonic logo" loading="lazy" decoding="async"></span>
+          <span class="logo-item"><img src="https://cdn.worldvectorlogo.com/logos/obey.svg" alt="Obey Clothing logo" loading="lazy" decoding="async"></span>
+          <span class="logo-item"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Okko_Logo.svg" alt="okko.tv logo" loading="lazy" decoding="async"></span>
+          <span class="logo-item"><span class="logo-item-text">Oktogo</span></span>
+          <span class="logo-item"><img src="https://docsvision.com/netcat_files/cs/logo_text.svg" alt="Docsvision logo" loading="lazy" decoding="async"></span>
         </div>
       </div>
     </div>
