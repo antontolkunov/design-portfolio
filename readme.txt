@@ -24,3 +24,4 @@ Recent update:
   - Real.de card now links to `real-checkout.html`
   - Trivago card now links to `trivago-talent-community.html`
 - Updated contact email to `antontolkunov@me.com` across pages.
+- Added `Mentorship` link to desktop and mobile navigation.
