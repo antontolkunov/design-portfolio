@@ -40,7 +40,7 @@ Recent update:
   - Vodafone: repo file `VF_Logo_RGB_BLACK.svg`
   - Kaufland: TopPNG provided logo asset (PNG preview file)
 - Added subheader above logo wall: "Companies that trust me".
-- Styled logo-wall subheader using the same `section-label` pattern as "Selected Work".
+- Styled logo-wall subheader using the same `section-label` pattern as "Selected Work" (left-aligned).
 - Added new case page `vodafone-secure-net.html`:
   - Full narrative for Vodafone Secure Net redesign
   - Role, timeline, reach, and results
