@@ -33,3 +33,5 @@ Recent update:
   - Continuous horizontal scrolling animation across full viewport width
   - Kept horizontal spacing consistent with logo-wall tuning
   - Mobile version uses 2x smaller logos
+  - Added `prefers-reduced-motion` fallback (animation disabled for motion-sensitive users)
+- Replaced Vodafone, trivago, and Kaufland icons with full-text SVG logo variants.
