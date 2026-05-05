@@ -172,15 +172,28 @@
       font-size: var(--text-lg);
       margin-bottom: var(--space-3);
     }
-    .placeholder {
-      border: 1px dashed var(--color-border);
-      background: var(--color-surface);
+    figure.case-media { margin: var(--space-6) 0 0; }
+    .case-media img {
+      width: 100%;
+      height: auto;
+      display: block;
       border-radius: var(--radius-xl);
-      padding: var(--space-8);
-      margin-top: var(--space-6);
-      color: var(--color-text-muted);
-      font-size: var(--text-sm);
+      border: 1px solid var(--color-border);
+      background: var(--color-surface);
     }
+    .case-media figcaption {
+      margin-top: var(--space-3);
+      font-size: var(--text-sm);
+      color: var(--color-text-muted);
+      line-height: 1.55;
+    }
+    .case-media-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-4);
+      margin-top: var(--space-6);
+    }
+    .case-media-grid .case-media { margin-top: 0; }
     .results-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
@@ -216,6 +229,7 @@
     @media (max-width: 768px) {
       .nav-inner, .case-hero, .details, .case-content, .footer { padding-inline: var(--space-4); }
       .results-grid { grid-template-columns: 1fr; }
+      .case-media-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -262,14 +276,22 @@
         <p>That is great for security, but bad for perceived value. Users could not feel the product working, and when you cannot feel something, you stop trusting it.</p>
         <p>The Cleaning Tool was the exception: scan device, find threats, remove them, see result. But almost nobody finished the flow.</p>
         <p><strong>Drop-off rate: 60%.</strong></p>
+        <figure class="case-media reveal">
+          <img src="assets/vodafone-cleaning-tool/secure-net-dashboard.png" alt="Secure Net Android dashboard showing Cleaning Tool among security modules." width="824" height="1834" loading="lazy" decoding="async" />
+          <figcaption>The Tool sits inside the Secure Net dashboard — one of the few surfaces where users expect visible motion after they tap.</figcaption>
+        </figure>
       </div>
 
       <div class="section reveal">
         <p class="section-label">What We Found</p>
         <h2>Not confusion — unmet expectation</h2>
         <p>I ran user testing in Turkey before changing the interface. Users started curious, then became uncertain and left.</p>
-        <p>The flow forced waiting through multiple steps: database update, scan, then removal. The system did not communicate how long this would take. Timing was unpredictable and depended on backend response, device model, and phone data volume.</p>
-        <div class="placeholder">Placeholder 1: Original flow screenshot — multi-step flow with no progress indication.</div>
+        <p>The flow stacked orientation, virus-definition preparation, scan, and removal without telling people how long each beat would last. Timing swung with backend latency, device tier, and storage volume — so even reliable engineering felt arbitrary.</p>
+        <p>A six-step onboarding sequence still greeted people before the scan began — useful for education, expensive for momentum when someone only wanted to clean their phone.</p>
+        <figure class="case-media reveal">
+          <img src="assets/vodafone-cleaning-tool/cleaning-onboarding-step.png" alt="Cleaning Tool introductory screen — step 1 of 6 before scanning." width="824" height="1834" loading="lazy" decoding="async" />
+          <figcaption>Orientation step 1 of 6: users absorbed security storytelling while their urgency drained.</figcaption>
+        </figure>
       </div>
 
       <div class="section reveal">
@@ -289,13 +311,32 @@
             <p>In parallel, I worked with engineering to optimize backend interaction, reducing real wait times and making the tool feel genuinely more responsive.</p>
           </div>
         </div>
-        <div class="placeholder">Placeholder 2: Updated 2-step flow — progress states, threat detection screen, success screen.</div>
+        <p>Execution screens split “work in flight”, “what we found”, and “what happened next” into distinct visual chapters instead of recycled layouts.</p>
+        <div class="case-media-grid">
+          <figure class="case-media reveal">
+            <img src="assets/vodafone-cleaning-tool/cleaning-device-progress.png" alt="Cleaning Tool screen — active cleaning with progress copy." width="824" height="1834" loading="lazy" decoding="async" />
+            <figcaption>Removal phase with explicit progress language — users finally saw the machine working for them.</figcaption>
+          </figure>
+          <figure class="case-media reveal">
+            <img src="assets/vodafone-cleaning-tool/scan-results-selection.png" alt="Scan results listing infections with Clean selected items control." width="824" height="1834" loading="lazy" decoding="async" />
+            <figcaption>Scan results as an actionable ledger — threats named, selection surfaced, primary action anchored.</figcaption>
+          </figure>
+        </div>
+        <figure class="case-media reveal">
+          <img src="assets/vodafone-cleaning-tool/cleaning-success-all-clear.png" alt="Cleaning Tool success — All Infections cleaned celebration state." width="824" height="1834" loading="lazy" decoding="async" />
+          <figcaption>Completion state with celebration micro-motion — closure became memorable, not muted.</figcaption>
+        </figure>
       </div>
 
       <div class="section reveal">
         <p class="section-label">Testing and Iteration</p>
         <h2>Tested, narrowed, iterated, and revalidated</h2>
         <p>I tested three design variations with users. One clearly outperformed the others, but moderated sessions exposed friction points that metrics alone would not reveal.</p>
+        <p>Mid-scan states were especially vocal: percentage motion helped, yet headline hierarchy, reassurance copy, and cancellation paths decided whether someone trusted the wait.</p>
+        <figure class="case-media reveal">
+          <img src="assets/vodafone-cleaning-tool/scan-progress-50.png" alt="Cleaning Tool scan in progress at fifty percent." width="824" height="1834" loading="lazy" decoding="async" />
+          <figcaption>Representative mid-scan frame used in sessions — anchoring pace expectations before polishing removal.</figcaption>
+        </figure>
         <p>I iterated and retested until those points were resolved. Four months after the first research session in Turkey, the redesign was live.</p>
       </div>
 
@@ -306,8 +347,6 @@
         <p>Turkey (Q1 → Q3 2025): <strong>Drop-off 60% → 20% (–67%)</strong>, Android app NPS <strong>5.0 → 6.5</strong>.</p>
         <p>UK, Spain, Italy: new market baseline with post-launch drop-off around <strong>20%</strong>, consistent with Turkey’s improved performance.</p>
         <p>Total reach: approximately <strong>100,000 users across 4 markets</strong>.</p>
-
-        <div class="placeholder">Placeholder 3: Metrics comparison visual — drop-off 60→20 and NPS 5.0→6.5.</div>
 
         <div class="results-grid">
           <div class="result-card">

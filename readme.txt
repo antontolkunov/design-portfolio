@@ -13,9 +13,9 @@ Recent update:
   - New navigation: Work, About, Resume, LinkedIn
   - New hero headline and positioning statement
   - New introduction text for target role narrative
-  - Added company logo cloud as text badges (Vodafone, Kaufland, real.de, trivago, Panasonic, obey clothing, okko.tv, oktogo, docsvision)
+  - Added company logo cloud as text badges (Vodafone, real.de, trivago, Panasonic, obey clothing, okko.tv, docsvision)
 - Replaced logo badges with real SVG logos where reliable sources exist:
-  Vodafone, Kaufland, real.de, trivago, Panasonic, Obey, okko.tv, Docsvision.
+  Vodafone, real.de, trivago, Panasonic, Obey, okko.tv, Docsvision.
 - Adjusted logo cloud presentation:
   - Logos are 2x larger
   - Logos are rendered in a single muted gray tone for both dark and light themes
@@ -34,16 +34,16 @@ Recent update:
   - Kept horizontal spacing consistent with logo-wall tuning
   - Mobile version uses 2x smaller logos
   - Added `prefers-reduced-motion` fallback (animation disabled for motion-sensitive users)
-- Replaced Vodafone, trivago, and Kaufland icons with full-text SVG logo variants.
-- Switched Vodafone and Kaufland sources to Wikimedia SVG wordmark files for cleaner rendering.
+- Replaced Vodafone and trivago icons with full-text SVG logo variants where applicable.
 - Logo wall assets:
   - Vodafone: repo file `VF_Logo_RGB_BLACK.svg`
-  - Kaufland: TopPNG provided logo asset (PNG preview file)
 - Added subheader above logo wall: "Companies that trust me".
 - Styled logo-wall subheader using the same `section-label` pattern as "Selected Work" (left-aligned).
 - Added new case page `vodafone-secure-net.html`:
   - Full narrative for Vodafone Secure Net redesign
   - Role, timeline, reach, and results
-  - 3 screenshot placeholders positioned in the requested sections
-  - Final metrics infographic block (drop-off and NPS)
+  - PNG screen exports from Figma file `portfolio` (Cleaning Tool section) in `assets/vodafone-cleaning-tool/`:
+    dashboard context, onboarding step, cleaning progress, scan results, success state, mid-scan reference frame
+  - Final metrics summary cards (drop-off and NPS)
 - Replaced Vodafone Cleaning Tool card on homepage with a live link to the new case.
+- Contact form posts via FormSubmit (`formsubmit.co`) to `antontolkunov@me.com` with redirect back to the site after send. First submission may require confirming the inbox once on FormSubmit’s side.

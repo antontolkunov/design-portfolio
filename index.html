@@ -777,15 +777,6 @@
       transition: opacity 200ms var(--ease);
     }
     .form-submit:hover { opacity: 0.82; }
-    .form-success {
-      display: none;
-      text-align: center;
-      padding: var(--space-8);
-      color: var(--color-text-muted);
-      font-size: var(--text-sm);
-    }
-    .form-success.show { display: block; }
-
     /* ============================================
        FOOTER
     ============================================ */
@@ -915,7 +906,6 @@
         <div class="logo-wall" aria-label="Companies">
           <div class="logo-track">
             <span class="logo-item"><img src="/VF_Logo_RGB_BLACK.svg" alt="Vodafone logo" loading="lazy" decoding="async"></span>
-            <span class="logo-item"><img src="https://toppng.com/public/uploads/preview/kaufland-logo-vector-download-11574090717c540vyejuc.png" alt="Kaufland logo" loading="lazy" decoding="async"></span>
             <span class="logo-item"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Real%2C-Logo.svg" alt="real.de logo" loading="lazy" decoding="async"></span>
             <span class="logo-item"><img src="https://cdn.worldvectorlogo.com/logos/trivago.svg" alt="trivago logo" loading="lazy" decoding="async"></span>
             <span class="logo-item logo-panasonic"><img src="https://cdn.simpleicons.org/panasonic" alt="Panasonic logo" loading="lazy" decoding="async"></span>
@@ -923,7 +913,6 @@
             <span class="logo-item"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Okko_Logo.svg" alt="okko.tv logo" loading="lazy" decoding="async"></span>
             <span class="logo-item logo-docsvision"><img src="https://docsvision.com/netcat_files/cs/logo_text.svg" alt="Docsvision logo" loading="lazy" decoding="async"></span>
             <span class="logo-item"><img src="/VF_Logo_RGB_BLACK.svg" alt="" loading="lazy" decoding="async" aria-hidden="true"></span>
-            <span class="logo-item"><img src="https://toppng.com/public/uploads/preview/kaufland-logo-vector-download-11574090717c540vyejuc.png" alt="" loading="lazy" decoding="async" aria-hidden="true"></span>
             <span class="logo-item"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Real%2C-Logo.svg" alt="" loading="lazy" decoding="async" aria-hidden="true"></span>
             <span class="logo-item"><img src="https://cdn.worldvectorlogo.com/logos/trivago.svg" alt="" loading="lazy" decoding="async" aria-hidden="true"></span>
             <span class="logo-item logo-panasonic"><img src="https://cdn.simpleicons.org/panasonic" alt="" loading="lazy" decoding="async" aria-hidden="true"></span>
@@ -1152,25 +1141,24 @@
 
       <div class="contact-form reveal" role="form" aria-label="Send a message">
         <h3 class="contact-form-title">Or send a message</h3>
-        <form id="contactForm" novalidate>
+        <form id="contactForm" action="https://formsubmit.co/antontolkunov@me.com" method="POST">
+          <input type="hidden" name="_subject" value="Portfolio — message from antontolkunov.me">
+          <input type="hidden" name="_next" value="https://antontolkunov.me/#contact">
+          <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off" aria-hidden="true">
           <div class="form-group">
             <label for="contactName">Name</label>
-            <input type="text" id="contactName" name="name" placeholder="Your name" autocomplete="name">
+            <input type="text" id="contactName" name="name" placeholder="Your name" autocomplete="name" required>
           </div>
           <div class="form-group">
             <label for="contactEmail">Email</label>
-            <input type="email" id="contactEmail" name="email" placeholder="your@email.com" autocomplete="email">
+            <input type="email" id="contactEmail" name="email" placeholder="your@email.com" autocomplete="email" required>
           </div>
           <div class="form-group">
             <label for="contactMsg">Message</label>
-            <textarea id="contactMsg" name="message" placeholder="Tell me about your project or role..."></textarea>
+            <textarea id="contactMsg" name="message" placeholder="Tell me about your project or role..." required></textarea>
           </div>
           <button type="submit" class="form-submit">Send message →</button>
         </form>
-        <div class="form-success" id="formSuccess" role="status" aria-live="polite">
-          <p style="font-size:var(--text-lg);margin-bottom:var(--space-2);">✓</p>
-          <p>Message sent. I'll get back to you soon.</p>
-        </div>
       </div>
     </div>
   </section>
@@ -1231,16 +1219,6 @@
   }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
   revealEls.forEach(el => observer.observe(el));
 
-  /* Contact form — simulated submit */
-  const form = document.getElementById('contactForm');
-  const success = document.getElementById('formSuccess');
-  if (form) {
-    form.addEventListener('submit', (e) => {
-      e.preventDefault();
-      form.style.display = 'none';
-      success.classList.add('show');
-    });
-  }
 </script>
 
 </body>
