@@ -399,6 +399,18 @@
     }
     .project-card:hover .card-thumb img { transform: scale(1.04); }
 
+    /* WIP placeholder thumb */
+    .card-thumb-placeholder {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--color-surface-2);
+    }
+    .card-thumb-placeholder .card-wip-badge {
+      position: static;
+      margin: 0;
+    }
+
     /* Placeholder thumb */
     .thumb-placeholder {
       width: 100%; height: 100%;
@@ -935,14 +947,21 @@
 
         <!-- CARD 1 — Vodafone Secure Net (XL) -->
         <a href="/vodafone-secure-net.html" class="project-card card-xl reveal" tabindex="0" aria-label="Vodafone Secure Net">
-          <div class="card-body" style="padding:0;flex:1;position:relative;overflow:hidden;">
-            <img src="assets/vodafone-cleaning-tool/CT_thumb.png" alt="Cleaning Tool preview" style="width:100%;height:100%;object-fit:cover;display:block;">
-            <div class="card-wip-state" style="position:absolute;bottom:var(--space-4);left:var(--space-4);">
-              <div>
-                <p class="wip-label" style="color:#fff;text-shadow:0 1px 4px rgba(0,0,0,.5);">Vodafone · Android</p>
-                <h2 class="wip-title" style="color:#fff;text-shadow:0 1px 4px rgba(0,0,0,.5);">Secure Net</h2>
-              </div>
+          <div class="card-thumb">
+            <img src="assets/vodafone-cleaning-tool/CT_thumb.png"
+                 alt="Vodafone Secure Net — Cleaning Tool preview"
+                 width="800" height="500" loading="lazy" decoding="async">
+          </div>
+          <div class="card-body">
+            <div class="card-meta">
+              <span class="card-tag">UX/UI Design</span>
+              <span class="card-dot"></span>
+              <span class="card-tag">Mobile</span>
+              <span class="card-dot"></span>
+              <span class="card-tag">Android</span>
             </div>
+            <h2 class="card-title">Vodafone Secure Net — Cleaning Tool</h2>
+            <p class="card-desc">Redesigned the Cleaning Tool flow inside Vodafone's security app, cutting drop-off from 60% to 20% through progressive disclosure and trust-building UI patterns.</p>
           </div>
           <div class="card-footer">
             <span class="card-metric"><strong>Drop-off 60% → 20%</strong> · Senior UX/UI Designer</span>
@@ -954,17 +973,17 @@
 
         <!-- CARD 2 — Vodafone Overview Summary (WIP) -->
         <article class="project-card card-sm reveal reveal-delay-1" tabindex="0" role="article" aria-label="Vodafone Overview Summary — coming soon">
-          <div class="card-body" style="padding:0;flex:1;">
-            <div class="card-wip-state">
-              <div class="wip-icon">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
-              </div>
-              <div>
-                <p class="wip-label">Vodafone · Coming soon</p>
-                <h2 class="wip-title">Overview Summary</h2>
-              </div>
-              <span class="card-wip-badge">In progress</span>
+          <div class="card-thumb card-thumb-placeholder">
+            <span class="card-wip-badge">Coming soon</span>
+          </div>
+          <div class="card-body">
+            <div class="card-meta">
+              <span class="card-tag">B2B SaaS</span>
+              <span class="card-dot"></span>
+              <span class="card-tag">Product Design</span>
             </div>
+            <h2 class="card-title">Vodafone Overview Summary</h2>
+            <p class="card-desc">End-to-end redesign of Vodafone's internal B2B tooling — streamlining complex data views into actionable dashboards.</p>
           </div>
           <div class="card-footer">
             <span class="card-metric"><strong>B2B SaaS</strong> · Lead Product Designer</span>
