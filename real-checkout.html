@@ -395,6 +395,12 @@
       margin-top: var(--space-3);
       letter-spacing: 0.03em;
     }
+    .case-image-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-4);
+    }
+    .case-image-grid .case-image-wide { margin: 0; padding: 0; }
 
     /* NEXT PROJECT */
     .next-project {
@@ -466,6 +472,7 @@
       .details-grid { grid-template-columns: 1fr 1fr; }
       .case-content { padding: 0 var(--space-4); }
       .case-image-wide { padding: 0 var(--space-4); }
+      .case-image-grid { grid-template-columns: 1fr; }
       .next-project { padding: var(--space-12) var(--space-4); }
       .site-footer { padding: var(--space-6) var(--space-4); }
       .process-item { grid-template-columns: 1fr; gap: var(--space-1); }
@@ -509,8 +516,8 @@
   </section>
 
   <div class="case-cover reveal reveal-delay-2">
-    <img src="https://payload.cargocollective.com/1/0/9942/14097745/prt_1589220539_2x.png"
-         alt="Real.de checkout redesign — before and after comparison"
+    <img src="assets/real-de/prt_1589220539_2x.png"
+         alt="Real.de Lebensmittelshop — online grocery platform"
          width="1280" height="800" loading="eager" decoding="async">
   </div>
 
@@ -566,6 +573,16 @@
           <span class="process-desc">Prototype usability testing, high-fidelity design handoff, implementation QA and A/B test setup</span>
         </li>
       </ul>
+
+      <div class="case-image-wide" style="max-width:var(--content-narrow);padding:0;margin:var(--space-10) auto var(--space-4);">
+        <img src="assets/real-de/research1.png" alt="Competitor analysis of grocery checkout flows and NNg e-commerce usability guidelines." loading="lazy" decoding="async">
+        <p class="image-caption">Competitor analysis and NNg e-commerce guidelines shaped the initial framing.</p>
+      </div>
+
+      <div class="case-image-wide" style="max-width:var(--content-narrow);padding:0;margin:var(--space-4) auto;">
+        <img src="assets/real-de/ideation.png" alt="Design sprint workshop — team ideation, whiteboard with prioritised notes, Crazy 8s sketches." loading="lazy" decoding="async">
+        <p class="image-caption">Ideation workshop: HMW framing, dot voting, Crazy 8s with product and engineering.</p>
+      </div>
     </div>
 
     <!-- KEY INSIGHT -->
@@ -586,6 +603,16 @@
       </div>
 
       <p>The sprint surfaced a clear hypothesis: users couldn't tell how close they were to finishing. The price kept changing as they scrolled. The delivery window felt buried. <strong>The problem wasn't the content — it was the structure.</strong></p>
+
+      <div class="case-image-wide" style="max-width:var(--content-narrow);padding:0;margin:var(--space-10) auto var(--space-4);">
+        <img src="assets/real-de/research2.png" alt="Remote usability testing sessions — test scenarios, screen recordings, and categorised findings." loading="lazy" decoding="async">
+        <p class="image-caption">Usability testing: scenarios, remote sessions, and structured feedback analysis.</p>
+      </div>
+
+      <div class="case-image-wide" style="max-width:var(--content-narrow);padding:0;margin:var(--space-4) auto;">
+        <img src="assets/real-de/oldnew1.png" alt="Before and after — single-page checkout versus multi-step flow with visible timeslot selection and persistent cart total." loading="lazy" decoding="async">
+        <p class="image-caption">Before: everything collapsed into one scrollable page. After: clear steps, persistent price, prominent timeslot.</p>
+      </div>
     </div>
 
     <!-- SOLUTION -->
@@ -594,6 +621,16 @@
       <h2>Small change on the surface. Meaningful change underneath.</h2>
       <p>The idea wasn't radical — it was structural. Break the checkout into clearly named steps. Surface the timeslot selection earlier and more prominently. Keep the total price always visible, no matter which step the user is on.</p>
       <p>We prototyped the multi-step flow and ran another round of usability testing. The difference was immediate. Users moved through the checkout without backtracking. They selected their delivery window confidently. When asked <em>"how close are you to finishing?"</em> — they knew the answer.</p>
+
+      <div class="case-image-wide" style="max-width:var(--content-narrow);padding:0;margin:var(--space-10) auto var(--space-4);">
+        <img src="assets/real-de/lms-checkout.png" alt="Redesigned multi-step grocery checkout — five screens: address, timeslot, payment, order summary, confirmation." loading="lazy" decoding="async">
+        <p class="image-caption">The final five-step flow: address, delivery timeslot, payment, summary, confirmation.</p>
+      </div>
+
+      <div class="case-image-wide" style="max-width:var(--content-narrow);padding:0;margin:var(--space-4) auto;">
+        <img src="assets/real-de/Screenshot-2020-05-11-at-13.13.18.png" alt="Detailed wireframe user flow of the redesigned multi-step checkout in Sketch." loading="lazy" decoding="async">
+        <p class="image-caption">Full user flow with edge cases: the wireframe that went into usability testing and engineering handoff.</p>
+      </div>
     </div>
 
     <!-- RESULT -->
