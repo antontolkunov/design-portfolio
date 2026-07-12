@@ -47,3 +47,8 @@ Recent update:
   - Final metrics summary cards (drop-off and NPS)
 - Replaced Vodafone Cleaning Tool card on homepage with a live link to the new case.
 - Contact form posts via FormSubmit (`formsubmit.co`) to `antontolkunov@me.com` with redirect back to the site after send. First submission may require confirming the inbox once on FormSubmit’s side.
+- Restructured `vodafone-secure-net.html` narrative:
+  - Section order: Problem, What We Found, UX Research (new), Design Decisions, Before/After, Design Exploration, Testing, Complete Flow, Results, What I Learned
+  - Added UX Research section with placeholders for journey maps, session notes, affinity diagrams
+  - Added placeholders in Design Exploration for early sketches and visual research moodboard
+  - Restored onboarding screen in What We Found and scan-progress in Testing

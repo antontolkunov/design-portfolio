@@ -185,6 +185,491 @@
       width: 50%;
       margin-inline: auto;
     }
+
+    /* Before/After comparison */
+    .before-after-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-6);
+      margin-top: var(--space-6);
+    }
+    .ba-column { display: flex; flex-direction: column; gap: var(--space-4); }
+    .ba-label {
+      font-size: var(--text-xs);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--color-accent);
+      padding-bottom: var(--space-2);
+      border-bottom: 1px solid var(--color-divider);
+    }
+    .ba-pair {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-4);
+      align-items: start;
+    }
+    .ba-pair + .ba-pair { margin-top: var(--space-4); }
+    .ba-column img {
+      width: 100%; height: auto; display: block;
+      border-radius: var(--radius-xl);
+      border: 1px solid var(--color-border);
+      background: var(--color-surface);
+    }
+    .ba-slider-row {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-10);
+      margin-top: var(--space-6);
+    }
+    .ba-slider-wrap {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: var(--space-8);
+      align-items: start;
+    }
+    .ba-slider-inner { display: flex; flex-direction: column; align-items: center; gap: var(--space-2); }
+    .ba-changes { display: flex; flex-direction: column; gap: var(--space-3); }
+    .ba-changes h3 {
+      font-family: var(--font-display);
+      font-size: var(--text-lg);
+      margin-bottom: var(--space-2);
+    }
+    .ba-changes ul {
+      list-style: none;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-2);
+    }
+    .ba-changes li {
+      font-size: var(--text-sm);
+      color: var(--color-text-muted);
+      line-height: 1.5;
+      padding-left: 1.2em;
+      position: relative;
+    }
+    .ba-changes li::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0.55em;
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--color-accent);
+    }
+    .ba-slider {
+      position: relative;
+      overflow: hidden;
+      border-radius: 22px;
+      border: none;
+      box-sizing: border-box;
+      cursor: col-resize;
+      user-select: none;
+      -webkit-user-select: none;
+      touch-action: none;
+    }
+    .ba-slider img {
+      display: block;
+      pointer-events: none;
+      position: absolute;
+      top: 0; left: 0;
+      transform-origin: top left;
+    }
+    .ba-divider {
+      position: absolute;
+      top: 0; bottom: 0;
+      width: 2px;
+      background: #fff;
+      box-shadow: 0 0 6px rgba(0,0,0,0.4);
+      pointer-events: none;
+      z-index: 2;
+    }
+    .ba-knob {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 44px; height: 44px;
+      background: #fff;
+      border-radius: 50%;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
+      z-index: 3;
+    }
+    .ba-badge {
+      position: absolute;
+      top: 12px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: #fff;
+      padding: 3px 8px;
+      border-radius: 4px;
+      background: rgba(0,0,0,0.45);
+      backdrop-filter: blur(4px);
+      pointer-events: none;
+      z-index: 3;
+    }
+    .ba-badge-after { left: 12px; }
+    .ba-badge-before { right: 12px; }
+    .ba-slider-label {
+      font-size: var(--text-xs);
+      color: var(--color-text-faint);
+    }
+
+    /* WIP mosaic */
+    .wip-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-4);
+      margin-top: var(--space-6);
+    }
+    .wip-grid img {
+      width: 100%; height: auto; display: block;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--color-border);
+      background: var(--color-surface);
+      opacity: 0.85;
+      transition: opacity 300ms var(--ease);
+    }
+    .wip-grid img:hover { opacity: 1; }
+
+    /* Placeholder for upcoming content */
+    .placeholder-media {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 260px;
+      padding: var(--space-6);
+      border: 2px dashed var(--color-border);
+      border-radius: var(--radius-xl);
+      background: var(--color-surface);
+      color: var(--color-muted);
+      font: var(--text-sm) var(--font-body);
+      text-align: center;
+    }
+
+    /* Full flow horizontal scroll */
+    .flow-scroll {
+      margin-top: var(--space-6);
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      padding-bottom: var(--space-4);
+    }
+    .flow-scroll img {
+      display: block;
+      height: 700px;
+      width: auto;
+      border-radius: var(--radius-xl);
+      border: 1px solid var(--color-border);
+      background: var(--color-surface);
+    }
+
+    /* ── Flow Compression Interactive Infographic ── */
+    .fc-demo {
+      margin: var(--space-8) 0;
+      padding: 0;
+    }
+    .fc-topline {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-3);
+      margin-bottom: var(--space-6);
+    }
+    .fc-metric {
+      padding: var(--space-4) var(--space-4);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      background: var(--color-surface);
+    }
+    .fc-metric__value {
+      display: block;
+      font-family: var(--font-display);
+      font-size: var(--text-xl);
+      font-weight: 700;
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+    .fc-metric__label {
+      font-size: var(--text-xs);
+      color: var(--color-text-muted);
+    }
+    .fc-stage {
+      position: relative;
+      height: 380px;
+      overflow: hidden;
+    }
+    .fc-layer {
+      position: absolute;
+      inset: 0;
+    }
+    .fc-layer--after { pointer-events: none; }
+    .fc-card {
+      position: absolute;
+      width: 30%;
+      padding: var(--space-3) var(--space-4);
+      border-radius: var(--radius-xl);
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+      transition: transform 700ms cubic-bezier(0.16, 1, 0.3, 1), opacity 500ms ease;
+    }
+    .fc-card h4 {
+      margin: 0 0 2px;
+      font-size: var(--text-sm);
+      font-weight: 600;
+      line-height: 1.2;
+    }
+    .fc-card p {
+      margin: 0;
+      font-size: var(--text-xs);
+      color: var(--color-text-muted);
+      line-height: 1.35;
+    }
+    .fc-kicker {
+      display: inline-flex;
+      margin-bottom: var(--space-2);
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+    .fc-kicker--old {
+      background: var(--color-surface-2);
+      color: var(--color-text-muted);
+    }
+    .fc-kicker--new {
+      background: rgba(200,184,154,0.12);
+      color: var(--color-accent);
+    }
+    .fc-card--1 { top: 16px;  left: 3%;   transform: rotate(-3deg); z-index: 6; }
+    .fc-card--2 { top: 16px;  left: 50%;  transform: translateX(-50%) rotate(1deg); z-index: 5; }
+    .fc-card--3 { top: 16px;  right: 3%;  transform: rotate(3deg); z-index: 4; }
+    .fc-card--4 { top: 200px; left: 3%;   transform: rotate(2deg); z-index: 3; }
+    .fc-card--5 { top: 200px; left: 50%;  transform: translateX(-50%) rotate(-1deg); z-index: 2; }
+    .fc-card--6 { top: 200px; right: 3%;  transform: rotate(-2deg); z-index: 1; }
+    .fc-connector {
+      position: absolute;
+      bottom: 28px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 200px;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--color-accent), transparent);
+      transition: opacity 400ms ease;
+    }
+    .fc-connector::after {
+      content: '';
+      position: absolute;
+      right: 0; top: -5px;
+      width: 10px; height: 10px;
+      border-top: 2px solid var(--color-accent);
+      border-right: 2px solid var(--color-accent);
+      transform: rotate(45deg);
+    }
+    .fc-card--result {
+      width: 340px;
+      top: 50%; left: 50%;
+      transform: translate(-50%, calc(-50% + 16px)) scale(0.9);
+      opacity: 0;
+      background: linear-gradient(180deg, rgba(200,184,154,0.05), var(--color-surface));
+      border-color: rgba(200,184,154,0.25);
+      box-shadow: 0 24px 80px rgba(200,184,154,0.1);
+      pointer-events: none;
+      transition: transform 700ms cubic-bezier(0.16, 1, 0.3, 1), opacity 500ms ease;
+    }
+    .fc-result-points {
+      margin: var(--space-3) 0 0;
+      padding: 0;
+      list-style: none;
+    }
+    .fc-result-points li {
+      font-size: var(--text-xs);
+      color: var(--color-text-muted);
+      padding: 3px 0 3px 16px;
+      position: relative;
+      line-height: 1.5;
+    }
+    .fc-result-points li::before {
+      content: "\2192";
+      position: absolute;
+      left: 0;
+      color: var(--color-accent);
+    }
+    /* Merged state */
+    .fc-demo.is-merged .fc-card--1 { transform: translate(40px, 50px) scale(0.65) rotate(-14deg); opacity: 0; }
+    .fc-demo.is-merged .fc-card--2 { transform: translateX(-50%) translateY(50px) scale(0.65); opacity: 0; }
+    .fc-demo.is-merged .fc-card--3 { transform: translate(-40px, 50px) scale(0.65) rotate(14deg); opacity: 0; }
+    .fc-demo.is-merged .fc-card--4 { transform: translate(40px, -30px) scale(0.65) rotate(10deg); opacity: 0; }
+    .fc-demo.is-merged .fc-card--5 { transform: translateX(-50%) translateY(-30px) scale(0.65); opacity: 0; }
+    .fc-demo.is-merged .fc-card--6 { transform: translate(-40px, -30px) scale(0.65) rotate(-10deg); opacity: 0; }
+    .fc-demo.is-merged .fc-connector { opacity: 0; }
+    .fc-demo.is-merged .fc-card--result {
+      transform: translate(-50%, -50%) scale(1);
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .fc-controls {
+      display: flex;
+      gap: var(--space-4);
+      align-items: center;
+      justify-content: space-between;
+      margin-top: var(--space-4);
+      flex-wrap: wrap;
+    }
+    .fc-toggle {
+      min-height: 44px;
+      padding: var(--space-3) var(--space-6);
+      border-radius: 999px;
+      border: 1px solid var(--color-accent);
+      background: transparent;
+      color: var(--color-accent);
+      font: var(--text-sm) var(--font-body);
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 260ms var(--ease), background 260ms var(--ease), color 260ms var(--ease);
+    }
+    .fc-toggle:hover {
+      background: var(--color-accent);
+      color: var(--color-bg);
+      transform: translateY(-1px);
+    }
+    .fc-toggle:active { transform: translateY(0); }
+    .fc-note {
+      margin: 0;
+      font-size: var(--text-xs);
+      color: var(--color-text-muted);
+      max-width: 52ch;
+    }
+    /* ── Tablet (481-768px): 2-col grid, tighter but readable ── */
+    @media (max-width: 768px) {
+      .fc-topline { grid-template-columns: 1fr; }
+      .fc-stage { height: 420px; }
+      .fc-card { width: 45%; transform: none !important; }
+      .fc-card--1 { top: 8px;   left: 3%; }
+      .fc-card--2 { top: 8px;   right: 3%; left: auto; }
+      .fc-card--3 { top: 140px; left: 3%; }
+      .fc-card--4 { top: 140px; right: 3%; left: auto; }
+      .fc-card--5 { top: 272px; left: 3%; }
+      .fc-card--6 { top: 272px; right: 3%; left: auto; }
+      .fc-demo.is-merged .fc-card { transform: scale(0.7) !important; opacity: 0; }
+      .fc-card--result { width: calc(100% - 32px); transform: translate(-50%, calc(-50% + 16px)) scale(0.9) !important; }
+      .fc-demo.is-merged .fc-card--result { transform: translate(-50%, -50%) scale(1) !important; opacity: 1; pointer-events: auto; }
+      .fc-controls { flex-direction: column; align-items: stretch; }
+      .fc-connector { display: none; }
+    }
+
+    /* ── Phone (<=480px): single column, fully stacked ── */
+    @media (max-width: 480px) {
+      .fc-stage { height: 600px; }
+      .fc-card { width: 88%; left: 6% !important; right: auto !important; }
+      .fc-card--1 { top: 0; }
+      .fc-card--2 { top: 100px; }
+      .fc-card--3 { top: 200px; }
+      .fc-card--4 { top: 300px; }
+      .fc-card--5 { top: 400px; }
+      .fc-card--6 { top: 500px; }
+    }
+
+    /* ── Convergence variant (3 lenses → 1 solution) ── */
+    .fc-converge .fc-stage { height: 340px; }
+    .fc-converge .fc-card { width: 30%; }
+    .fc-card--biz  { top: 20px;  left: 3%;   transform: rotate(-3deg); z-index: 3; }
+    .fc-card--tech { top: 48px;  left: 50%;  transform: translateX(-50%) rotate(1deg); z-index: 2; }
+    .fc-card--dsgn { top: 76px;  right: 3%;  transform: rotate(2.5deg); z-index: 1; }
+    .fc-converge.is-merged .fc-card--biz  { transform: translate(60px, 30px) scale(0.65) rotate(-12deg); opacity: 0; }
+    .fc-converge.is-merged .fc-card--tech { transform: translateX(-50%) translateY(30px) scale(0.65); opacity: 0; }
+    .fc-converge.is-merged .fc-card--dsgn { transform: translate(-60px, 30px) scale(0.65) rotate(12deg); opacity: 0; }
+    .fc-converge .fc-card--result { width: 380px; }
+    /* Convergence tablet + phone */
+    @media (max-width: 768px) {
+      .fc-converge .fc-stage { height: 340px; }
+      .fc-converge .fc-card {
+        width: 90% !important;
+        left: 5% !important;
+        right: auto !important;
+        transform: none !important;
+      }
+      .fc-converge .fc-card--biz  { top: 0; }
+      .fc-converge .fc-card--tech { top: 110px; }
+      .fc-converge .fc-card--dsgn { top: 220px; }
+      .fc-converge.is-merged .fc-card--biz,
+      .fc-converge.is-merged .fc-card--tech,
+      .fc-converge.is-merged .fc-card--dsgn { transform: scale(0.7) !important; opacity: 0; }
+      .fc-converge .fc-card--result { width: calc(100% - 32px) !important; }
+    }
+    @media (max-width: 480px) {
+      .fc-converge .fc-stage { height: 310px; }
+      .fc-converge .fc-card--biz  { top: 0; }
+      .fc-converge .fc-card--tech { top: 100px; }
+      .fc-converge .fc-card--dsgn { top: 200px; }
+    }
+
+    /* Animated decision infographic */
+    .flow-infographic {
+      margin: var(--space-8) 0;
+      display: flex;
+      align-items: center;
+      gap: var(--space-6);
+    }
+    .flow-path {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-3);
+    }
+    .flow-step {
+      padding: var(--space-3) var(--space-4);
+      border-radius: var(--radius-md);
+      font-size: var(--text-sm);
+      border: 1px solid var(--color-border);
+      background: var(--color-surface);
+      opacity: 0;
+      transform: translateX(-12px);
+      transition: opacity 400ms var(--ease), transform 400ms var(--ease);
+    }
+    .flow-path.new .flow-step {
+      transform: translateX(12px);
+      background: var(--color-surface-2);
+      border-color: var(--color-accent);
+    }
+    .flow-infographic.visible .flow-step {
+      opacity: 1;
+      transform: translateX(0);
+    }
+    .flow-infographic.visible .flow-step:nth-child(2) { transition-delay: 100ms; }
+    .flow-infographic.visible .flow-step:nth-child(3) { transition-delay: 200ms; }
+    .flow-infographic.visible .flow-step:nth-child(4) { transition-delay: 300ms; }
+    .flow-infographic.visible .flow-step:nth-child(5) { transition-delay: 400ms; }
+    .flow-infographic.visible .flow-step:nth-child(6) { transition-delay: 500ms; }
+    .flow-arrow {
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: var(--space-2);
+      color: var(--color-accent);
+      font-size: var(--text-xs);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .flow-arrow svg {
+      opacity: 0;
+      transition: opacity 600ms var(--ease) 300ms;
+    }
+    .flow-infographic.visible .flow-arrow svg { opacity: 1; }
+    .flow-path-label {
+      font-size: var(--text-xs);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--color-text-muted);
+      margin-bottom: var(--space-2);
+    }
     .case-media figcaption {
       margin-top: var(--space-3);
       font-size: var(--text-sm);
@@ -234,6 +719,13 @@
       .nav-inner, .case-hero, .details, .case-content, .footer { padding-inline: var(--space-4); }
       .results-grid { grid-template-columns: 1fr; }
       .case-media-grid { grid-template-columns: 1fr; }
+      .before-after-grid { grid-template-columns: 1fr; }
+      .ba-pair { grid-template-columns: 1fr 1fr; }
+      .ba-slider-wrap { grid-template-columns: 1fr; }
+      .ba-changes { margin-top: var(--space-2); }
+      .wip-grid { grid-template-columns: 1fr 1fr; }
+      .flow-infographic { flex-direction: column; }
+      .flow-scroll img { height: 400px; }
     }
   </style>
 </head>
@@ -280,9 +772,9 @@
         <p>That is great for security, but bad for perceived value. Users could not feel the product working, and when you cannot feel something, you stop trusting it.</p>
         <p>The Cleaning Tool was the exception: scan device, find threats, remove them, see result. But almost nobody finished the flow.</p>
         <p><strong>Drop-off rate: 60%.</strong></p>
-        <figure class="case-media reveal">
-          <img class="half" src="assets/vodafone-cleaning-tool/secure-net-dashboard.png" alt="Secure Net Android dashboard showing Cleaning Tool among security modules." loading="lazy" decoding="async" />
-          <figcaption>The Tool sits inside the Secure Net dashboard — one of the few surfaces where users expect visible motion after they tap.</figcaption>
+        <figure class="case-media reveal" style="display:flex;flex-direction:column;align-items:center;">
+          <iframe style="border:none;border-radius:var(--radius-xl);max-width:420px;width:100%;height:860px;" src="https://embed.figma.com/proto/QU1eFixAWNpnVff8iUAV19/portfolio?node-id=257-159620&scaling=scale-down&content-scaling=fixed&page-id=0%3A1&embed-host=share" allowfullscreen></iframe>
+          <figcaption>Interactive prototype — tap through the Secure Net dashboard to explore the Cleaning Tool flow.</figcaption>
         </figure>
       </div>
 
@@ -293,14 +785,72 @@
         <p>The flow stacked orientation, virus-definition preparation, scan, and removal without telling people how long each beat would last. Timing swung with backend latency, device tier, and storage volume — so even reliable engineering felt arbitrary.</p>
         <p>A six-step onboarding sequence still greeted people before the scan began — useful for education, expensive for momentum when someone only wanted to clean their phone.</p>
         <figure class="case-media reveal">
-          <img class="half" src="assets/vodafone-cleaning-tool/cleaning-onboarding-step.png" alt="Cleaning Tool introductory screen — step 1 of 6 before scanning." loading="lazy" decoding="async" />
+          <img class="half" src="assets/vodafone-cleaning-tool/cleaning-onboarding-step.png" alt="Cleaning Tool introductory screen showing step 1 of 6 before scanning." loading="lazy" decoding="async" />
           <figcaption>Orientation step 1 of 6: users absorbed security storytelling while their urgency drained.</figcaption>
         </figure>
+      </div>
+      <div class="section reveal">
+        <p class="section-label">UX Research</p>
+        <h2>Understanding the drop-off, not just measuring it</h2>
+        <p>I directed a dedicated UX researcher to run moderated sessions in the UK before any design work began. We observed 12 users attempting the Cleaning Tool flow on their own devices, tracking where hesitation turned into abandonment.</p>
+        <p>The sessions revealed that drop-off was not about confusion with the UI. Users understood what to do. They lost trust in <em>when it would end</em>. The flow gave no temporal anchors — no progress, no stage markers, no sense of how long each step would take.</p>
+        <p>We mapped the emotional arc: <strong>curiosity → uncertainty → impatience → abandonment</strong>. The inflection point was consistently around step 3 of 6, where onboarding content felt repetitive and the scan had not yet started.</p>
+        <div class="case-media-grid">
+          <figure class="case-media reveal">
+            <div class="placeholder-media">Coming soon</div>
+          </figure>
+          <figure class="case-media reveal">
+            <div class="placeholder-media">Coming soon</div>
+          </figure>
+        </div>
       </div>
 
       <div class="section reveal">
         <p class="section-label">The Design Decisions</p>
         <h2>Three coordinated decisions across UX, UI, and system behavior</h2>
+
+        <div class="fc-demo fc-converge js-fc-converge">
+          <div class="fc-stage">
+            <div class="fc-layer fc-layer--before">
+              <article class="fc-card fc-card--biz">
+                <span class="fc-kicker fc-kicker--old">Business</span>
+                <h4>Prove the value</h4>
+                <p>Increase user awareness of app benefits and encourage proactive device cleaning.</p>
+              </article>
+              <article class="fc-card fc-card--tech">
+                <span class="fc-kicker fc-kicker--old">Technical</span>
+                <h4>Speed up the engine</h4>
+                <p>Accelerate the scan process and surface relevant threat metadata earlier.</p>
+              </article>
+              <article class="fc-card fc-card--dsgn">
+                <span class="fc-kicker fc-kicker--old">Design</span>
+                <h4>New design system</h4>
+                <p>Adopt Vodafone Home Portfolio system for a more readable, accessible experience.</p>
+              </article>
+              <div class="fc-connector" aria-hidden="true"></div>
+            </div>
+
+            <div class="fc-layer fc-layer--after">
+              <article class="fc-card fc-card--result">
+                <span class="fc-kicker fc-kicker--new">What actually happened</span>
+                <h4>Design system upgrade became a UX redesign</h4>
+                <p>The initial scope was a design system migration. During requirements review, I initiated research that reshaped the brief.</p>
+                <ul class="fc-result-points" role="list">
+                  <li>Users wanted control over digital security and access to threat detail</li>
+                  <li>Making scans “educational and entertaining” was not validated by research</li>
+                  <li>Effort redirected toward clarity, speed, and trust</li>
+                </ul>
+              </article>
+            </div>
+          </div>
+
+          <div class="fc-controls">
+            <button class="fc-toggle" type="button">Show the convergence</button>
+            <p class="fc-note">Three separate briefs. One design opportunity I shaped from research.</p>
+          </div>
+        </div>
+
+
         <div class="decisions-list">
           <div class="decision-item">
             <h3>1. Collapse the flow</h3>
@@ -316,32 +866,178 @@
           </div>
         </div>
         <p>Execution screens split “work in flight”, “what we found”, and “what happened next” into distinct visual chapters instead of recycled layouts.</p>
-        <div class="case-media-grid">
-          <figure class="case-media reveal">
-            <img src="assets/vodafone-cleaning-tool/scan-results-selection.png" alt="Scan results listing infections with Clean selected items control." width="824" height="1834" loading="lazy" decoding="async" />
-            <figcaption>Scan results as an actionable ledger — threats named, selection surfaced, primary action anchored.</figcaption>
-          </figure>
-          <figure class="case-media reveal">
-            <img src="assets/vodafone-cleaning-tool/cleaning-device-progress.png" alt="Cleaning Tool screen — active cleaning with progress copy." width="824" height="1834" loading="lazy" decoding="async" />
-            <figcaption>Removal phase with explicit progress language — users finally saw the machine working for them.</figcaption>
-          </figure>
+
+        <div class="fc-demo js-fc-demo">
+          <div class="fc-topline" aria-label="Compression metrics">
+            <div class="fc-metric">
+              <span class="fc-metric__value">6 &rarr; 2</span>
+              <span class="fc-metric__label">User-facing steps</span>
+            </div>
+            <div class="fc-metric">
+              <span class="fc-metric__value">&minus;67%</span>
+              <span class="fc-metric__label">Interaction steps</span>
+            </div>
+            <div class="fc-metric">
+              <span class="fc-metric__value">60 &rarr; 40%</span>
+              <span class="fc-metric__label">Drop-off rate</span>
+            </div>
+          </div>
+
+          <div class="fc-stage">
+            <div class="fc-layer fc-layer--before">
+              <article class="fc-card fc-card--1">
+                <span class="fc-kicker fc-kicker--old">Step 1</span>
+                <h4>Onboarding intro</h4>
+                <p>Welcome screen explaining what Cleaning Tool does.</p>
+              </article>
+              <article class="fc-card fc-card--2">
+                <span class="fc-kicker fc-kicker--old">Step 2</span>
+                <h4>Education carousel</h4>
+                <p>Six slides about threats, security tips, definitions.</p>
+              </article>
+              <article class="fc-card fc-card--3">
+                <span class="fc-kicker fc-kicker--old">Step 3</span>
+                <h4>DB update wait</h4>
+                <p>Visible virus definition download blocking the flow.</p>
+              </article>
+              <article class="fc-card fc-card--4">
+                <span class="fc-kicker fc-kicker--old">Step 4</span>
+                <h4>Scan</h4>
+                <p>Full-device scan with minimal progress feedback.</p>
+              </article>
+              <article class="fc-card fc-card--5">
+                <span class="fc-kicker fc-kicker--old">Step 5</span>
+                <h4>Threat list</h4>
+                <p>Flat list of issues, no clear action hierarchy.</p>
+              </article>
+              <article class="fc-card fc-card--6">
+                <span class="fc-kicker fc-kicker--old">Step 6</span>
+                <h4>Completion</h4>
+                <p>Generic success screen, no summary of what happened.</p>
+              </article>
+              <div class="fc-connector" aria-hidden="true"></div>
+            </div>
+
+            <div class="fc-layer fc-layer--after">
+              <article class="fc-card fc-card--result">
+                <span class="fc-kicker fc-kicker--new">Redesigned</span>
+                <h4>Scan &rarr; Remove</h4>
+                <p>Two clear phases. DB update runs silently in background. Onboarding moved to an optional info touchpoint.</p>
+                <ul class="fc-result-points" role="list">
+                  <li>Direct entry into scan with real-time progress</li>
+                  <li>Actionable threat ledger with severity and selection</li>
+                  <li>Earned closure: summary of cleaned items and time</li>
+                  <li>Education available on demand, never blocking</li>
+                </ul>
+              </article>
+            </div>
+          </div>
+
+          <div class="fc-controls">
+            <button class="fc-toggle" type="button">Compress the flow</button>
+            <p class="fc-note">See how six disconnected steps became a focused two-phase experience.</p>
+          </div>
         </div>
+      </div>
+
+      <div class="section reveal">
+        <p class="section-label">Before and After</p>
+        <h2>Old flow vs. redesigned flow</h2>
+        <p>Drag the slider to compare the original and redesigned experience.</p>
+        <div class="ba-slider-row">
+          <div class="ba-slider-wrap">
+            <div class="ba-slider-inner">
+              <div class="ba-slider" data-before="assets/vodafone-cleaning-tool/ba-prescan-before.png" data-after="assets/vodafone-cleaning-tool/ba-prescan-after.png" data-pw="412" data-ph="917"></div>
+              <span class="ba-slider-label">Pre Scan</span>
+            </div>
+            <div class="ba-changes">
+              <h3>Pre Scan</h3>
+              <ul>
+                <li>Moved 6-step onboarding wall that drained user momentum into the info touchpoint. Always available, never blocking.</li>
+                <li>Moved virus definition update to a silent background pre-step</li>
+                <li>Entry point now leads directly into scan with clear intent</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="ba-slider-wrap">
+            <div class="ba-slider-inner">
+              <div class="ba-slider" data-before="assets/vodafone-cleaning-tool/ba-scan-before.png" data-after="assets/vodafone-cleaning-tool/ba-scan-after.png" data-pw="412" data-ph="917"></div>
+              <span class="ba-slider-label">Scan</span>
+            </div>
+            <div class="ba-changes">
+              <h3>Scan</h3>
+              <ul>
+                <li>The real-time percentage progress indicator became more visible</li>
+                <li>Contextual content during wait replaces empty screen</li>
+                <li>Cancel path visible and accessible throughout</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="ba-slider-wrap">
+            <div class="ba-slider-inner">
+              <div class="ba-slider" data-before="assets/vodafone-cleaning-tool/ba-preclean-before.png" data-after="assets/vodafone-cleaning-tool/ba-preclean-after.png" data-pw="412" data-ph="917"></div>
+              <span class="ba-slider-label">Pre Clean</span>
+            </div>
+            <div class="ba-changes">
+              <h3>Pre Clean</h3>
+              <ul>
+                <li>Threat list redesigned as actionable ledger with selection controls based on the real data (usually 1-5 infections found)</li>
+                <li>Severity and type made immediately scannable</li>
+                <li>Primary action anchored at bottom for single-hand reach</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="ba-slider-wrap">
+            <div class="ba-slider-inner">
+              <div class="ba-slider" data-before="assets/vodafone-cleaning-tool/ba-success-before.png" data-after="assets/vodafone-cleaning-tool/ba-success-after.png" data-pw="412" data-ph="917"></div>
+              <span class="ba-slider-label">Success</span>
+            </div>
+            <div class="ba-changes">
+              <h3>Success</h3>
+              <ul>
+                <li>Clear summary of what was cleaned and time taken</li>
+                <li>Closure state feels earned, not administrative</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section reveal">
+        <p class="section-label">Design Exploration</p>
+        <h2>Searching for the right visual language</h2>
+        <p>Before converging on the final direction, I explored multiple approaches: onboarding tone, scan UI density, progress visualization, and completion states. The process included paper sketches, low-fidelity wireframes, and visual research across security and health-monitoring apps.</p>
         <figure class="case-media reveal">
-          <img class="half" src="assets/vodafone-cleaning-tool/cleaning-success-all-clear.png" alt="Cleaning Tool success — All Infections cleaned celebration state." loading="lazy" decoding="async" />
-          <figcaption>Completion state with celebration micro-motion — closure became memorable, not muted.</figcaption>
+          <img src="assets/vodafone-cleaning-tool/visexpl.png" alt="Visual exploration — design directions, UI density experiments, and iteration snapshots" loading="lazy" decoding="async" />
         </figure>
+        <div class="flow-scroll" style="margin-top:var(--space-8);">
+          <img src="assets/vodafone-cleaning-tool/research.png" alt="User research artifacts and findings" loading="lazy" decoding="async" style="height:400px;">
+        </div>
+        <p style="font-size:var(--text-sm);color:var(--color-text-muted);margin-top:var(--space-3);">Research artifacts that informed the design direction -- scroll horizontally to explore.</p>
       </div>
 
       <div class="section reveal">
         <p class="section-label">Testing and Iteration</p>
         <h2>Tested, narrowed, iterated, and revalidated</h2>
         <p>I tested three design variations with users. One clearly outperformed the others, but moderated sessions exposed friction points that metrics alone would not reveal.</p>
-        <p>Mid-scan states were especially vocal: percentage motion helped, yet headline hierarchy, reassurance copy, and cancellation paths decided whether someone trusted the wait.</p>
         <figure class="case-media reveal">
           <img class="half" src="assets/vodafone-cleaning-tool/scan-progress-50.png" alt="Cleaning Tool scan in progress at fifty percent." loading="lazy" decoding="async" />
-          <figcaption>Representative mid-scan frame used in sessions — anchoring pace expectations before polishing removal.</figcaption>
+          <figcaption>Mid-scan frame used in user sessions — anchoring pace expectations before polishing the removal step.</figcaption>
         </figure>
+        <p>Mid-scan states were especially vocal: percentage motion helped, yet headline hierarchy, reassurance copy, and cancellation paths decided whether someone trusted the wait.</p>
         <p>I iterated and retested until those points were resolved. Four months after the first research session in the UK, the redesign was live.</p>
+      </div>
+
+      <div class="section reveal">
+        <p class="section-label">The Complete Flow</p>
+        <h2>Every screen, every state, every edge case</h2>
+        <p>The final design covers the full journey: dashboard entry, permissions, scanning with real-time progress, results with actionable threat management, cleaning with cancel/uninstall paths, and celebration closure. Scroll horizontally to explore.</p>
+        <div class="flow-scroll">
+          <img src="assets/vodafone-cleaning-tool/full-flow.png" alt="Complete Cleaning Tool flow — all screens and states" loading="lazy" decoding="async">
+        </div>
       </div>
 
       <div class="section reveal">
@@ -402,6 +1098,131 @@
       });
     }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
     revealEls.forEach((el) => observer.observe(el));
+
+    document.querySelectorAll('.ba-slider').forEach(el => {
+      const phoneW = parseInt(el.dataset.pw) || 412;
+      const phoneH = parseInt(el.dataset.ph) || 917;
+      const scale = 0.45;
+      const W = Math.round(phoneW * scale);
+      const H = Math.round(phoneH * scale);
+      el.style.width = W + 'px';
+      el.style.height = H + 'px';
+
+      const beforeImg = new Image();
+      beforeImg.src = el.dataset.before;
+      beforeImg.style.width = phoneW + 'px';
+      beforeImg.style.height = phoneH + 'px';
+      beforeImg.style.transform = 'scale(' + scale + ')';
+
+      const afterImg = new Image();
+      afterImg.src = el.dataset.after;
+      afterImg.style.width = phoneW + 'px';
+      afterImg.style.height = phoneH + 'px';
+      afterImg.style.transform = 'scale(' + scale + ')';
+
+      const divider = document.createElement('div');
+      divider.className = 'ba-divider';
+
+      const knob = document.createElement('div');
+      knob.className = 'ba-knob';
+      knob.innerHTML = '<svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M8 5.5L4.5 11L8 16.5" stroke="#444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 5.5L17.5 11L14 16.5" stroke="#444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+
+      const badgeAfter = document.createElement('div');
+      badgeAfter.className = 'ba-badge ba-badge-after';
+      badgeAfter.textContent = 'After';
+
+      const badgeBefore = document.createElement('div');
+      badgeBefore.className = 'ba-badge ba-badge-before';
+      badgeBefore.textContent = 'Before';
+
+      el.appendChild(afterImg);
+      el.appendChild(beforeImg);
+      el.appendChild(divider);
+      el.appendChild(knob);
+      el.appendChild(badgeBefore);
+      el.appendChild(badgeAfter);
+
+      let sliderX = 0;
+      let animId = 0;
+      let dragging = false;
+
+      function render(x) {
+        sliderX = x;
+        const clipRight = (W - x) / scale;
+        beforeImg.style.clipPath = 'inset(0 ' + clipRight + 'px 0 0)';
+        const show = x > 0 && x < W;
+        divider.style.display = show ? '' : 'none';
+        divider.style.left = (x - 1) + 'px';
+        knob.style.display = show ? '' : 'none';
+        knob.style.left = x + 'px';
+        knob.style.top = '50%';
+        badgeBefore.style.display = x > 20 ? '' : 'none';
+        badgeAfter.style.display = x < W - 20 ? '' : 'none';
+      }
+
+      render(0);
+
+      const ioObs = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+          if (!entry.isIntersecting) return;
+          ioObs.unobserve(el);
+          let start = null;
+          const delay = 800, dur = 1600, peak = W * 0.65;
+          function tick(ts) {
+            if (start === null) start = ts;
+            const elapsed = ts - start - delay;
+            if (elapsed < 0) { animId = requestAnimationFrame(tick); return; }
+            const t = Math.min(elapsed / dur, 1);
+            const arc = Math.sin(t * Math.PI);
+            render(arc * peak);
+            if (t < 1) animId = requestAnimationFrame(tick);
+            else render(0);
+          }
+          animId = requestAnimationFrame(tick);
+        });
+      }, { threshold: 0.3 });
+      ioObs.observe(el);
+
+      el.addEventListener('pointerdown', e => {
+        cancelAnimationFrame(animId);
+        dragging = true;
+        const rect = el.getBoundingClientRect();
+        render(Math.max(0, Math.min(W, e.clientX - rect.left)));
+        el.setPointerCapture(e.pointerId);
+      });
+      el.addEventListener('pointermove', e => {
+        if (!dragging) return;
+        const rect = el.getBoundingClientRect();
+        render(Math.max(0, Math.min(W, e.clientX - rect.left)));
+      });
+      el.addEventListener('pointerup', () => { dragging = false; });
+      el.addEventListener('lostpointercapture', () => { dragging = false; });
+    });
+
+    /* Flow Compression toggles (generic for all fc-demo instances) */
+    document.querySelectorAll('.fc-demo').forEach(function(demo) {
+      var btn = demo.querySelector('.fc-toggle');
+      if (!btn) return;
+      var merged = false;
+      var labels = [btn.textContent, demo.classList.contains('fc-converge') ? 'Show three briefs' : 'Show original flow'];
+      btn.addEventListener('click', function() {
+        merged = !merged;
+        demo.classList.toggle('is-merged', merged);
+        btn.textContent = merged ? labels[1] : labels[0];
+      });
+      var io = new IntersectionObserver(function(entries) {
+        entries.forEach(function(e) {
+          if (!e.isIntersecting) return;
+          io.unobserve(demo);
+          setTimeout(function() {
+            merged = true;
+            demo.classList.add('is-merged');
+            btn.textContent = labels[1];
+          }, 1200);
+        });
+      }, { threshold: 0.4 });
+      io.observe(demo);
+    });
   </script>
 </body>
 </html>
