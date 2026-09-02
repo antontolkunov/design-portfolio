@@ -57,3 +57,8 @@ Recent update:
   - Result copy without invented A/B percentages; "meaningful improvement" language
   - Homepage card metric: "Checkout completion ↑ · A/B validated"
   - Impact detail: "Checkout completion ↑ · validated in A/B"
+- Added case page `visual-qa.html` (Design Visual QA process):
+  - Sync vs async experiments, converge animation (design/eng/QA → hybrid)
+  - Animated 4-step pipeline; cover board with staggered chips
+  - Homepage: replaced WIP Overview Summary card with link to Visual QA
+  - Narrative: PO-gated live QA, QA ticket habit as first filter, AI-assisted residual tickets

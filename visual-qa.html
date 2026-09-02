@@ -1,0 +1,1063 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Design Visual QA — Anton Tolkunov</title>
+  <meta name="description" content="Case study: redesigning remote Visual QA — sync vs async tradeoffs, then a hybrid process with QA, design, eng, and PO.">
+
+  <link rel="preconnect" href="https://api.fontshare.com">
+  <link href="https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@700,800,900&f[]=satoshi@400,500,700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --font-display: 'Cabinet Grotesk', 'Helvetica Neue', sans-serif;
+      --font-body:    'Satoshi', 'Inter', sans-serif;
+
+      --text-xs:   clamp(0.75rem,  0.7rem  + 0.25vw, 0.875rem);
+      --text-sm:   clamp(0.875rem, 0.8rem  + 0.35vw, 1rem);
+      --text-base: clamp(1rem,     0.95rem + 0.25vw, 1.125rem);
+      --text-lg:   clamp(1.125rem, 1rem    + 0.75vw, 1.5rem);
+      --text-xl:   clamp(1.5rem,   1.2rem  + 1.25vw, 2.25rem);
+      --text-2xl:  clamp(2rem,     1.2rem  + 2.5vw,  3.5rem);
+      --text-3xl:  clamp(2.5rem,   1.5rem  + 3.5vw,  4.5rem);
+
+      --space-1: 0.25rem; --space-2: 0.5rem; --space-3: 0.75rem;
+      --space-4: 1rem;    --space-5: 1.25rem; --space-6: 1.5rem;
+      --space-8: 2rem;    --space-10: 2.5rem; --space-12: 3rem;
+      --space-16: 4rem;   --space-20: 5rem;
+
+      --radius-sm: 0.25rem;
+      --radius-md: 0.5rem;
+      --radius-lg: 0.75rem;
+      --radius-xl: 1rem;
+
+      --content-narrow: 720px;
+      --content-default: 1000px;
+      --content-wide: 1280px;
+
+      --ease: cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    :root, [data-theme="light"] {
+      --color-bg:              #f5f4f0;
+      --color-surface:         #fafaf8;
+      --color-surface-2:       #ffffff;
+      --color-surface-offset:  #edeae5;
+      --color-border:          rgba(0,0,0,0.08);
+      --color-divider:         rgba(0,0,0,0.05);
+      --color-text:            #1a1917;
+      --color-text-muted:      #6b6a67;
+      --color-text-faint:      #c0bdb8;
+      --color-accent:          #7a5c38;
+      --color-accent-hover:    #5e4428;
+      --color-good:            #3d6b4f;
+      --color-warn:            #8a5a2b;
+    }
+
+    [data-theme="dark"] {
+      --color-bg:              #0f0e0d;
+      --color-surface:         #161513;
+      --color-surface-2:       #1d1b19;
+      --color-surface-offset:  #242220;
+      --color-border:          rgba(255,255,255,0.07);
+      --color-divider:         rgba(255,255,255,0.05);
+      --color-text:            #e8e4dc;
+      --color-text-muted:      #7a7873;
+      --color-text-faint:      #3d3b38;
+      --color-accent:          #c8b89a;
+      --color-accent-hover:    #d9ccb8;
+      --color-good:            #8fbf9f;
+      --color-warn:            #d4a574;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html {
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      text-rendering: optimizeLegibility;
+      scroll-behavior: smooth;
+    }
+    body {
+      min-height: 100dvh;
+      font-family: var(--font-body);
+      font-size: var(--text-base);
+      color: var(--color-text);
+      background: var(--color-bg);
+      line-height: 1.6;
+      transition: background 300ms var(--ease), color 300ms var(--ease);
+    }
+    a { color: inherit; text-decoration: none; }
+    button { cursor: pointer; background: none; border: none; font: inherit; color: inherit; }
+    ::selection { background: rgba(200,184,154,0.2); color: var(--color-text); }
+    :focus-visible { outline: 1.5px solid var(--color-accent); outline-offset: 3px; border-radius: var(--radius-sm); }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+
+    .site-header {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(15,14,13,0.85);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--color-border);
+    }
+    [data-theme="light"] .site-header { background: rgba(245,244,240,0.88); }
+    .nav-inner {
+      max-width: var(--content-wide);
+      margin-inline: auto;
+      padding: var(--space-4) var(--space-8);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-8);
+    }
+    .nav-logo {
+      font-family: var(--font-display);
+      font-size: var(--text-sm);
+      font-weight: 700;
+      letter-spacing: -0.01em;
+    }
+    .nav-right { display: flex; align-items: center; gap: var(--space-6); }
+    .nav-right a {
+      font-size: var(--text-sm);
+      font-weight: 500;
+      color: var(--color-text-muted);
+      transition: color 180ms var(--ease);
+    }
+    .nav-right a:hover { color: var(--color-text); }
+    .theme-toggle {
+      width: 36px; height: 36px;
+      display: flex; align-items: center; justify-content: center;
+      border-radius: var(--radius-md);
+      color: var(--color-text-muted);
+      transition: color 180ms var(--ease), background 180ms var(--ease);
+    }
+    .theme-toggle:hover { color: var(--color-text); background: var(--color-surface-2); }
+
+    .case-hero {
+      max-width: var(--content-wide);
+      margin-inline: auto;
+      padding: var(--space-16) var(--space-8) var(--space-12);
+    }
+    .case-back {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-2);
+      font-size: var(--text-sm);
+      font-weight: 500;
+      color: var(--color-text-muted);
+      margin-bottom: var(--space-10);
+      transition: color 180ms var(--ease);
+    }
+    .case-back:hover { color: var(--color-text); }
+    .case-meta-tags {
+      display: flex;
+      gap: var(--space-3);
+      flex-wrap: wrap;
+      margin-bottom: var(--space-6);
+    }
+    .case-tag {
+      font-size: var(--text-xs);
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--color-accent);
+      background: rgba(200,184,154,0.08);
+      border: 1px solid rgba(200,184,154,0.15);
+      padding: var(--space-1) var(--space-3);
+      border-radius: 9999px;
+    }
+    [data-theme="light"] .case-tag {
+      background: rgba(122,92,56,0.06);
+      border-color: rgba(122,92,56,0.15);
+    }
+    .case-title {
+      font-family: var(--font-display);
+      font-size: var(--text-3xl);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.05;
+      max-width: 18ch;
+      margin-bottom: var(--space-6);
+    }
+    .case-subtitle {
+      font-size: var(--text-lg);
+      color: var(--color-text-muted);
+      max-width: 54ch;
+      line-height: 1.55;
+    }
+
+    /* Abstract cover */
+    .case-cover {
+      max-width: var(--content-wide);
+      margin-inline: auto;
+      padding: 0 var(--space-8) var(--space-12);
+    }
+    .cover-board {
+      position: relative;
+      overflow: hidden;
+      border-radius: var(--radius-xl);
+      border: 1px solid var(--color-border);
+      background:
+        radial-gradient(ellipse 80% 60% at 20% 30%, rgba(122,92,56,0.12), transparent 60%),
+        radial-gradient(ellipse 70% 50% at 80% 70%, rgba(122,92,56,0.08), transparent 55%),
+        var(--color-surface);
+      min-height: clamp(280px, 42vw, 440px);
+      padding: var(--space-10) var(--space-8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    [data-theme="dark"] .cover-board {
+      background:
+        radial-gradient(ellipse 80% 60% at 20% 30%, rgba(200,184,154,0.1), transparent 60%),
+        radial-gradient(ellipse 70% 50% at 80% 70%, rgba(200,184,154,0.06), transparent 55%),
+        var(--color-surface);
+    }
+    .cover-pipeline {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+      flex-wrap: wrap;
+      justify-content: center;
+      max-width: 920px;
+    }
+    .cover-chip {
+      background: var(--color-surface-2);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      padding: var(--space-4) var(--space-5);
+      min-width: 140px;
+      opacity: 0;
+      transform: translateY(16px);
+      animation: chipIn 700ms var(--ease) forwards;
+    }
+    .cover-chip:nth-child(1) { animation-delay: 120ms; }
+    .cover-chip:nth-child(3) { animation-delay: 280ms; }
+    .cover-chip:nth-child(5) { animation-delay: 440ms; }
+    .cover-chip:nth-child(7) { animation-delay: 600ms; }
+    .cover-chip--premium {
+      border-color: rgba(122,92,56,0.35);
+      box-shadow: 0 0 0 1px rgba(122,92,56,0.08);
+    }
+    [data-theme="dark"] .cover-chip--premium {
+      border-color: rgba(200,184,154,0.35);
+    }
+    .cover-chip-kicker {
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--color-accent);
+      margin-bottom: var(--space-2);
+    }
+    .cover-chip-title {
+      font-family: var(--font-display);
+      font-size: var(--text-sm);
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      line-height: 1.25;
+    }
+    .cover-chip-sub {
+      font-size: var(--text-xs);
+      color: var(--color-text-muted);
+      margin-top: var(--space-1);
+    }
+    .cover-arrow {
+      color: var(--color-text-faint);
+      opacity: 0;
+      animation: chipIn 500ms var(--ease) forwards;
+    }
+    .cover-arrow:nth-child(2) { animation-delay: 200ms; }
+    .cover-arrow:nth-child(4) { animation-delay: 360ms; }
+    .cover-arrow:nth-child(6) { animation-delay: 520ms; }
+    @keyframes chipIn {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .case-details {
+      max-width: var(--content-wide);
+      margin-inline: auto;
+      padding: 0 var(--space-8) var(--space-16);
+    }
+    .details-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: var(--space-4);
+      padding: var(--space-6) 0;
+      border-top: 1px solid var(--color-divider);
+      border-bottom: 1px solid var(--color-divider);
+    }
+    .detail-label {
+      font-size: var(--text-xs);
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--color-text-muted);
+      margin-bottom: var(--space-1);
+    }
+    .detail-value {
+      font-size: var(--text-sm);
+      font-weight: 500;
+    }
+
+    .case-content {
+      max-width: var(--content-narrow);
+      margin-inline: auto;
+      padding: 0 var(--space-8);
+    }
+    .case-section { margin-bottom: var(--space-16); }
+    .case-section-label {
+      font-size: var(--text-xs);
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--color-text-muted);
+      margin-bottom: var(--space-6);
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+    }
+    .case-section-label::before {
+      content: '';
+      display: block;
+      width: 24px; height: 1px;
+      background: var(--color-text-faint);
+    }
+    .case-section h2 {
+      font-family: var(--font-display);
+      font-size: var(--text-xl);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin-bottom: var(--space-6);
+      line-height: 1.15;
+    }
+    .case-section p {
+      font-size: var(--text-base);
+      color: var(--color-text-muted);
+      line-height: 1.75;
+      margin-bottom: var(--space-5);
+    }
+    .case-section p:last-child { margin-bottom: 0; }
+    .case-section strong { color: var(--color-text); font-weight: 600; }
+    .case-section em { color: var(--color-text); font-style: italic; }
+
+    .pull-quote {
+      border-left: 2px solid var(--color-accent);
+      padding: var(--space-4) var(--space-6);
+      margin: var(--space-8) 0;
+      background: rgba(200,184,154,0.04);
+      border-radius: 0 var(--radius-md) var(--radius-md) 0;
+    }
+    .pull-quote p {
+      font-size: var(--text-lg) !important;
+      font-style: italic;
+      color: var(--color-text) !important;
+      line-height: 1.55 !important;
+      margin: 0 !important;
+    }
+
+    .insight-box {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      padding: var(--space-6);
+      margin: var(--space-8) 0;
+    }
+    .insight-box-label {
+      font-size: var(--text-xs);
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--color-accent);
+      margin-bottom: var(--space-3);
+    }
+    .insight-box p {
+      margin: 0 !important;
+      font-size: var(--text-sm) !important;
+      color: var(--color-text-muted) !important;
+      line-height: 1.65 !important;
+    }
+
+    /* Compare grid */
+    .compare-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-4);
+      margin: var(--space-8) 0;
+    }
+    .compare-card {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      padding: var(--space-6);
+      opacity: 0;
+      transform: translateY(18px);
+      transition: opacity 600ms var(--ease), transform 600ms var(--ease), border-color 200ms;
+    }
+    .compare-grid.visible .compare-card { opacity: 1; transform: translateY(0); }
+    .compare-grid.visible .compare-card:nth-child(2) { transition-delay: 120ms; }
+    .compare-kicker {
+      font-size: var(--text-xs);
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--color-accent);
+      margin-bottom: var(--space-3);
+    }
+    .compare-card h3 {
+      font-family: var(--font-display);
+      font-size: var(--text-lg);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin-bottom: var(--space-4);
+      line-height: 1.2;
+    }
+    .compare-list {
+      list-style: none;
+      display: grid;
+      gap: var(--space-3);
+    }
+    .compare-list li {
+      font-size: var(--text-sm);
+      color: var(--color-text-muted);
+      line-height: 1.5;
+      padding-left: 1.1rem;
+      position: relative;
+    }
+    .compare-list li::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 0.55em;
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--color-text-faint);
+    }
+    .compare-list li.up::before { background: var(--color-good); }
+    .compare-list li.down::before { background: var(--color-warn); }
+
+    /* Converge demo */
+    .fc-demo {
+      margin: var(--space-10) 0;
+    }
+    .fc-stage {
+      position: relative;
+      height: 320px;
+      margin-bottom: var(--space-6);
+    }
+    .fc-layer { position: absolute; inset: 0; }
+    .fc-layer--after { pointer-events: none; }
+    .fc-card {
+      position: absolute;
+      width: 30%;
+      background: var(--color-surface-2);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      padding: var(--space-5);
+      transition: transform 700ms var(--ease), opacity 550ms var(--ease);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.04);
+    }
+    .fc-card h4 {
+      font-family: var(--font-display);
+      font-size: var(--text-sm);
+      font-weight: 800;
+      margin-bottom: var(--space-2);
+    }
+    .fc-card p {
+      font-size: var(--text-xs) !important;
+      color: var(--color-text-muted) !important;
+      line-height: 1.5 !important;
+      margin: 0 !important;
+    }
+    .fc-kicker {
+      display: inline-block;
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: var(--space-2);
+    }
+    .fc-kicker--old { color: var(--color-text-muted); }
+    .fc-kicker--new { color: var(--color-accent); }
+    .fc-card--design { top: 24px; left: 2%; transform: rotate(-2.5deg); z-index: 3; }
+    .fc-card--eng    { top: 56px; left: 50%; transform: translateX(-50%) rotate(1deg); z-index: 2; }
+    .fc-card--qa     { top: 88px; right: 2%; transform: rotate(2deg); z-index: 1; }
+    .fc-card--result {
+      left: 50%;
+      top: 50%;
+      width: min(380px, 88%);
+      transform: translate(-50%, -50%) scale(0.92);
+      opacity: 0;
+      pointer-events: none;
+      z-index: 10;
+    }
+    .fc-demo.is-merged .fc-card--design { transform: translate(50px, 40px) scale(0.7) rotate(-10deg); opacity: 0; }
+    .fc-demo.is-merged .fc-card--eng { transform: translateX(-50%) translateY(36px) scale(0.7); opacity: 0; }
+    .fc-demo.is-merged .fc-card--qa { transform: translate(-50px, 40px) scale(0.7) rotate(10deg); opacity: 0; }
+    .fc-demo.is-merged .fc-card--result {
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1);
+      pointer-events: auto;
+    }
+    .fc-result-points {
+      list-style: none;
+      margin-top: var(--space-4);
+      display: grid;
+      gap: var(--space-2);
+    }
+    .fc-result-points li {
+      font-size: var(--text-xs);
+      color: var(--color-text-muted);
+      padding-left: 1rem;
+      position: relative;
+      line-height: 1.45;
+    }
+    .fc-result-points li::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 0.45em;
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--color-accent);
+    }
+    .fc-controls {
+      display: flex;
+      align-items: center;
+      gap: var(--space-4);
+      flex-wrap: wrap;
+    }
+    .fc-toggle {
+      background: var(--color-text);
+      color: var(--color-bg);
+      font-size: var(--text-sm);
+      font-weight: 600;
+      padding: var(--space-3) var(--space-5);
+      border-radius: var(--radius-md);
+      transition: transform 160ms var(--ease), opacity 160ms;
+    }
+    .fc-toggle:hover { transform: translateY(-1px); opacity: 0.92; }
+    .fc-toggle:active { transform: translateY(0); }
+    .fc-note {
+      font-size: var(--text-xs);
+      color: var(--color-text-muted);
+    }
+
+    /* Pipeline steps */
+    .pipeline {
+      margin: var(--space-10) 0;
+      display: grid;
+      gap: var(--space-3);
+    }
+    .pipe-step {
+      display: grid;
+      grid-template-columns: 56px 1fr;
+      gap: var(--space-4);
+      align-items: start;
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      padding: var(--space-5);
+      opacity: 0;
+      transform: translateX(-14px);
+      transition: opacity 550ms var(--ease), transform 550ms var(--ease);
+    }
+    .pipeline.visible .pipe-step { opacity: 1; transform: translateX(0); }
+    .pipeline.visible .pipe-step:nth-child(1) { transition-delay: 0ms; }
+    .pipeline.visible .pipe-step:nth-child(2) { transition-delay: 100ms; }
+    .pipeline.visible .pipe-step:nth-child(3) { transition-delay: 200ms; }
+    .pipeline.visible .pipe-step:nth-child(4) { transition-delay: 300ms; }
+    .pipe-num {
+      font-family: var(--font-display);
+      font-size: var(--text-xl);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      color: var(--color-accent);
+      line-height: 1;
+      padding-top: 2px;
+    }
+    .pipe-body h3 {
+      font-family: var(--font-display);
+      font-size: var(--text-base);
+      font-weight: 800;
+      letter-spacing: -0.01em;
+      margin-bottom: var(--space-2);
+    }
+    .pipe-body p {
+      font-size: var(--text-sm) !important;
+      margin: 0 !important;
+      color: var(--color-text-muted) !important;
+      line-height: 1.55 !important;
+    }
+    .pipe-step--premium {
+      border-color: rgba(122,92,56,0.3);
+      background: linear-gradient(135deg, var(--color-surface), rgba(122,92,56,0.05));
+    }
+    [data-theme="dark"] .pipe-step--premium {
+      border-color: rgba(200,184,154,0.3);
+      background: linear-gradient(135deg, var(--color-surface), rgba(200,184,154,0.06));
+    }
+
+    .stat-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-4);
+      margin: var(--space-8) 0;
+    }
+    .stat-card {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      padding: var(--space-6);
+    }
+    .stat-number {
+      font-family: var(--font-display);
+      font-size: var(--text-xl);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.1;
+      margin-bottom: var(--space-2);
+    }
+    .stat-desc {
+      font-size: var(--text-xs);
+      color: var(--color-text-muted);
+      line-height: 1.5;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      font-weight: 600;
+    }
+
+    .learn-list {
+      list-style: none;
+      margin-top: var(--space-6);
+      display: grid;
+      gap: 0;
+    }
+    .learn-list li {
+      padding: var(--space-4) 0;
+      border-bottom: 1px solid var(--color-divider);
+      font-size: var(--text-sm);
+      color: var(--color-text-muted);
+      line-height: 1.55;
+      display: grid;
+      grid-template-columns: 2rem 1fr;
+      gap: var(--space-3);
+    }
+    .learn-list li:first-child { border-top: 1px solid var(--color-divider); }
+    .learn-num {
+      font-family: var(--font-display);
+      font-weight: 800;
+      color: var(--color-accent);
+    }
+
+    .next-project {
+      background: var(--color-surface);
+      border-top: 1px solid var(--color-border);
+      padding: var(--space-16) var(--space-8);
+      margin-top: var(--space-16);
+    }
+    .next-project-inner {
+      max-width: var(--content-default);
+      margin-inline: auto;
+      text-align: center;
+    }
+    .next-label {
+      font-size: var(--text-xs);
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--color-text-muted);
+      margin-bottom: var(--space-4);
+    }
+    .next-title {
+      font-family: var(--font-display);
+      font-size: var(--text-2xl);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      transition: color 180ms var(--ease);
+    }
+    .next-title:hover { color: var(--color-accent); }
+
+    .site-footer {
+      padding: var(--space-8);
+      max-width: var(--content-wide);
+      margin-inline: auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-4);
+      flex-wrap: wrap;
+    }
+    .footer-copy { font-size: var(--text-xs); color: var(--color-text-muted); }
+    .footer-links { display: flex; gap: var(--space-6); }
+    .footer-links a {
+      font-size: var(--text-xs);
+      color: var(--color-text-muted);
+      transition: color 180ms var(--ease);
+    }
+    .footer-links a:hover { color: var(--color-text); }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 600ms var(--ease), transform 600ms var(--ease);
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .reveal-delay-1 { transition-delay: 80ms; }
+    .reveal-delay-2 { transition-delay: 160ms; }
+    .reveal-delay-3 { transition-delay: 240ms; }
+
+    @media (max-width: 768px) {
+      .nav-inner { padding: var(--space-3) var(--space-4); }
+      .case-hero { padding: var(--space-10) var(--space-4) var(--space-8); }
+      .case-cover { padding: 0 var(--space-4) var(--space-8); }
+      .case-details { padding: 0 var(--space-4) var(--space-10); }
+      .details-grid { grid-template-columns: 1fr 1fr; }
+      .case-content { padding: 0 var(--space-4); }
+      .compare-grid { grid-template-columns: 1fr; }
+      .stat-row { grid-template-columns: 1fr; }
+      .fc-stage { height: 420px; }
+      .fc-card { width: 88%; left: 6% !important; right: auto !important; }
+      .fc-card--design { top: 0; transform: none; }
+      .fc-card--eng { top: 120px; transform: none; left: 6% !important; }
+      .fc-card--qa { top: 240px; transform: none; }
+      .fc-demo.is-merged .fc-card--design,
+      .fc-demo.is-merged .fc-card--eng,
+      .fc-demo.is-merged .fc-card--qa {
+        transform: scale(0.7) !important;
+        opacity: 0;
+      }
+      .cover-chip { min-width: 120px; }
+      .cover-arrow { display: none; }
+      .next-project { padding: var(--space-12) var(--space-4); }
+      .site-footer { padding: var(--space-6) var(--space-4); }
+    }
+  </style>
+</head>
+<body>
+
+<header class="site-header">
+  <nav class="nav-inner">
+    <a href="index.html" class="nav-logo">Anton Tolkunov</a>
+    <div class="nav-right">
+      <a href="index.html#work">Work</a>
+      <a href="index.html#about">About</a>
+      <a href="index.html#contact">Contact</a>
+      <button class="theme-toggle" data-theme-toggle aria-label="Switch to dark mode">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      </button>
+    </div>
+  </nav>
+</header>
+
+<main>
+  <section class="case-hero">
+    <a href="index.html" class="case-back reveal">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+      All projects
+    </a>
+
+    <div class="case-meta-tags reveal reveal-delay-1">
+      <span class="case-tag">Process Design</span>
+      <span class="case-tag">Design Ops</span>
+      <span class="case-tag">Remote</span>
+      <span class="case-tag">Cross-functional</span>
+    </div>
+
+    <h1 class="case-title reveal reveal-delay-1">Visual QA without the ticket war</h1>
+    <p class="case-subtitle reveal reveal-delay-2">How we redesigned remote Visual QA — not as a checklist, but as a negotiation system between design, QA, engineering, and product.</p>
+  </section>
+
+  <div class="case-cover reveal reveal-delay-2">
+    <div class="cover-board" aria-hidden="true">
+      <div class="cover-pipeline">
+        <div class="cover-chip">
+          <div class="cover-chip-kicker">01</div>
+          <div class="cover-chip-title">Functional QA</div>
+          <div class="cover-chip-sub">+ coarse visual</div>
+        </div>
+        <svg class="cover-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+        <div class="cover-chip">
+          <div class="cover-chip-kicker">02</div>
+          <div class="cover-chip-title">Designer ↔ QA</div>
+          <div class="cover-chip-sub">short sync</div>
+        </div>
+        <svg class="cover-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+        <div class="cover-chip">
+          <div class="cover-chip-kicker">03</div>
+          <div class="cover-chip-title">Residual tickets</div>
+          <div class="cover-chip-sub">AI-assisted drafts</div>
+        </div>
+        <svg class="cover-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+        <div class="cover-chip cover-chip--premium">
+          <div class="cover-chip-kicker">04</div>
+          <div class="cover-chip-title">Live Visual QA</div>
+          <div class="cover-chip-sub">PO-gated only</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="case-details reveal reveal-delay-3">
+    <div class="details-grid">
+      <div class="detail-item">
+        <div class="detail-label">Role</div>
+        <div class="detail-value">Senior Designer · process owner</div>
+      </div>
+      <div class="detail-item">
+        <div class="detail-label">Context</div>
+        <div class="detail-value">Vodafone · remote · design system</div>
+      </div>
+      <div class="detail-item">
+        <div class="detail-label">Partners</div>
+        <div class="detail-value">Design · QA · Eng · PO</div>
+      </div>
+      <div class="detail-item">
+        <div class="detail-label">Outcome</div>
+        <div class="detail-value">Hybrid QA pipeline adopted</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="case-content">
+
+    <div class="case-section reveal">
+      <p class="case-section-label">Situation</p>
+      <h2>«Done» in Jira was not the same as looking like the design.</h2>
+      <p>On a remote product team, Visual QA couldn't mean sitting next to a developer. Design-system consistency across markets mattered — but quality depended on who cared that week. We needed a process that protected product integrity without burning design capacity or developer flow.</p>
+      <div class="pull-quote">
+        <p>"This wasn't a Figma problem. It was a negotiation problem."</p>
+      </div>
+    </div>
+
+    <div class="case-section reveal">
+      <p class="case-section-label">Two experiments</p>
+      <h2>Both extremes were half-right.</h2>
+      <p>We tried two approaches. Each solved one side of the conflict and broke the other.</p>
+
+      <div class="compare-grid js-compare">
+        <article class="compare-card">
+          <p class="compare-kicker">Attempt A</p>
+          <h3>Sync Visual QA</h3>
+          <ul class="compare-list">
+            <li class="up">Live screen-share: Inspect Element ↔ Figma</li>
+            <li class="up">High integrity within one feature story</li>
+            <li class="up">Related fixes shipped together</li>
+            <li class="down">Broke developer deep work</li>
+            <li class="down">Many finds = DS consistency — low eng priority</li>
+          </ul>
+        </article>
+        <article class="compare-card">
+          <p class="compare-kicker">Attempt B</p>
+          <h3>Async ticket factory</h3>
+          <ul class="compare-list">
+            <li class="up">Fit eng async culture</li>
+            <li class="up">Batchable, prioritizable work</li>
+            <li class="down">Design drowned writing tickets</li>
+            <li class="down">Priority killed «small» consistency fixes</li>
+            <li class="down">Surface integrity fragmented</li>
+          </ul>
+        </article>
+      </div>
+
+      <div class="insight-box">
+        <p class="insight-box-label">Hidden actor</p>
+        <p>QA engineers already ran functional testing — and often caught <strong>coarse visual bugs</strong> the same way they file functional defects. Developers were used to that ticket stream. The mountain of tickets wasn't only a design burden — it was a habit we could redirect.</p>
+      </div>
+    </div>
+
+    <div class="case-section reveal">
+      <p class="case-section-label">The conflict</p>
+      <h2>Three valid goals. Zero pure winners.</h2>
+      <p><strong>Design</strong> wanted coherent surfaces and design-system fidelity. <strong>Engineering</strong> wanted protected focus and clear batchable work. <strong>QA</strong> needed coverage without inventing a new religion.</p>
+      <p>We sat down with QA, developers, and the Product Owner — and redesigned the <em>sequence</em>, not the tool.</p>
+
+      <div class="fc-demo js-fc-demo">
+        <div class="fc-stage">
+          <div class="fc-layer fc-layer--before">
+            <article class="fc-card fc-card--design">
+              <span class="fc-kicker fc-kicker--old">Design</span>
+              <h4>Integrity</h4>
+              <p>Coherent surface per story. Design-system fidelity.</p>
+            </article>
+            <article class="fc-card fc-card--eng">
+              <span class="fc-kicker fc-kicker--old">Engineering</span>
+              <h4>Flow</h4>
+              <p>Protected deep work. Clear, batchable tickets.</p>
+            </article>
+            <article class="fc-card fc-card--qa">
+              <span class="fc-kicker fc-kicker--old">QA</span>
+              <h4>Coverage</h4>
+              <p>Functional pass + coarse visual — without a new ritual.</p>
+            </article>
+          </div>
+          <div class="fc-layer fc-layer--after">
+            <article class="fc-card fc-card--result">
+              <span class="fc-kicker fc-kicker--new">Hybrid</span>
+              <h4>Redirect habits. Gate expensive modes.</h4>
+              <ul class="fc-result-points" role="list">
+                <li>QA ticket habit absorbs coarse visual bugs</li>
+                <li>Short designer–QA sync for judgment</li>
+                <li>Designer tickets only for residual fine issues</li>
+                <li>Live designer–dev QA only when PO flags consistency</li>
+              </ul>
+            </article>
+          </div>
+        </div>
+        <div class="fc-controls">
+          <button class="fc-toggle" type="button">Show the hybrid</button>
+          <p class="fc-note">Three forces. One negotiated pipeline.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="case-section reveal">
+      <p class="case-section-label">The hybrid</p>
+      <h2>A pipeline of filters — not one ritual for everything.</h2>
+      <p>Default mode is lean and async. Live Visual QA with developers becomes a <strong>premium mode</strong> — justified by product, not designer preference.</p>
+
+      <div class="pipeline js-pipeline">
+        <article class="pipe-step">
+          <div class="pipe-num">01</div>
+          <div class="pipe-body">
+            <h3>Functional QA pass</h3>
+            <p>QA territory — including gross visual issues. Tickets in the format engineering already trusts.</p>
+          </div>
+        </article>
+        <article class="pipe-step">
+          <div class="pipe-num">02</div>
+          <div class="pipe-body">
+            <h3>Short sync: Designer ↔ QA</h3>
+            <p>Triage what's left. Cheaper than pulling every developer into a live review.</p>
+          </div>
+        </article>
+        <article class="pipe-step">
+          <div class="pipe-num">03</div>
+          <div class="pipe-body">
+            <h3>Residual designer tickets</h3>
+            <p>Only fine-grained design-system issues. AI drafts the tickets — designers still own severity and accuracy.</p>
+          </div>
+        </article>
+        <article class="pipe-step pipe-step--premium">
+          <div class="pipe-num">04</div>
+          <div class="pipe-body">
+            <h3>Live Visual QA — PO-gated</h3>
+            <p>Only when the Product Owner marks the story: must look right for product consistency. Same story, related fixes, justified interruption.</p>
+          </div>
+        </article>
+      </div>
+
+      <div class="insight-box">
+        <p class="insight-box-label">Mental model</p>
+        <p><strong>QA ticket habit</strong> = first filter · <strong>Designer–QA sync</strong> = second filter · <strong>Designer tickets</strong> = residual · <strong>Dev live sync</strong> = premium mode, PO-gated · <strong>AI</strong> = writing acceleration, not judgment.</p>
+      </div>
+    </div>
+
+    <div class="case-section reveal">
+      <p class="case-section-label">Result</p>
+      <h2>Less interrupt. Less ticket hell. Surfaces that mattered stayed coherent.</h2>
+
+      <div class="stat-row">
+        <div class="stat-card">
+          <div class="stat-number">QA first filter</div>
+          <div class="stat-desc">Coarse visual absorbed by existing ticket habit</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">PO-gated sync</div>
+          <div class="stat-desc">Live designer–dev sessions became the exception</div>
+        </div>
+      </div>
+
+      <p>Design ticket volume dropped because QA absorbed the coarse layer. Engineering interruption dropped because live sessions became rare and justified. Quality didn't collapse into «QA only» — designers still owned fine design-system judgment.</p>
+      <p>The process became shared know-how: design, QA, engineering, and product agreed on the sequence — not a design decree.</p>
+    </div>
+
+    <div class="case-section reveal">
+      <p class="case-section-label">What I learned</p>
+      <h2>Process design is product design for the organisation.</h2>
+      <ul class="learn-list">
+        <li><span class="learn-num">01</span><span>Don't invent rituals — redirect habits partners already trust.</span></li>
+        <li><span class="learn-num">02</span><span>«Perfect QA» that destroys partner flow fails. Integrity without dignity is temporary.</span></li>
+        <li><span class="learn-num">03</span><span>Put expensive modes behind a product gate — the PO, not designer preference.</span></li>
+        <li><span class="learn-num">04</span><span>Sequence matters: functional → coarse visual → fine visual.</span></li>
+        <li><span class="learn-num">05</span><span>AI accelerates writing residual tickets. Humans still decide what matters.</span></li>
+      </ul>
+    </div>
+
+  </div>
+
+  <section class="next-project">
+    <div class="next-project-inner reveal">
+      <p class="next-label">Next project</p>
+      <a href="vodafone-secure-net.html" class="next-title">Vodafone Secure Net →</a>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <p class="footer-copy">&copy; 2026 Anton Tolkunov</p>
+  <nav class="footer-links">
+    <a href="index.html#work">Work</a>
+    <a href="index.html#about">About</a>
+    <a href="mailto:antontolkunov@me.com">Email</a>
+    <a href="https://linkedin.com/in/antontolkunov" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+  </nav>
+</footer>
+
+<script>
+  (function(){
+    const toggle = document.querySelector('[data-theme-toggle]');
+    const root = document.documentElement;
+    const sunSVG = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>';
+    const moonSVG = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>';
+    let theme = 'light';
+    root.setAttribute('data-theme', theme);
+    if (toggle) {
+      toggle.innerHTML = sunSVG;
+      toggle.addEventListener('click', () => {
+        theme = theme === 'dark' ? 'light' : 'dark';
+        root.setAttribute('data-theme', theme);
+        toggle.innerHTML = theme === 'dark' ? moonSVG : sunSVG;
+        toggle.setAttribute('aria-label', 'Switch to ' + (theme === 'dark' ? 'light' : 'dark') + ' mode');
+      });
+    }
+  })();
+
+  const revealEls = document.querySelectorAll('.reveal, .js-compare, .js-pipeline');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+  revealEls.forEach((el) => observer.observe(el));
+
+  document.querySelectorAll('.js-fc-demo').forEach(function(demo) {
+    var btn = demo.querySelector('.fc-toggle');
+    if (!btn) return;
+    var labels = ['Show the hybrid', 'Show three forces'];
+    var merged = false;
+    function setState(on) {
+      merged = on;
+      demo.classList.toggle('is-merged', on);
+      btn.textContent = labels[on ? 1 : 0];
+    }
+    btn.addEventListener('click', function() { setState(!merged); });
+    var io = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          setTimeout(function() { setState(true); }, 500);
+          io.unobserve(demo);
+        }
+      });
+    }, { threshold: 0.35 });
+    io.observe(demo);
+  });
+</script>
+</body>
+</html>
