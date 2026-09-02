@@ -537,7 +537,7 @@
       </div>
       <div class="detail-item">
         <div class="detail-label">Impact</div>
-        <div class="detail-value">Significant drop-off reduction</div>
+        <div class="detail-value">Checkout completion ↑ · validated in A/B</div>
       </div>
     </div>
   </div>
@@ -633,6 +633,23 @@
       </div>
     </div>
 
+    <!-- EXPERIMENT -->
+    <div class="case-section reveal">
+      <p class="case-section-label">Experiment</p>
+      <h2>Test the segment, not the whole platform</h2>
+      <p>The hypothesis was grocery-specific — so the experiment had to be too. We did not A/B test the entire Real.de checkout. We ran a controlled test on users who had already started <strong>grocery web checkout in Germany</strong>, comparing the existing single-page flow against the multi-step structure.</p>
+
+      <div class="insight-box">
+        <p class="insight-box-label">How the test was scoped</p>
+        <p><strong>Primary metric:</strong> checkout completion (started checkout → order confirmed).<br>
+        <strong>Secondary signals:</strong> drop-off at the delivery timeslot step; rage-clicks on timeslot and price areas (Contentsquare).<br>
+        <strong>Guardrails:</strong> time to complete checkout, cart value, payment errors — so a faster-looking flow could not win by hiding cost or breaking payment.</p>
+      </div>
+
+      <p>Prototype usability testing came first: users moved through the new flow without backtracking and could answer <em>"how close are you to finishing?"</em> at every step. Only then did we ship to a split test and measure completion on real traffic.</p>
+      <p>I no longer have access to the exact 2019 lift figure. What I can stand behind: the segment choice, the metric framing, and a <strong>meaningful improvement in checkout completion</strong> — enough to roll out the grocery web experience, not a cosmetic tweak kept in a slide deck.</p>
+    </div>
+
     <!-- RESULT -->
     <div class="case-section reveal">
       <p class="case-section-label">Result</p>
@@ -640,16 +657,17 @@
 
       <div class="stat-row">
         <div class="stat-card">
-          <div class="stat-number">A/B</div>
-          <div class="stat-desc">Significant drop-off improvement confirmed in A/B test</div>
+          <div class="stat-number">Grocery web</div>
+          <div class="stat-desc">Scoped A/B on DE grocery checkout starters — completion improved meaningfully on test traffic</div>
         </div>
         <div class="stat-card">
           <div class="stat-number">✓</div>
-          <div class="stat-desc">Zero backtracking observed in post-launch usability tests</div>
+          <div class="stat-desc">Zero backtracking in prototype and post-launch usability tests</div>
         </div>
       </div>
 
-      <p>The A/B test showed a significant improvement in drop-off rate. Not because we reinvented the wheel — but because we listened closely enough to understand <strong>this specific user, with this specific task</strong>. Deep research delivered a more precise solution than pattern-matching to what already existed elsewhere on the platform.</p>
+      <p>The win was not a visual redesign — it was structural clarity for a high-stakes moment. Users needed to know where they were, when groceries would arrive, and what they would pay. The multi-step flow made that legible; the experiment confirmed it on the audience that actually mattered.</p>
+      <p>Not because we reinvented the wheel — but because we listened closely enough to understand <strong>this specific user, with this specific task</strong>. Deep research delivered a more precise solution than pattern-matching to what already existed elsewhere on the platform.</p>
       <p>The most impactful design changes are sometimes the ones that look smallest from the outside. The real work is in understanding <em>why</em> something isn't working — not just reaching for the obvious fix.</p>
     </div>
 

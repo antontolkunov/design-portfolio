@@ -52,3 +52,8 @@ Recent update:
   - Added UX Research section with placeholders for journey maps, session notes, affinity diagrams
   - Added placeholders in Design Exploration for early sketches and visual research moodboard
   - Restored onboarding screen in What We Found and scan-progress in Testing
+- Real.de checkout case (`real-checkout.html`) — honest experiment framing:
+  - New Experiment section: grocery web / DE / checkout starters segment, primary + guardrail metrics
+  - Result copy without invented A/B percentages; "meaningful improvement" language
+  - Homepage card metric: "Checkout completion ↑ · A/B validated"
+  - Impact detail: "Checkout completion ↑ · validated in A/B"
