@@ -456,21 +456,23 @@
       flex-shrink: 0;
     }
     .card-wip-badge {
-      font-size: 10px;
+      font-size: 11px;
       font-weight: 700;
       letter-spacing: 0.08em;
       text-transform: uppercase;
-      color: var(--color-accent);
-      background: rgba(200,184,154,0.1);
-      border: 1px solid rgba(200,184,154,0.2);
-      padding: 2px 8px;
+      color: #fff;
+      background: rgba(0,0,0,0.65);
+      -webkit-backdrop-filter: blur(8px);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255,255,255,0.15);
+      padding: 4px 12px;
       border-radius: var(--radius-full, 9999px);
       margin-left: auto;
     }
     [data-theme="light"] .card-wip-badge {
-      color: var(--color-accent);
-      background: rgba(122,92,56,0.08);
-      border-color: rgba(122,92,56,0.2);
+      color: #fff;
+      background: rgba(0,0,0,0.6);
+      border-color: rgba(0,0,0,0.1);
     }
     .card-title {
       font-family: var(--font-display);
@@ -972,7 +974,7 @@
         </a>
 
         <!-- CARD 2 — Vodafone Overview Summary (WIP) -->
-        <article class="project-card card-sm reveal reveal-delay-1" tabindex="0" role="article" aria-label="Vodafone Overview Summary — coming soon">
+        <article class="project-card card-sm reveal reveal-delay-1" style="pointer-events:none;cursor:default;" role="article" aria-label="Vodafone Overview Summary — coming soon">
           <div class="card-thumb">
             <img src="assets/vodafone-cleaning-tool/OS_thumb.png"
                  alt="Vodafone Overview Summary — project preview"
@@ -990,9 +992,6 @@
           </div>
           <div class="card-footer">
             <span class="card-metric"><strong>B2B SaaS</strong> · Lead Product Designer</span>
-            <span class="card-arrow" aria-hidden="true">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
-            </span>
           </div>
         </article>
 
