@@ -440,6 +440,21 @@
     .compare-list li.up::before { background: var(--color-good); }
     .compare-list li.down::before { background: var(--color-warn); }
 
+    /* Sync/Async convergence (2 → pipeline) */
+    .fc-card--sync  { top: 32px; left: 4%; transform: rotate(-2.5deg); z-index: 2; width: 42%; }
+    .fc-card--async { top: 32px; right: 4%; transform: rotate(2deg); z-index: 1; width: 42%; }
+    .fc-merge .fc-stage { height: 280px; }
+    .fc-merge .fc-card--result { width: min(440px, 90%); }
+    .fc-demo.is-merged .fc-card--sync  { transform: translate(40px, 30px) scale(0.7) rotate(-10deg); opacity: 0; }
+    .fc-demo.is-merged .fc-card--async { transform: translate(-40px, 30px) scale(0.7) rotate(10deg); opacity: 0; }
+    @media (max-width: 768px) {
+      .fc-merge .fc-stage { height: 340px; }
+      .fc-card--sync  { top: 0; left: 6% !important; right: auto !important; width: 88% !important; transform: none !important; }
+      .fc-card--async { top: 140px; left: 6% !important; right: auto !important; width: 88% !important; transform: none !important; }
+      .fc-demo.is-merged .fc-card--sync,
+      .fc-demo.is-merged .fc-card--async { transform: scale(0.7) !important; opacity: 0; }
+    }
+
     /* Converge demo */
     .fc-demo {
       margin: var(--space-10) 0;
@@ -863,6 +878,39 @@
         </article>
       </div>
 
+      <div class="fc-demo fc-merge js-fc-merge">
+        <div class="fc-stage">
+          <div class="fc-layer fc-layer--before">
+            <article class="fc-card fc-card--sync">
+              <span class="fc-kicker fc-kicker--old">Attempt A</span>
+              <h4>Sync Visual QA</h4>
+              <p>Live screen-share: high integrity per feature, but broke developer deep work and couldn’t scale beyond one story.</p>
+            </article>
+            <article class="fc-card fc-card--async">
+              <span class="fc-kicker fc-kicker--old">Attempt B</span>
+              <h4>Async ticket factory</h4>
+              <p>Fit eng culture, but design drowned writing tickets. Priority killed consistency fixes. Surface integrity fragmented.</p>
+            </article>
+          </div>
+          <div class="fc-layer fc-layer--after">
+            <article class="fc-card fc-card--result">
+              <span class="fc-kicker fc-kicker--new">Hybrid pipeline</span>
+              <h4>Keep what worked. Gate what’s expensive.</h4>
+              <ul class="fc-result-points" role="list">
+                <li>QA absorbs coarse visual bugs via existing ticket habit</li>
+                <li>Short designer–QA sync replaces long dev sessions</li>
+                <li>AI drafts residual tickets — designers own severity</li>
+                <li>Live dev QA becomes PO-gated premium mode</li>
+              </ul>
+            </article>
+          </div>
+        </div>
+        <div class="fc-controls">
+          <button class="fc-toggle" type="button">Merge into pipeline</button>
+          <p class="fc-note">Two extremes. One hybrid that kept the best of each.</p>
+        </div>
+      </div>
+
       <div class="insight-box">
         <p class="insight-box-label">Hidden actor</p>
         <p>QA engineers already ran functional testing — and often caught <strong>coarse visual bugs</strong> the same way they file functional defects. Developers were used to that ticket stream. The mountain of tickets wasn't only a design burden — it was a habit we could redirect.</p>
@@ -1057,6 +1105,30 @@
       });
     }, { threshold: 0.35 });
     io.observe(demo);
+
+    /* Sync/Async merge toggle */
+    var merge = document.querySelector('.js-fc-merge');
+    if (merge) {
+      var mbtn = merge.querySelector('.fc-toggle');
+      var mState = false;
+      mbtn.addEventListener('click', function() {
+        mState = !mState;
+        merge.classList.toggle('is-merged', mState);
+        mbtn.textContent = mState ? 'Show both attempts' : 'Merge into pipeline';
+      });
+      var mio = new IntersectionObserver(function(entries) {
+        entries.forEach(function(e) {
+          if (!e.isIntersecting) return;
+          mio.unobserve(merge);
+          setTimeout(function() {
+            mState = true;
+            merge.classList.add('is-merged');
+            mbtn.textContent = 'Show both attempts';
+          }, 1200);
+        });
+      }, { threshold: 0.4 });
+      mio.observe(merge);
+    }
   });
 </script>
 </body>
