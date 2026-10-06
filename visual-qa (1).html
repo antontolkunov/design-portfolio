@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="light dark">
+  <title>Design Visual QA — Anton Tolkunov</title>
+  <meta name="description" content="Redesigning remote Visual QA at Vodafone: a hybrid workflow aligning design, QA, engineering and product, with an illustrative effort model.">
+  <link rel="preconnect" href="https://api.fontshare.com">
+  <link href="https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@700,800,900&amp;f[]=satoshi@400,500,700&amp;display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --font-display: 'Cabinet Grotesk', 'Helvetica Neue', sans-serif;
+      --font-body: 'Satoshi', 'Inter', sans-serif;
+      --text-xs: clamp(.75rem,.7rem + .25vw,.875rem);
+      --text-sm: clamp(.875rem,.8rem + .35vw,1rem);
+      --text-base: clamp(1rem,.95rem + .25vw,1.125rem);
+      --text-lg: clamp(1.125rem,1rem + .75vw,1.5rem);
+      --text-xl: clamp(1.5rem,1.2rem + 1.25vw,2.25rem);
+      --text-2xl: clamp(2rem,1.2rem + 2.5vw,3.5rem);
+      --text-3xl: clamp(2.5rem,1.5rem + 3.5vw,4.5rem);
+      --space-1: .25rem; --space-2: .5rem; --space-3: .75rem;
+      --space-4: 1rem; --space-5: 1.25rem; --space-6: 1.5rem;
+      --space-8: 2rem; --space-10: 2.5rem; --space-12: 3rem;
+      --space-16: 4rem; --space-20: 5rem;
+      --radius-sm: .25rem; --radius-md: .5rem;
+      --radius-lg: .75rem; --radius-xl: 1rem;
+      --content-narrow: 720px; --content-default: 1000px; --content-wide: 1280px;
+      --ease: cubic-bezier(.16,1,.3,1);
+    }
+    :root, [data-theme="light"] {
+      --color-bg: #f5f4f0; --color-surface: #fafaf8; --color-surface-2: #fff;
+      --color-surface-offset: #edeae5; --color-border: rgba(0,0,0,.08);
+      --color-divider: rgba(0,0,0,.05); --color-text: #1a1917;
+      --color-text-muted: #6b6a67; --color-text-faint: #c0bdb8;
+      --color-accent: #7a5c38; --color-accent-hover: #5e4428;
+      --color-good: #3d6b4f; --color-warn: #8a5a2b;
+    }
+    [data-theme="dark"] {
+      --color-bg: #0f0e0d; --color-surface: #161513; --color-surface-2: #1d1b19;
+      --color-surface-offset: #242220; --color-border: rgba(255,255,255,.09);
+      --color-divider: rgba(255,255,255,.07); --color-text: #e8e4dc;
+      --color-text-muted: #aaa69e; --color-text-faint: #625e56;
+      --color-accent: #c8b89a; --color-accent-hover: #d9ccb8;
+      --color-good: #8fbf9f; --color-warn: #d4a574;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; text-rendering: optimizeLegibility; scroll-behavior: smooth; }
+    body { min-height: 100dvh; font-family: var(--font-body); font-size: var(--text-base); color: var(--color-text); background: var(--color-bg); line-height: 1.6; transition: background 300ms var(--ease), color 300ms var(--ease); }
+    a { color: inherit; text-decoration: none; }
+    button { cursor: pointer; background: none; border: none; font: inherit; color: inherit; }
+    ::selection { background: rgba(200,184,154,.2); color: var(--color-text); }
+    :focus-visible { outline: 2px solid var(--color-accent); outline-offset: 4px; border-radius: var(--radius-sm); }
+    .skip-link { position: absolute; left: 1rem; top: -100px; z-index: 200; padding: .75rem 1rem; background: var(--color-text); color: var(--color-bg); border-radius: var(--radius-md); }
+    .skip-link:focus { top: 1rem; }
+    .site-header { position: sticky; top: 0; z-index: 100; background: rgba(15,14,13,.88); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-bottom: 1px solid var(--color-border); }
+    [data-theme="light"] .site-header { background: rgba(245,244,240,.88); }
+    .nav-inner { max-width: var(--content-wide); margin-inline: auto; padding: var(--space-4) var(--space-8); display: flex; align-items: center; justify-content: space-between; gap: var(--space-8); }
+    .nav-logo { font-family: var(--font-display); font-size: var(--text-sm); font-weight: 700; letter-spacing: -.01em; }
+    .nav-right { display: flex; align-items: center; gap: var(--space-6); }
+    .nav-right a { font-size: var(--text-sm); font-weight: 500; color: var(--color-text-muted); transition: color 180ms var(--ease); }
+    .nav-right a:hover, .case-back:hover, .footer-links a:hover { color: var(--color-text); }
+    .theme-toggle { width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; border-radius: var(--radius-md); color: var(--color-text-muted); }
+    .theme-toggle:hover { color: var(--color-text); background: var(--color-surface-2); }
+    .case-hero { max-width: var(--content-wide); margin-inline: auto; padding: var(--space-16) var(--space-8) var(--space-12); }
+    .case-back { display: inline-flex; align-items: center; gap: var(--space-2); font-size: var(--text-sm); font-weight: 500; color: var(--color-text-muted); margin-bottom: var(--space-10); }
+    .case-meta-tags { display: flex; gap: var(--space-3); flex-wrap: wrap; margin-bottom: var(--space-6); }
+    .case-tag { font-size: var(--text-xs); font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--color-accent); background: rgba(200,184,154,.08); border: 1px solid rgba(200,184,154,.15); padding: var(--space-1) var(--space-3); border-radius: 9999px; }
+    [data-theme="light"] .case-tag { background: rgba(122,92,56,.06); border-color: rgba(122,92,56,.15); }
+    .case-title { font-family: var(--font-display); font-size: var(--text-3xl); font-weight: 800; letter-spacing: -.03em; line-height: 1.05; max-width: 18ch; margin-bottom: var(--space-6); }
+    .case-subtitle { font-size: var(--text-lg); color: var(--color-text-muted); max-width: 54ch; line-height: 1.55; }
+    .case-cover { max-width: var(--content-wide); margin-inline: auto; padding: 0 var(--space-8) var(--space-12); }
+    .cover-board { overflow: hidden; border-radius: var(--radius-xl); border: 1px solid var(--color-border); background: radial-gradient(ellipse 80% 60% at 20% 30%,rgba(122,92,56,.12),transparent 60%), radial-gradient(ellipse 70% 50% at 80% 70%,rgba(122,92,56,.08),transparent 55%),var(--color-surface); min-height: clamp(280px,42vw,440px); padding: var(--space-10) var(--space-8); display: flex; align-items: center; justify-content: center; }
+    [data-theme="dark"] .cover-board { background: radial-gradient(ellipse 80% 60% at 20% 30%,rgba(200,184,154,.1),transparent 60%),var(--color-surface); }
+    .cover-pipeline { display: flex; align-items: center; gap: var(--space-3); flex-wrap: wrap; justify-content: center; max-width: 1000px; }
+    .cover-chip { background: var(--color-surface-2); border: 1px solid var(--color-border); border-radius: var(--radius-lg); padding: var(--space-4) var(--space-5); min-width: 140px; animation: chipIn 700ms var(--ease) both; }
+    .cover-chip:nth-child(3) { animation-delay: 160ms; }
+    .cover-chip:nth-child(5) { animation-delay: 320ms; }
+    .cover-chip:nth-child(7) { animation-delay: 480ms; }
+    .cover-chip--premium { border-color: var(--color-accent); }
+    .cover-chip-kicker { font-size: .65rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--color-accent); margin-bottom: var(--space-2); }
+    .cover-chip-title { font-family: var(--font-display); font-size: var(--text-sm); font-weight: 700; letter-spacing: -.01em; line-height: 1.25; }
+    .cover-chip-sub { font-size: var(--text-xs); color: var(--color-text-muted); margin-top: var(--space-1); }
+    .cover-arrow { color: var(--color-text-faint); font-size: 1.5rem; }
+    @keyframes chipIn { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+    .case-details { max-width: var(--content-wide); margin-inline: auto; padding: 0 var(--space-8) var(--space-16); }
+    .details-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: var(--space-4); padding: var(--space-6) 0; border-top: 1px solid var(--color-divider); border-bottom: 1px solid var(--color-divider); }
+    .detail-label { font-size: var(--text-xs); font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--color-text-muted); margin-bottom: var(--space-1); }
+    .detail-value { font-size: var(--text-sm); font-weight: 500; }
+    .case-content { max-width: var(--content-narrow); margin-inline: auto; padding: 0 var(--space-8); }
+    .case-section { margin-bottom: var(--space-16); scroll-margin-top: 100px; }
+    .case-section-label { font-size: var(--text-xs) !important; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--color-text-muted); margin-bottom: var(--space-6); display: flex; align-items: center; gap: var(--space-3); }
+    .case-section-label::before { content: ''; width: 24px; height: 1px; background: var(--color-text-faint); }
+    .case-section h2 { font-family: var(--font-display); font-size: var(--text-xl); font-weight: 800; letter-spacing: -.02em; margin-bottom: var(--space-6); line-height: 1.15; }
+    .case-section p { font-size: var(--text-base); color: var(--color-text-muted); line-height: 1.75; margin-bottom: var(--space-5); }
+    .case-section p:last-child { margin-bottom: 0; }
+    .case-section strong { color: var(--color-text); font-weight: 600; }
+    .case-section em { color: var(--color-text); }
+    .pull-quote { border-left: 2px solid var(--color-accent); padding: var(--space-4) var(--space-6); margin: var(--space-8) 0; background: rgba(200,184,154,.04); border-radius: 0 var(--radius-md) var(--radius-md) 0; }
+    .pull-quote p { font-size: var(--text-lg) !important; font-style: italic; color: var(--color-text) !important; line-height: 1.55 !important; margin: 0 !important; }
+    .insight-box { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-lg); padding: var(--space-6); margin: var(--space-8) 0; }
+    .insight-box p { font-size: var(--text-sm) !important; line-height: 1.65 !important; margin-bottom: var(--space-3); }
+    .insight-box .insight-box-label { font-size: var(--text-xs) !important; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--color-accent); }
+    .compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-4); margin: var(--space-8) 0; }
+    .compare-card { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-lg); padding: var(--space-6); }
+    .compare-kicker { font-size: var(--text-xs) !important; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--color-accent) !important; margin-bottom: var(--space-3) !important; }
+    .compare-card h3 { font-family: var(--font-display); font-size: var(--text-lg); font-weight: 800; letter-spacing: -.02em; margin-bottom: var(--space-4); line-height: 1.2; }
+    .compare-list { list-style: none; display: grid; gap: var(--space-3); }
+    .compare-list li { font-size: var(--text-sm); color: var(--color-text-muted); line-height: 1.5; padding-left: 1.1rem; position: relative; }
+    .compare-list li::before { content: ''; position: absolute; left: 0; top: .55em; width: 6px; height: 6px; border-radius: 50%; background: var(--color-text-faint); }
+    .compare-list li.up::before { background: var(--color-good); }
+    .compare-list li.down::before { background: var(--color-warn); }
+    .fc-demo { margin: var(--space-10) 0; }
+    .fc-stage { display: grid; min-height: 290px; margin-bottom: var(--space-6); align-items: center; }
+    .fc-layer { grid-area: 1 / 1; }
+    .fc-layer--before { display: grid; grid-template-columns: repeat(3,1fr); gap: var(--space-3); transition: opacity 450ms var(--ease), transform 600ms var(--ease); }
+    .fc-layer--after { display: flex; justify-content: center; opacity: 0; visibility: hidden; transform: scale(.94); transition: opacity 450ms var(--ease), transform 600ms var(--ease), visibility 450ms; }
+    .fc-card { background: var(--color-surface-2); border: 1px solid var(--color-border); border-radius: var(--radius-lg); padding: var(--space-5); box-shadow: 0 8px 24px rgba(0,0,0,.04); }
+    .fc-card h3 { font-family: var(--font-display); font-size: var(--text-sm); font-weight: 800; margin-bottom: var(--space-2); }
+    .fc-card p { font-size: var(--text-xs) !important; line-height: 1.5 !important; margin: 0 !important; }
+    .fc-kicker { display: inline-block; font-size: .65rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; margin-bottom: var(--space-2); color: var(--color-text-muted); }
+    .fc-kicker--new { color: var(--color-accent); }
+    .fc-card--design { transform: rotate(-2deg); }
+    .fc-card--eng { transform: translateY(18px); }
+    .fc-card--qa { transform: translateY(36px) rotate(2deg); }
+    .fc-card--result { width: min(400px,100%); border-color: var(--color-accent); }
+    .fc-demo.is-merged .fc-layer--before { opacity: 0; transform: scale(.85); visibility: hidden; }
+    .fc-demo.is-merged .fc-layer--after { opacity: 1; visibility: visible; transform: scale(1); }
+    .fc-result-points { list-style: none; margin-top: var(--space-4); display: grid; gap: var(--space-2); }
+    .fc-result-points li { font-size: var(--text-xs); color: var(--color-text-muted); padding-left: 1rem; position: relative; line-height: 1.45; }
+    .fc-result-points li::before { content: ''; position: absolute; left: 0; top: .45em; width: 6px; height: 6px; border-radius: 50%; background: var(--color-accent); }
+    .fc-controls { display: flex; align-items: center; gap: var(--space-4); flex-wrap: wrap; }
+    .fc-toggle { display: none; background: var(--color-text); color: var(--color-bg); font-size: var(--text-sm); font-weight: 600; padding: var(--space-3) var(--space-5); border-radius: var(--radius-md); }
+    .js .fc-toggle { display: inline-block; }
+    .fc-toggle:hover { opacity: .92; }
+    .fc-note { font-size: var(--text-xs) !important; margin: 0 !important; }
+    .pipeline { margin: var(--space-10) 0; display: grid; gap: var(--space-3); }
+    .pipe-step { display: grid; grid-template-columns: 56px 1fr; gap: var(--space-4); align-items: start; background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-lg); padding: var(--space-5); }
+    .pipe-num { font-family: var(--font-display); font-size: var(--text-xl); font-weight: 800; letter-spacing: -.03em; color: var(--color-accent); line-height: 1; padding-top: 2px; }
+    .pipe-body h3 { font-family: var(--font-display); font-size: var(--text-base); font-weight: 800; letter-spacing: -.01em; margin-bottom: var(--space-2); }
+    .pipe-body p { font-size: var(--text-sm) !important; margin: 0 !important; line-height: 1.55 !important; }
+    .pipe-step--premium { border-color: var(--color-accent); background: linear-gradient(135deg,var(--color-surface),rgba(122,92,56,.05)); }
+    .stat-row { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-4); margin: var(--space-8) 0; }
+    .stat-card { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-lg); padding: var(--space-6); }
+    .stat-number { font-family: var(--font-display); font-size: var(--text-2xl); font-weight: 800; letter-spacing: -.03em; line-height: 1.1; margin-bottom: var(--space-3); color: var(--color-accent); }
+    .stat-title { font-family: var(--font-display); font-size: var(--text-base); font-weight: 700; line-height: 1.3; margin-bottom: var(--space-2); }
+    .stat-desc { font-size: var(--text-xs); color: var(--color-text-muted); line-height: 1.5; }
+    .model-badge { display: inline-block; font-size: var(--text-xs); font-weight: 600; color: var(--color-accent); padding: var(--space-1) var(--space-3); border: 1px solid var(--color-border); border-radius: 999px; margin-bottom: var(--space-5); }
+    .table-wrap { overflow-x: auto; border: 1px solid var(--color-border); border-radius: var(--radius-lg); margin: var(--space-6) 0; background: var(--color-surface); }
+    .model-table { width: 100%; min-width: 540px; border-collapse: collapse; font-size: var(--text-sm); font-variant-numeric: tabular-nums; }
+    .model-table caption { text-align: left; padding: var(--space-4); font-weight: 600; color: var(--color-text); border-bottom: 1px solid var(--color-border); }
+    .model-table th, .model-table td { padding: var(--space-4); text-align: right; vertical-align: top; border-bottom: 1px solid var(--color-divider); }
+    .model-table th:first-child, .model-table td:first-child { text-align: left; }
+    .model-table thead th { font-size: var(--text-xs); font-weight: 600; color: var(--color-text-muted); background: var(--color-surface-offset); }
+    .model-table tbody th { font-weight: 500; }
+    .model-table td { color: var(--color-text-muted); }
+    .model-table td:last-child { color: var(--color-accent); }
+    .model-table tfoot th, .model-table tfoot td { font-weight: 700; border-bottom: 0; color: var(--color-text); }
+    .model-table small { display: block; font-size: .75rem; color: var(--color-text-muted); font-weight: 400; }
+    .model-details { margin: var(--space-6) 0; border: 1px solid var(--color-border); border-radius: var(--radius-lg); background: var(--color-surface); }
+    .model-details summary { cursor: pointer; padding: var(--space-5); font-size: var(--text-sm); font-weight: 600; }
+    .model-details[open] summary { border-bottom: 1px solid var(--color-divider); }
+    .model-details-body { padding: var(--space-5); }
+    .model-details-body h3 { font-family: var(--font-display); font-size: var(--text-base); margin: var(--space-6) 0 var(--space-3); }
+    .model-details-body h3:first-child { margin-top: 0; }
+    .model-details-body p { font-size: var(--text-sm); }
+    .assumption-list { padding-left: 1.2rem; display: grid; gap: var(--space-3); font-size: var(--text-sm); color: var(--color-text-muted); line-height: 1.6; }
+    .learn-list { list-style: none; margin-top: var(--space-6); }
+    .learn-list li { padding: var(--space-4) 0; border-bottom: 1px solid var(--color-divider); font-size: var(--text-sm); color: var(--color-text-muted); line-height: 1.55; display: grid; grid-template-columns: 2rem 1fr; gap: var(--space-3); }
+    .learn-list li:first-child { border-top: 1px solid var(--color-divider); }
+    .learn-num { font-family: var(--font-display); font-weight: 800; color: var(--color-accent); }
+    .next-project { background: var(--color-surface); border-top: 1px solid var(--color-border); padding: var(--space-16) var(--space-8); margin-top: var(--space-16); }
+    .next-project-inner { max-width: var(--content-default); margin-inline: auto; text-align: center; }
+    .next-label { font-size: var(--text-xs); font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--color-text-muted); margin-bottom: var(--space-4); }
+    .next-title { font-family: var(--font-display); font-size: var(--text-2xl); font-weight: 800; letter-spacing: -.03em; }
+    .next-title:hover { color: var(--color-accent); }
+    .site-footer { padding: var(--space-8); max-width: var(--content-wide); margin-inline: auto; display: flex; align-items: center; justify-content: space-between; gap: var(--space-4); flex-wrap: wrap; }
+    .footer-copy { font-size: var(--text-xs); color: var(--color-text-muted); }
+    .footer-links { display: flex; gap: var(--space-6); }
+    .footer-links a { font-size: var(--text-xs); color: var(--color-text-muted); }
+    .js .reveal { opacity: 0; transform: translateY(20px); transition: opacity 600ms var(--ease),transform 600ms var(--ease); }
+    .js .reveal.visible { opacity: 1; transform: translateY(0); }
+    .reveal-delay-1 { transition-delay: 80ms !important; }
+    .reveal-delay-2 { transition-delay: 160ms !important; }
+    .reveal-delay-3 { transition-delay: 240ms !important; }
+    @media (max-width: 768px) {
+      .nav-inner { padding: var(--space-3) var(--space-4); gap: var(--space-4); }
+      .nav-right { gap: var(--space-3); }
+      .case-hero { padding: var(--space-10) var(--space-4) var(--space-8); }
+      .case-cover { padding: 0 var(--space-4) var(--space-8); }
+      .case-details { padding: 0 var(--space-4) var(--space-10); }
+      .details-grid { grid-template-columns: 1fr 1fr; gap: var(--space-6); }
+      .case-content { padding: 0 var(--space-4); }
+      .compare-grid, .stat-row { grid-template-columns: 1fr; }
+      .fc-layer--before { grid-template-columns: 1fr; }
+      .fc-card--design, .fc-card--eng, .fc-card--qa { transform: none; }
+      .fc-stage { min-height: 370px; }
+      .cover-board { padding: var(--space-8) var(--space-4); }
+      .cover-pipeline { display: grid; grid-template-columns: 1fr 1fr; width: 100%; }
+      .cover-chip { min-width: 0; }
+      .cover-arrow { display: none; }
+      .pipe-step { grid-template-columns: 36px 1fr; gap: var(--space-3); }
+      .next-project { padding: var(--space-12) var(--space-4); }
+      .site-footer { padding: var(--space-6) var(--space-4); }
+    }
+    @media (max-width: 380px) { .nav-right { gap: var(--space-2); } .nav-logo { max-width: 90px; line-height: 1.2; } }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { animation-duration: .01ms !important; animation-delay: 0ms !important; transition-duration: .01ms !important; transition-delay: 0ms !important; }
+      .js .reveal { opacity: 1; transform: none; }
+    }
+    @media print {
+      .site-header, .case-back, .fc-controls, .next-project, .site-footer { display: none; }
+      .js .reveal { opacity: 1; transform: none; }
+      .case-cover { display: none; }
+      .case-section { break-inside: avoid; }
+      .table-wrap { overflow: visible; }
+      .model-table { min-width: 0; }
+    }
+  </style>
+</head>
+<body>
+<a class="skip-link" href="#main-content">Skip to content</a>
+<header class="site-header">
+  <nav class="nav-inner" aria-label="Main navigation">
+    <a href="index.html" class="nav-logo">Anton Tolkunov</a>
+    <div class="nav-right">
+      <a href="index.html#work">Work</a>
+      <a href="index.html#about">About</a>
+      <a href="index.html#contact">Contact</a>
+      <button class="theme-toggle" type="button" data-theme-toggle aria-label="Switch to dark mode">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      </button>
+    </div>
+  </nav>
+</header>
+<main id="main-content">
+  <section class="case-hero" aria-labelledby="case-title">
+    <a href="index.html#work" class="case-back reveal">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M19 12H5m7-7-7 7 7 7"/></svg>
+      All projects
+    </a>
+    <div class="case-meta-tags reveal reveal-delay-1">
+      <span class="case-tag">Process Design</span><span class="case-tag">Design Ops</span>
+      <span class="case-tag">Remote</span><span class="case-tag">Cross-functional</span>
+    </div>
+    <h1 id="case-title" class="case-title reveal reveal-delay-1">Visual QA without the ticket war</h1>
+    <p class="case-subtitle reveal reveal-delay-2">How we redesigned remote Visual QA — not as a checklist, but as a negotiation system between design, QA, engineering, and product.</p>
+  </section>
+  <div class="case-cover reveal reveal-delay-2">
+    <div class="cover-board" aria-hidden="true">
+      <div class="cover-pipeline">
+        <div class="cover-chip"><div class="cover-chip-kicker">01</div><div class="cover-chip-title">Functional QA</div><div class="cover-chip-sub">+ coarse visual</div></div>
+        <span class="cover-arrow">→</span>
+        <div class="cover-chip"><div class="cover-chip-kicker">02</div><div class="cover-chip-title">Designer ↔ QA</div><div class="cover-chip-sub">short triage sync</div></div>
+        <span class="cover-arrow">→</span>
+        <div class="cover-chip"><div class="cover-chip-kicker">03</div><div class="cover-chip-title">Residual tickets</div><div class="cover-chip-sub">AI-assisted drafts</div></div>
+        <span class="cover-arrow">→</span>
+        <div class="cover-chip cover-chip--premium"><div class="cover-chip-kicker">04 · Optional</div><div class="cover-chip-title">Live Visual QA</div><div class="cover-chip-sub">PO-gated only</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="case-details reveal reveal-delay-3">
+    <dl class="details-grid">
+      <div><dt class="detail-label">Role</dt><dd class="detail-value">Senior Designer · process owner</dd></div>
+      <div><dt class="detail-label">Context</dt><dd class="detail-value">Vodafone · remote · design system</dd></div>
+      <div><dt class="detail-label">Partners</dt><dd class="detail-value">Design · QA · Eng · PO</dd></div>
+      <div><dt class="detail-label">Outcome</dt><dd class="detail-value">Hybrid QA pipeline adopted</dd></div>
+    </dl>
+  </div>
+  <div class="case-content">
+    <section class="case-section reveal" aria-labelledby="situation-title">
+      <p class="case-section-label">Situation</p>
+      <h2 id="situation-title">“Done” in Jira was not the same as looking like the design.</h2>
+      <p>On a remote product team, Visual QA couldn't mean sitting next to a developer. Design-system consistency across markets mattered — but quality depended on who cared that week. We needed a process that protected product integrity without burning design capacity or developer flow.</p>
+      <blockquote class="pull-quote"><p>“This wasn't a Figma problem. It was a negotiation problem.”</p></blockquote>
+    </section>
+    <section class="case-section reveal" aria-labelledby="experiments-title">
+      <p class="case-section-label">Two experiments</p>
+      <h2 id="experiments-title">Both extremes were half-right.</h2>
+      <p>We tried two approaches. Each solved one side of the conflict and broke the other.</p>
+      <div class="compare-grid">
+        <article class="compare-card">
+          <p class="compare-kicker">Attempt A</p><h3>Sync Visual QA</h3>
+          <ul class="compare-list">
+            <li class="up">Live screen-share: implementation ↔ Figma</li>
+            <li class="up">High visual integrity within one feature story</li>
+            <li class="up">Related fixes could ship together</li>
+            <li class="down">Interrupted developer deep work</li>
+            <li class="down">Design-system fixes competed with higher-priority engineering work</li>
+          </ul>
+        </article>
+        <article class="compare-card">
+          <p class="compare-kicker">Attempt B</p><h3>Async ticket factory</h3>
+          <ul class="compare-list">
+            <li class="up">Fit engineering's async culture</li>
+            <li class="up">Made work batchable and prioritizable</li>
+            <li class="down">Design spent too much time writing tickets</li>
+            <li class="down">“Small” consistency fixes lost priority</li>
+            <li class="down">Related visual fixes became fragmented</li>
+          </ul>
+        </article>
+      </div>
+      <aside class="insight-box"><p class="insight-box-label">Hidden actor</p><p>QA engineers already ran functional testing — and often caught coarse visual bugs through the same ticket workflow. Developers trusted that stream. Rather than adding another parallel review ritual, we could build on an existing habit.</p></aside>
+    </section>
+    <section class="case-section reveal" aria-labelledby="conflict-title">
+      <p class="case-section-label">The conflict</p>
+      <h2 id="conflict-title">Three valid goals. Zero pure winners.</h2>
+      <p>Design wanted coherent surfaces and design-system fidelity. Engineering wanted protected focus and clear, batchable work. QA needed reliable coverage without a separate visual-testing bureaucracy.</p>
+      <p>We sat down with QA, developers, and the Product Owner — and redesigned the <em>sequence</em>, not the tool.</p>
+      <div class="fc-demo js-fc-demo is-merged">
+        <div class="fc-stage">
+          <div class="fc-layer fc-layer--before" id="forces-panel" aria-hidden="true" inert>
+            <article class="fc-card fc-card--design"><span class="fc-kicker">Design</span><h3>Integrity</h3><p>Coherent surfaces and design-system fidelity.</p></article>
+            <article class="fc-card fc-card--eng"><span class="fc-kicker">Engineering</span><h3>Flow</h3><p>Protected deep work and clear, batchable tickets.</p></article>
+            <article class="fc-card fc-card--qa"><span class="fc-kicker">QA</span><h3>Coverage</h3><p>Functional and coarse visual checks, using familiar workflows.</p></article>
+          </div>
+          <div class="fc-layer fc-layer--after" id="hybrid-panel">
+            <article class="fc-card fc-card--result">
+              <span class="fc-kicker fc-kicker--new">Hybrid</span><h3>Redirect habits. Gate expensive modes.</h3>
+              <ul class="fc-result-points">
+                <li>QA tickets cover coarse visual defects</li>
+                <li>Designer–QA triage resolves overlap and ambiguity</li>
+                <li>Designers document residual fine-grained issues</li>
+                <li>PO prioritises fixes and gates live developer reviews</li>
+              </ul>
+            </article>
+          </div>
+        </div>
+        <div class="fc-controls"><button class="fc-toggle" type="button" aria-controls="hybrid-panel" aria-expanded="true">Show three forces</button><p class="fc-note">Three forces. One negotiated pipeline.</p></div>
+      </div>
+    </section>
+    <section class="case-section reveal" aria-labelledby="hybrid-title">
+      <p class="case-section-label">The hybrid</p>
+      <h2 id="hybrid-title">A pipeline of filters — not one ritual for everything.</h2>
+      <p>Default mode is lean and async. Live Visual QA with developers becomes a premium mode — justified by product needs, not designer preference.</p>
+      <div class="pipeline">
+        <article class="pipe-step"><div class="pipe-num" aria-hidden="true">01</div><div class="pipe-body"><h3>Functional QA + coarse visual checks</h3><p>QA checks behaviour and obvious visual defects, then files actionable tickets in the format engineering already trusts. Design is kept in the loop rather than starting a separate stream for the same findings.</p></div></article>
+        <article class="pipe-step"><div class="pipe-num" aria-hidden="true">02</div><div class="pipe-body"><h3>Short sync: Designer ↔ QA</h3><p>Review QA findings, remove duplicates, and separate coarse defects from fine design-system issues. Resolve design ambiguity before adding residual tickets; escalate priority decisions to the PO.</p></div></article>
+        <article class="pipe-step"><div class="pipe-num" aria-hidden="true">03</div><div class="pipe-body"><h3>Residual designer tickets</h3><p>Designers inspect the remaining fine-grained issues and document actionable fixes. AI assists with ticket drafts; designers own accuracy and severity, while the PO owns delivery priority. Engineering works from the documented, prioritised ticket stream, and fixes are verified.</p></div></article>
+        <article class="pipe-step pipe-step--premium"><div class="pipe-num" aria-hidden="true">04</div><div class="pipe-body"><h3>Live Visual QA — PO-gated</h3><p>Optional escalation, not a mandatory final meeting. When visual consistency materially matters to the story, the PO authorises a live designer–developer review so related fixes can be resolved together.</p></div></article>
+      </div>
+      <aside class="insight-box"><p class="insight-box-label">Ownership stays explicit</p><p>QA owns functional coverage and coarse visual findings. Design owns fine visual judgment and design-system fidelity. Engineering owns implementation. The PO prioritises bugs against OKRs and engineering capacity. Findings, decisions, and deferred work remain documented.</p></aside>
+    </section>
+    <section class="case-section reveal" aria-labelledby="outcome-title">
+      <p class="case-section-label">Outcome</p>
+      <h2 id="outcome-title">A shared quality process, not competing review streams.</h2>
+      <p>The hybrid pipeline was adopted as shared team practice. QA handled the coarse layer, designers retained fine design-system judgment, and the PO decided which fixes mattered now — including when a live review was worth the interruption.</p>
+      <p>Design ticket volume dropped as QA absorbed coarse visual findings. Live designer–developer sessions became the exception rather than the default. These were qualitative process outcomes; the effort estimates below are a separate model, not rollout measurements.</p>
+      <blockquote class="pull-quote"><p>“The goal wasn't fewer quality checks. It was less duplicated effort and clearer decisions.”</p></blockquote>
+    </section>
+    <section class="case-section reveal" aria-labelledby="model-title">
+      <p class="case-section-label">Making the tradeoffs explicit</p>
+      <span class="model-badge">Illustrative estimate · not measured results</span>
+      <h2 id="model-title">What could this save on one cross-platform story?</h2>
+      <p>I modelled a small dashboard-control story spanning three weeks and delivered across iOS, Android, and web. The scenario uses a team of two designers, two QA engineers, and three platform developers, with one developer per platform.</p>
+      <p>Hours are summed across the people doing the work — not multiplied by every team member. A one-hour designer–developer call therefore costs two person-hours.</p>
+      <div class="stat-row">
+        <article class="stat-card"><div class="stat-number">~24%</div><h3 class="stat-title">Less total review-and-fix effort</h3><div class="stat-desc">31.5 → 24.1 person-hours across three platforms, compared with the live-review workflow. Includes QA checks, coordination and visual corrections.</div></article>
+        <article class="stat-card"><div class="stat-number">~34%</div><h3 class="stat-title">Less engineering review-and-fix time</h3><div class="stat-desc">18 → 11.9 developer-hours across three platforms. This is not a reduction in total story development time.</div></article>
+      </div>
+      <p>Against the independent async-ticket workflow, the same model estimates approximately 15% less total effort and 21% less engineering time.</p>
+      <div class="table-wrap" role="region" aria-label="Effort model comparison" tabindex="0">
+        <table class="model-table">
+          <caption>Person-hours per story · iOS + Android + web</caption>
+          <thead><tr><th scope="col">Role</th><th scope="col">Live review</th><th scope="col">Independent tickets</th><th scope="col">Hybrid model</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">Design</th><td>6.0</td><td>6.0</td><td>5.25</td></tr>
+            <tr><th scope="row">Engineering</th><td>18.0</td><td>15.0</td><td>11.85</td></tr>
+            <tr><th scope="row">QA</th><td>7.5</td><td>7.5</td><td>6.75</td></tr>
+            <tr><th scope="row">PO<small>Additional prioritisation</small></th><td>Not modelled</td><td>Not modelled</td><td>0.25</td></tr>
+          </tbody>
+          <tfoot><tr><th scope="row">Total modelled effort</th><td>31.5</td><td>28.5</td><td>24.1</td></tr></tfoot>
+        </table>
+      </div>
+      <p>The estimated saving is 7.4 person-hours per story against live review, or 4.4 against independent tickets. It comes from less correction work and shorter follow-up — not from removing designer ownership.</p>
+      <details class="model-details">
+        <summary>View assumptions and calculation</summary>
+        <div class="model-details-body">
+          <h3>Scope and baseline</h3>
+          <ul class="assumption-list">
+            <li>One small story, three platforms, one developer per platform. Design and QA work is allocated across their respective two-person teams.</li>
+            <li>Four hours of visual corrections per platform is the midpoint of the assumed three-to-five-hour range.</li>
+            <li>Each platform is counted separately. Shared cross-platform findings are not credited with extra savings.</li>
+            <li>Initial design, implementation, functional bug fixes, and existing PO work are outside the model. QA technical-check time is included and held constant.</li>
+          </ul>
+          <h3>Live-review workflow · per platform</h3>
+          <p>Design: 1 hour initial live review + 1 hour final review = 2 hours. Engineering: 1 hour initial review + 4 hours corrections + 1 hour final review and small fixes = 6 hours.</p>
+          <h3>Independent tickets · per platform</h3>
+          <p>Design: 1 hour inspection and ticket creation + 1 hour final review = 2 hours. Engineering: 4 hours corrections + 1 hour final review and small fixes = 5 hours.</p>
+          <h3>QA in both baselines · per platform</h3>
+          <p>1 hour technical checks + 30 minutes coarse visual checks + 30 minutes ticket creation and clarification + 30 minutes verification = 2.5 hours.</p>
+          <h3>Hybrid model · per platform</h3>
+          <p>Design: 15 minutes QA triage + 1 hour deep visual inspection and residual tickets + 30 minutes final review = 1.75 hours.</p>
+          <p>Engineering: 15 minutes ticket review and clarification + 3.2 hours visual corrections + 30 minutes final review and small fixes = 3.95 hours.</p>
+          <p>QA: 1 hour technical checks + 30 minutes coarse visual checks + 15 minutes ticket creation + 15 minutes designer triage + 15 minutes verification = 2.25 hours.</p>
+          <p>PO: 15 additional minutes of prioritisation for the whole story, not per platform.</p>
+          <h3>Where the assumed saving comes from</h3>
+          <p>Correction effort is assumed to fall by 20%: 4 × 0.8 = 3.2 hours per platform. This represents removing duplicate requests, batching related fixes, and agreeing current scope. Ticket creation and QA verification are assumed to shorten, while final review falls from one hour to 30 minutes.</p>
+          <p>No additional saving is assigned to AI drafting. The designer's deep inspection and residual-ticket work remains one hour per platform.</p>
+          <h3>Arithmetic</h3>
+          <p>Live review: (2 + 6 + 2.5) × 3 = 31.5 person-hours. Independent tickets: (2 + 5 + 2.5) × 3 = 28.5 person-hours. Hybrid: (1.75 + 3.95 + 2.25) × 3 + 0.25 = 24.1 person-hours.</p>
+          <p>Total reduction: (31.5 − 24.1) ÷ 31.5 = 23.5%, rounded to 24%. Engineering reduction: (18 − 11.85) ÷ 18 = 34.2%, rounded to 34%.</p>
+          <p>Against independent tickets: (28.5 − 24.1) ÷ 28.5 = 15.4% total reduction; (15 − 11.85) ÷ 15 = 21% engineering reduction.</p>
+        </div>
+      </details>
+      <aside class="insight-box"><p class="insight-box-label">What the model does not prove</p><p>The model includes a 30-minute final designer–developer review on every platform as a conservative allowance. The adopted workflow only uses live reviews when PO-gated; no further saving from that policy is claimed here.</p><p>The 20% correction reduction and shorter follow-up are assumptions, not observed metrics. Deferred fixes remain backlog work, not eliminated defects. Person-hours do not establish calendar-time savings, faster releases, or fewer escaped defects. The three-week story duration is context, not the denominator for these percentages.</p></aside>
+    </section>
+    <section class="case-section reveal" aria-labelledby="learning-title">
+      <p class="case-section-label">What I learned</p>
+      <h2 id="learning-title">Process design is product design for the organisation.</h2>
+      <ol class="learn-list">
+        <li><span class="learn-num" aria-hidden="true">01</span><span>Don't invent rituals — redirect habits partners already trust.</span></li>
+        <li><span class="learn-num" aria-hidden="true">02</span><span>“Perfect QA” that destroys partner flow fails. Integrity without dignity is temporary.</span></li>
+        <li><span class="learn-num" aria-hidden="true">03</span><span>Put expensive modes behind a product gate — the PO, not designer preference.</span></li>
+        <li><span class="learn-num" aria-hidden="true">04</span><span>Sequence matters: functional → coarse visual → fine visual. Document decisions, not just defects.</span></li>
+        <li><span class="learn-num" aria-hidden="true">05</span><span>AI accelerates writing residual tickets. Humans still decide what matters.</span></li>
+      </ol>
+    </section>
+  </div>
+  <section class="next-project" aria-label="Next project">
+    <div class="next-project-inner reveal"><p class="next-label">Next project</p><a href="vodafone-secure-net.html" class="next-title">Vodafone Secure Net →</a></div>
+  </section>
+</main>
+<footer class="site-footer">
+  <p class="footer-copy">&copy; 2026 Anton Tolkunov</p>
+  <nav class="footer-links" aria-label="Footer navigation"><a href="index.html#work">Work</a><a href="index.html#about">About</a><a href="mailto:antontolkunov@me.com">Email</a><a href="https://linkedin.com/in/antontolkunov" target="_blank" rel="noopener noreferrer">LinkedIn</a></nav>
+</footer>
+<script>
+(function () {
+  'use strict';
+  const root = document.documentElement;
+  const toggle = document.querySelector('[data-theme-toggle]');
+  const sun = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="5"/><path d="M12 1v2m0 18v2M1 12h2m18 0h2M4.22 4.22l1.42 1.42m12.72 12.72 1.42 1.42M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>';
+  const moon = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>';
+  let theme = 'light';
+  try { const saved = localStorage.getItem('anton-theme'); if (saved === 'dark' || saved === 'light') theme = saved; } catch (error) {}
+  function applyTheme() {
+    root.setAttribute('data-theme', theme);
+    if (toggle) { toggle.innerHTML = theme === 'dark' ? sun : moon; toggle.setAttribute('aria-label', 'Switch to ' + (theme === 'dark' ? 'light' : 'dark') + ' mode'); }
+  }
+  applyTheme();
+  if (toggle) toggle.addEventListener('click', function () {
+    theme = theme === 'dark' ? 'light' : 'dark'; applyTheme();
+    try { localStorage.setItem('anton-theme', theme); } catch (error) {}
+  });
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const revealEls = document.querySelectorAll('.reveal');
+  if ('IntersectionObserver' in window && !reducedMotion) {
+    try {
+      const observer = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) { if (entry.isIntersecting) { entry.target.classList.add('visible'); observer.unobserve(entry.target); } });
+      }, { threshold: .08, rootMargin: '0px 0px -40px 0px' });
+      revealEls.forEach(function (el) { observer.observe(el); });
+      root.classList.add('js');
+    } catch (error) { revealEls.forEach(function (el) { el.classList.add('visible'); }); root.classList.add('js'); }
+  } else { revealEls.forEach(function (el) { el.classList.add('visible'); }); root.classList.add('js'); }
+  document.querySelectorAll('.js-fc-demo').forEach(function (demo) {
+    const btn = demo.querySelector('.fc-toggle');
+    const before = demo.querySelector('.fc-layer--before');
+    const after = demo.querySelector('.fc-layer--after');
+    if (!btn || !before || !after) return;
+    let merged = true;
+    let interacted = false;
+    function setState(on) {
+      merged = on; demo.classList.toggle('is-merged', on);
+      btn.textContent = on ? 'Show three forces' : 'Show the hybrid';
+      btn.setAttribute('aria-expanded', String(on));
+      before.setAttribute('aria-hidden', String(on));
+      after.setAttribute('aria-hidden', String(!on));
+      before.toggleAttribute('inert', on); after.toggleAttribute('inert', !on);
+    }
+    btn.addEventListener('click', function () { interacted = true; setState(!merged); });
+    if ('IntersectionObserver' in window && !reducedMotion) {
+      setState(false);
+      const io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            window.setTimeout(function () { if (!interacted) setState(true); }, 500);
+            io.unobserve(demo);
+          }
+        });
+      }, { threshold: .35 });
+      io.observe(demo);
+    } else { setState(true); }
+  });
+})();
+</script>
+</body>
+</html>
