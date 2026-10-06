@@ -753,6 +753,28 @@
       .next-project { padding: var(--space-12) var(--space-4); }
       .site-footer { padding: var(--space-6) var(--space-4); }
     }
+  
+    /* Content remains readable if JavaScript is unavailable. */
+    .reveal, .reveal.visible, .compare-card, .pipe-step {
+      opacity: 1;
+      transform: none;
+    }
+    .cover-chip, .cover-arrow { opacity: 1; }
+    .cover-pipeline { position: relative; z-index: 1; }
+    @media (max-width: 768px) {
+      .fc-card--result {
+        left: 50% !important;
+        right: auto !important;
+      }
+      .fc-merge .fc-stage { height: 460px; }
+      .fc-card--async { top: 210px; }
+      .nav-inner { gap: 1rem; }
+      .nav-right { gap: .75rem; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { animation-delay: 0ms !important; transition-delay: 0ms !important; }
+    }
   </style>
 </head>
 <body>
@@ -1059,80 +1081,59 @@
 </footer>
 
 <script>
-  (function(){
-    const toggle = document.querySelector('[data-theme-toggle]');
-    const root = document.documentElement;
-    const sunSVG = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>';
-    const moonSVG = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>';
-    let theme = 'light';
+(function () {
+  'use strict';
+  const root = document.documentElement;
+  const toggle = document.querySelector('[data-theme-toggle]');
+  const sunSVG = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>';
+  const moonSVG = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>';
+  let theme = root.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+  function renderTheme() {
     root.setAttribute('data-theme', theme);
-    if (toggle) {
-      toggle.innerHTML = sunSVG;
-      toggle.addEventListener('click', () => {
-        theme = theme === 'dark' ? 'light' : 'dark';
-        root.setAttribute('data-theme', theme);
-        toggle.innerHTML = theme === 'dark' ? moonSVG : sunSVG;
-        toggle.setAttribute('aria-label', 'Switch to ' + (theme === 'dark' ? 'light' : 'dark') + ' mode');
-      });
-    }
-  })();
-
-  const revealEls = document.querySelectorAll('.reveal, .js-compare, .js-pipeline');
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(e => {
-      if (e.isIntersecting) {
-        e.target.classList.add('visible');
-        observer.unobserve(e.target);
-      }
-    });
-  }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
-  revealEls.forEach((el) => observer.observe(el));
-
-  document.querySelectorAll('.js-fc-demo').forEach(function(demo) {
-    var btn = demo.querySelector('.fc-toggle');
+    if (!toggle) return;
+    toggle.innerHTML = theme === 'dark' ? sunSVG : moonSVG;
+    toggle.setAttribute('aria-label', 'Switch to ' + (theme === 'dark' ? 'light' : 'dark') + ' mode');
+  }
+  renderTheme();
+  if (toggle) toggle.addEventListener('click', function () {
+    theme = theme === 'dark' ? 'light' : 'dark'; renderTheme();
+  });
+  document.querySelectorAll('.reveal, .js-compare, .js-pipeline').forEach(function (el) {
+    el.classList.add('visible');
+  });
+  const reducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  document.querySelectorAll('.js-fc-demo, .js-fc-merge').forEach(function (demo) {
+    const btn = demo.querySelector('.fc-toggle');
     if (!btn) return;
-    var labels = ['Show the hybrid', 'Show three forces'];
-    var merged = false;
+    const merge = demo.classList.contains('js-fc-merge');
+    const before = demo.querySelector('.fc-layer--before');
+    const after = demo.querySelector('.fc-layer--after');
+    let state = demo.classList.contains('is-merged');
+    let interacted = false;
     function setState(on) {
-      merged = on;
+      state = on;
       demo.classList.toggle('is-merged', on);
-      btn.textContent = labels[on ? 1 : 0];
+      btn.textContent = merge ? (on ? 'Show both attempts' : 'Merge into pipeline') : (on ? 'Show three forces' : 'Show the hybrid');
+      btn.setAttribute('aria-pressed', String(on));
+      if (before) before.setAttribute('aria-hidden', String(on));
+      if (after) after.setAttribute('aria-hidden', String(!on));
     }
-    btn.addEventListener('click', function() { setState(!merged); });
-    var io = new IntersectionObserver(function(entries) {
-      entries.forEach(function(entry) {
-        if (entry.isIntersecting) {
-          setTimeout(function() { setState(true); }, 500);
-          io.unobserve(demo);
-        }
-      });
-    }, { threshold: 0.35 });
-    io.observe(demo);
-
-    /* Sync/Async merge toggle */
-    var merge = document.querySelector('.js-fc-merge');
-    if (merge) {
-      var mbtn = merge.querySelector('.fc-toggle');
-      var mState = false;
-      mbtn.addEventListener('click', function() {
-        mState = !mState;
-        merge.classList.toggle('is-merged', mState);
-        mbtn.textContent = mState ? 'Show both attempts' : 'Merge into pipeline';
-      });
-      var mio = new IntersectionObserver(function(entries) {
-        entries.forEach(function(e) {
-          if (!e.isIntersecting) return;
-          mio.unobserve(merge);
-          setTimeout(function() {
-            mState = true;
-            merge.classList.add('is-merged');
-            mbtn.textContent = 'Show both attempts';
-          }, 1200);
+    setState(state);
+    btn.addEventListener('click', function () { interacted = true; setState(!state); });
+    if ('IntersectionObserver' in window && !reducedMotion) {
+      const observer = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (!entry.isIntersecting) return;
+          observer.unobserve(demo);
+          window.setTimeout(function () { if (!interacted) setState(true); }, merge ? 1200 : 500);
         });
-      }, { threshold: 0.4 });
-      mio.observe(merge);
+      }, { threshold: .35 });
+      observer.observe(demo);
+    } else {
+      setState(true);
     }
   });
+})();
 </script>
 </body>
 </html>
