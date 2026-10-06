@@ -202,7 +202,14 @@
       overflow: hidden;
       border-radius: var(--radius-xl);
       border: 1px solid var(--color-border);
+<<<<<<< Updated upstream
       background: url('assets/vqa_cover_bg.png') center / cover no-repeat, var(--color-surface);
+=======
+      background:
+        radial-gradient(ellipse 80% 60% at 20% 30%, rgba(122,92,56,0.12), transparent 60%),
+        radial-gradient(ellipse 70% 50% at 80% 70%, rgba(122,92,56,0.08), transparent 55%),
+        var(--color-surface);
+>>>>>>> Stashed changes
       min-height: clamp(280px, 42vw, 440px);
       padding: var(--space-10) var(--space-8);
       display: flex;
@@ -210,6 +217,7 @@
       justify-content: center;
     }
     [data-theme="dark"] .cover-board {
+<<<<<<< Updated upstream
       background: var(--color-surface);
     }
     [data-theme="dark"] .cover-board::before {
@@ -220,6 +228,12 @@
       opacity: 0.35;
       filter: invert(1) brightness(0.7);
       pointer-events: none;
+=======
+      background:
+        radial-gradient(ellipse 80% 60% at 20% 30%, rgba(200,184,154,0.1), transparent 60%),
+        radial-gradient(ellipse 70% 50% at 80% 70%, rgba(200,184,154,0.06), transparent 55%),
+        var(--color-surface);
+>>>>>>> Stashed changes
     }
     .cover-pipeline {
       display: flex;
@@ -443,6 +457,7 @@
     .compare-list li.up::before { background: var(--color-good); }
     .compare-list li.down::before { background: var(--color-warn); }
 
+<<<<<<< Updated upstream
     /* Sync/Async convergence (2 → pipeline) */
     .fc-card--sync  { top: 32px; left: 4%; transform: rotate(-2.5deg); z-index: 2; width: 42%; }
     .fc-card--async { top: 32px; right: 4%; transform: rotate(2deg); z-index: 1; width: 42%; }
@@ -458,6 +473,8 @@
       .fc-demo.is-merged .fc-card--async { transform: scale(0.7) !important; opacity: 0; }
     }
 
+=======
+>>>>>>> Stashed changes
     /* Converge demo */
     .fc-demo {
       margin: var(--space-10) 0;
@@ -881,6 +898,7 @@
         </article>
       </div>
 
+<<<<<<< Updated upstream
       <div class="fc-demo fc-merge js-fc-merge">
         <div class="fc-stage">
           <div class="fc-layer fc-layer--before">
@@ -914,6 +932,8 @@
         </div>
       </div>
 
+=======
+>>>>>>> Stashed changes
       <div class="insight-box">
         <p class="insight-box-label">Hidden actor</p>
         <p>QA engineers already ran functional testing — and often caught <strong>coarse visual bugs</strong> the same way they file functional defects. Developers were used to that ticket stream. The mountain of tickets wasn't only a design burden — it was a habit we could redirect.</p>
@@ -1108,6 +1128,7 @@
       });
     }, { threshold: 0.35 });
     io.observe(demo);
+<<<<<<< Updated upstream
 
     /* Sync/Async merge toggle */
     var merge = document.querySelector('.js-fc-merge');
@@ -1132,6 +1153,8 @@
       }, { threshold: 0.4 });
       mio.observe(merge);
     }
+=======
+>>>>>>> Stashed changes
   });
 </script>
 </body>
