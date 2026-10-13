@@ -62,3 +62,13 @@ Recent update:
   - Animated 4-step pipeline; cover board with staggered chips
   - Homepage: replaced WIP Overview Summary card with link to Visual QA
   - Narrative: PO-gated live QA, QA ticket habit as first filter, AI-assisted residual tickets
+- 2026-10-13 — aligned site with CV (single source of truth):
+  - Titles: official job titles everywhere; "Lead" only as project scope
+    (Secure Net: Senior Product Designer · design lead; Real.de: Senior UX Designer · sole UX designer;
+    Trivago: Digital Product Designer · design lead on the project)
+  - Hero/About: "Senior Product Designer"; intro and bio rewritten in plainer voice
+  - Secure Net: reach ~0.5 million users; "NPS" renamed to average recommendation score (5.0 → 6.5 out of 10);
+    backend part credited to the vendor; added "close the app without losing progress" and optional Coach link
+  - Skills: "B2B / SaaS" -> "B2B Tools", "Team Leadership" -> "Mentoring"
+  - `assets/Anton_Tolkunov_CV.pdf` replaced with the October 2026 CV (Vodafone 2020–September 2026, drop-off 60% → 40%)
+  - TODO: add Secure Net screens showing the "you can close the app" message
