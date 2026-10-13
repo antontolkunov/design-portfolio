@@ -72,3 +72,5 @@ Recent update:
   - Skills: "B2B / SaaS" -> "B2B Tools", "Team Leadership" -> "Mentoring"
   - `assets/Anton_Tolkunov_CV.pdf` replaced with the October 2026 CV (Vodafone 2020–September 2026, drop-off 60% → 40%)
   - TODO: add Secure Net screens showing the "you can close the app" message
+- 2026-10-13 — Secure Net "Three coordinated decisions": the single result card is now centered on screens ≤768px
+  (mobile rule `left: 5%` no longer overrides the card's centering)

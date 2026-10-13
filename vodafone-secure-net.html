@@ -601,7 +601,13 @@
       .fc-converge.is-merged .fc-card--biz,
       .fc-converge.is-merged .fc-card--tech,
       .fc-converge.is-merged .fc-card--dsgn { transform: scale(0.7) !important; opacity: 0; }
-      .fc-converge .fc-card--result { width: calc(100% - 32px) !important; }
+      .fc-converge .fc-card.fc-card--result {
+        width: calc(100% - 32px) !important;
+        left: 50% !important;
+        right: auto !important;
+        transform: translate(-50%, calc(-50% + 16px)) scale(0.9) !important;
+      }
+      .fc-converge.is-merged .fc-card.fc-card--result { transform: translate(-50%, -50%) scale(1) !important; }
     }
     @media (max-width: 480px) {
       .fc-converge .fc-stage { height: 310px; }
