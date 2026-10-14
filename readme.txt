@@ -74,3 +74,4 @@ Recent update:
   - TODO: add Secure Net screens showing the "you can close the app" message
 - 2026-10-13 — Secure Net "Three coordinated decisions": the single result card is now centered on screens ≤768px
   (mobile rule `left: 5%` no longer overrides the card's centering)
+- 2026-10-14 — Secure Net: header now follows the light theme (added the `[data-theme="light"] .site-header` rule the other case pages already had)
