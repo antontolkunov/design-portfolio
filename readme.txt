@@ -7,6 +7,7 @@ Summary:
 - Design style: dark minimal editorial, responsive, with light/dark theme toggle.
 
 Recent update:
+- Favicon from the Figma export (16px black mark). Nearest-neighbor upscale to favicon.png (32) and apple-touch-icon.png (192). Linked on all live case pages.
 - Added a dedicated Mentorship section with social proof (100+ sessions),
   mentoring focus, and CTA link to ADPList booking.
 - Updated homepage copy and structure:
