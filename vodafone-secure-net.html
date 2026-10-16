@@ -174,6 +174,39 @@
       line-height: 1.75;
     }
     .section strong { color: var(--color-text); }
+
+    /* Research stats */
+    .research-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-4);
+      margin: var(--space-6) 0;
+    }
+    .research-stat {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      padding: var(--space-5);
+      text-align: center;
+    }
+    .research-stat-number {
+      font-family: var(--font-display);
+      font-size: var(--text-2xl);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.1;
+      margin-bottom: var(--space-2);
+      color: var(--color-accent);
+    }
+    .research-stat-label {
+      font-size: var(--text-xs);
+      color: var(--color-text-muted);
+      line-height: 1.45;
+    }
+    @media (max-width: 600px) {
+      .research-stats { grid-template-columns: 1fr; }
+    }
+
     .decisions-list {
       display: grid;
       gap: var(--space-6);
@@ -817,14 +850,22 @@
         <p>I directed a dedicated UX researcher to run moderated sessions in the UK before any design work began. We observed 12 users attempting the Cleaning Tool flow on their own devices, tracking where hesitation turned into abandonment.</p>
         <p>The sessions revealed that drop-off was not about confusion with the UI. Users understood what to do. They lost trust in <em>when it would end</em>. The flow gave no temporal anchors — no progress, no stage markers, no sense of how long each step would take.</p>
         <p>We mapped the emotional arc: <strong>curiosity → uncertainty → impatience → abandonment</strong>. The inflection point was consistently around step 3 of 6, where onboarding content felt repetitive and the scan had not yet started.</p>
-        <div class="case-media-grid">
-          <figure class="case-media reveal">
-            <div class="placeholder-media">Coming soon</div>
-          </figure>
-          <figure class="case-media reveal">
-            <div class="placeholder-media">Coming soon</div>
-          </figure>
+        <p>We then asked 20 participants directly: <em>what would you prefer to do while the scan is running?</em></p>
+        <div class="research-stats reveal">
+          <div class="research-stat">
+            <div class="research-stat-number">10 / 20</div>
+            <div class="research-stat-label">would leave to do other tasks on their phone — check emails, social media, etc.</div>
+          </div>
+          <div class="research-stat">
+            <div class="research-stat-number">8 / 20</div>
+            <div class="research-stat-label">would stay on the scanning page and wait</div>
+          </div>
+          <div class="research-stat">
+            <div class="research-stat-number">2 / 20</div>
+            <div class="research-stat-label">would be interested in reading security articles</div>
+          </div>
         </div>
+        <p>Half the participants wanted to leave the app entirely. Only 2 out of 20 cared about educational content during the scan. This killed the edutainment hypothesis and pointed to one clear design decision: <strong>tell people they can close the app without losing progress</strong>. Don't try to hold their attention — earn their trust by letting go.</p>
       </div>
 
       <div class="section reveal">
