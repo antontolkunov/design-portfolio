@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Spare Key — Anton Tolkunov</title>
+  <meta name="description" content="A mobile prototype that reads an error screenshot on the device, names the service, and offers one safe next step. Not shipped. The full guided path is Apple ID.">
+  <link rel="preconnect" href="https://api.fontshare.com">
+  <link href="https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@700,800,900&f[]=satoshi@400,500,700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --font-display: 'Cabinet Grotesk', 'Helvetica Neue', sans-serif;
+      --font-body: 'Satoshi', 'Inter', sans-serif;
+      --text-xs: clamp(0.75rem, 0.7rem + 0.25vw, 0.875rem);
+      --text-sm: clamp(0.875rem, 0.8rem + 0.35vw, 1rem);
+      --text-base: clamp(1rem, 0.95rem + 0.25vw, 1.125rem);
+      --text-lg: clamp(1.125rem, 1rem + 0.75vw, 1.5rem);
+      --text-xl: clamp(1.5rem, 1.2rem + 1.25vw, 2.25rem);
+      --text-2xl: clamp(2rem, 1.2rem + 2.5vw, 3.5rem);
+      --text-3xl: clamp(2.5rem, 1.5rem + 3.5vw, 4.5rem);
+      --space-2: 0.5rem; --space-3: 0.75rem; --space-4: 1rem;
+      --space-6: 1.5rem; --space-8: 2rem; --space-10: 2.5rem;
+      --space-12: 3rem; --space-16: 4rem; --space-20: 5rem;
+      --radius-md: 0.5rem; --radius-xl: 1rem;
+      --content-narrow: 760px;
+      --content-default: 1040px;
+      --content-wide: 1280px;
+      --ease: cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    :root, [data-theme="dark"] {
+      --color-bg: #0f0e0d;
+      --color-surface: #161513;
+      --color-surface-2: #1d1b19;
+      --color-border: rgba(255,255,255,0.07);
+      --color-divider: rgba(255,255,255,0.05);
+      --color-text: #e8e4dc;
+      --color-text-muted: #7a7873;
+      --color-text-faint: #3d3b38;
+      --color-accent: #c8b89a;
+      --color-accent-hover: #d9ccb8;
+    }
+    [data-theme="light"] {
+      --color-bg: #f5f4f0;
+      --color-surface: #fafaf8;
+      --color-surface-2: #fff;
+      --color-border: rgba(0,0,0,0.08);
+      --color-divider: rgba(0,0,0,0.05);
+      --color-text: #1a1917;
+      --color-text-muted: #6b6a67;
+      --color-text-faint: #c0bdb8;
+      --color-accent: #7a5c38;
+      --color-accent-hover: #5e4428;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      min-height: 100dvh;
+      font-family: var(--font-body);
+      font-size: var(--text-base);
+      color: var(--color-text);
+      background: var(--color-bg);
+      line-height: 1.6;
+    }
+    a { color: inherit; text-decoration: none; }
+
+    /* --- Header --- */
+    .site-header {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(15,14,13,0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--color-border);
+    }
+    .nav-inner {
+      max-width: var(--content-wide);
+      margin: 0 auto;
+      padding: var(--space-4) var(--space-8);
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .nav-logo {
+      font-family: var(--font-display);
+      font-weight: 700; font-size: var(--text-sm);
+      letter-spacing: -0.02em;
+    }
+    .nav-right { display: flex; align-items: center; gap: var(--space-6); }
+    .nav-right a { font-size: var(--text-sm); color: var(--color-text-muted); transition: color 200ms; }
+    .nav-right a:hover { color: var(--color-text); }
+    .theme-toggle {
+      background: none; border: 1px solid var(--color-border);
+      color: var(--color-text-muted); border-radius: 999px;
+      width: 32px; height: 32px; display: grid; place-items: center; cursor: pointer;
+      transition: color 200ms, border-color 200ms;
+    }
+    .theme-toggle:hover { color: var(--color-text); border-color: var(--color-text-muted); }
+
+    /* --- Hero --- */
+    .case-hero {
+      max-width: var(--content-default);
+      margin: 0 auto;
+      padding: var(--space-16) var(--space-8) var(--space-8);
+    }
+    .case-back {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: var(--text-sm); color: var(--color-text-muted);
+      transition: color 200ms;
+      margin-bottom: var(--space-10);
+    }
+    .case-back:hover { color: var(--color-text); }
+    .case-title {
+      font-family: var(--font-display);
+      font-size: var(--text-3xl);
+      line-height: 1.05;
+      letter-spacing: -0.03em;
+      margin-bottom: var(--space-6);
+    }
+    .case-sub {
+      color: var(--color-text-muted);
+      font-size: var(--text-lg);
+      max-width: 60ch;
+    }
+
+    /* --- Details --- */
+    .details {
+      max-width: var(--content-default);
+      margin: 0 auto var(--space-16);
+      padding: 0 var(--space-8);
+    }
+    .details-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: var(--space-4);
+      border-top: 1px solid var(--color-divider);
+      border-bottom: 1px solid var(--color-divider);
+      padding: var(--space-6) 0;
+    }
+    .detail-label {
+      font-size: var(--text-xs);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--color-text-muted);
+      margin-bottom: 0.25rem;
+    }
+    .detail-value { font-size: var(--text-sm); }
+
+    /* --- Content --- */
+    .case-content {
+      max-width: var(--content-narrow);
+      margin-inline: auto;
+      padding: 0 var(--space-8);
+    }
+    .section { margin-bottom: var(--space-16); }
+    .section-label {
+      font-size: var(--text-xs);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--color-text-muted);
+      margin-bottom: var(--space-4);
+    }
+    .section h2 {
+      font-family: var(--font-display);
+      font-size: var(--text-xl);
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      margin-bottom: var(--space-6);
+    }
+    .section p {
+      color: var(--color-text-muted);
+      margin-bottom: var(--space-4);
+      line-height: 1.75;
+    }
+    .section strong { color: var(--color-text); }
+
+    /* --- Decisions --- */
+    .decisions-list { display: grid; gap: var(--space-6); margin-top: var(--space-6); }
+    .decision-item { border-top: 1px solid var(--color-divider); padding-top: var(--space-4); }
+    .decision-item h3 {
+      font-family: var(--font-display);
+      font-size: var(--text-lg);
+      margin-bottom: var(--space-3);
+    }
+
+    /* --- Media --- */
+    figure.case-media { margin: var(--space-6) 0 0; }
+    .case-media img {
+      width: 100%; height: auto; display: block;
+      border-radius: var(--radius-xl);
+      border: 1px solid var(--color-border);
+      background: var(--color-surface);
+    }
+    .case-media figcaption {
+      margin-top: var(--space-3);
+      font-size: var(--text-sm);
+      color: var(--color-text-muted);
+      line-height: 1.55;
+    }
+    .case-media-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-4);
+      margin-top: var(--space-6);
+    }
+    .case-media-grid .case-media { margin-top: 0; }
+
+    /* --- Results --- */
+    .results-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--space-4);
+      margin-top: var(--space-6);
+    }
+    .result-card {
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-xl);
+      background: var(--color-surface);
+      padding: var(--space-6);
+    }
+    .result-title { color: var(--color-text-muted); font-size: var(--text-sm); margin-bottom: var(--space-3); }
+    .result-value {
+      font-family: var(--font-display);
+      font-size: var(--text-2xl);
+      line-height: 1;
+      letter-spacing: -0.03em;
+    }
+
+    /* --- Footer --- */
+    .footer {
+      max-width: var(--content-wide);
+      margin: var(--space-16) auto 0;
+      padding: var(--space-8);
+      border-top: 1px solid var(--color-divider);
+      color: var(--color-text-muted);
+      display: flex; justify-content: space-between; gap: var(--space-4); flex-wrap: wrap;
+    }
+
+    /* --- Animations --- */
+    .reveal { opacity: 0; transform: translateY(20px); transition: opacity 600ms var(--ease), transform 600ms var(--ease); }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* --- Responsive --- */
+    @media (max-width: 900px) {
+      .details-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 768px) {
+      .nav-inner, .case-hero, .details, .case-content, .footer { padding-inline: var(--space-4); }
+      .results-grid { grid-template-columns: 1fr; }
+      .case-media-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <nav class="nav-inner">
+      <a href="index.html" class="nav-logo">Anton Tolkunov</a>
+      <div class="nav-right">
+        <a href="index.html#work">Work</a>
+        <a href="index.html#about">About</a>
+        <a href="index.html#contact">Contact</a>
+        <button class="theme-toggle" data-theme-toggle aria-label="Switch to dark mode">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        </button>
+      </div>
+    </nav>
+  </header>
+  <main>
+    <section class="case-hero">
+      <a href="index.html#work" class="case-back">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+        All projects
+      </a>
+      <h1 class="case-title reveal">Spare Key</h1>
+      <p class="case-sub reveal">I designed a phone prototype for a parent who is stuck on an error screen and would rather call than tap. The screenshot is read on the device. Nothing is uploaded.</p>
+    </section>
+    <section class="details reveal">
+      <div class="details-grid">
+        <div><p class="detail-label">Role</p><p class="detail-value">Sole product designer</p></div>
+        <div><p class="detail-label">Platform</p><p class="detail-value">Mobile web prototype</p></div>
+        <div><p class="detail-label">Timeline</p><p class="detail-value">2026, concept</p></div>
+        <div><p class="detail-label">Reach</p><p class="detail-value">Not shipped</p></div>
+        <div><p class="detail-label">Result</p><p class="detail-value">Error screen named on the device</p></div>
+      </div>
+    </section>
+    <section class="case-content">
+      <div class="section reveal">
+        <p class="section-label">The problem</p>
+        <h2>The call happens before the tap</h2>
+        <p>A parent cannot get into an account. She mixes up services. If the Apple ID uses a Gmail address, she treats them as the same login. While she waits for someone to pick up, the fear of breaking the phone gets louder than the error itself.</p>
+        <p>The old fix was a person on the other end: TeamViewer, screenshots, an explanation at the kitchen table. She was embarrassed to ask what she called a stupid question.</p>
+        <p><strong>The job is not password recovery. It is one safe tap she can make alone.</strong></p>
+        <figure class="case-media reveal">
+          <img src="assets/zapasnoy-klyuch/sample-apple.png" alt="Sample error screen: Apple ID, wrong password, and a mention of Gmail" width="980" height="520" loading="lazy" decoding="async">
+          <figcaption>The screen she would photograph. This fixture mentions both Apple ID and Gmail, which is the actual mix-up.</figcaption>
+        </figure>
+      </div>
+      <div class="section reveal">
+        <p class="section-label">What I found</p>
+        <h2>Shame and a wrong mental model</h2>
+        <p>Interviews around this job kept returning the same three lines. I did not turn them into a persona. I used them as constraints.</p>
+        <p>If Apple ID signs in with her Gmail, she can believe it is Gmail. She is afraid of pressing the wrong thing and breaking the phone. She is embarrassed to ask her son a stupid question.</p>
+        <div class="case-media-grid">
+          <figure class="case-media reveal">
+            <img src="assets/zapasnoy-klyuch/scan.png" alt="Prototype screen asking for a photo of the error" width="800" height="1200" loading="lazy" decoding="async">
+            <figcaption>The first action is the screen she already has, not a quiz about brand names.</figcaption>
+          </figure>
+          <figure class="case-media reveal">
+            <img src="assets/zapasnoy-klyuch/read.png" alt="Prototype naming the screen as Apple ID with a wrong password" width="800" height="1200" loading="lazy" decoding="async">
+            <figcaption>It names Apple ID, warns that Gmail is also on the screen, and shows only the matched words.</figcaption>
+          </figure>
+        </div>
+      </div>
+      <div class="section reveal">
+        <p class="section-label">Design decisions</p>
+        <h2>What I refused to build</h2>
+        <div class="decisions-list">
+          <div class="decision-item">
+            <h3>1. The photo stays on the phone</h3>
+            <p>Recognition runs in the browser. The image is not sent to an account, and the full text the reader saw is not shown back. A password in the frame would otherwise become a second copy.</p>
+          </div>
+          <div class="decision-item">
+            <h3>2. Two services means say so</h3>
+            <p>When the screen contains both Apple ID and Gmail, the prototype does not pick a winner and sound sure. It says both words are there. That is the confusion the product exists for.</p>
+          </div>
+          <div class="decision-item">
+            <h3>3. Green is the only thing you press</h3>
+            <p>The visual system is the paper page from the concept, not an agency site. Ochre is the name. The serif is the headline. Forest green is reserved for the one next step. Alarm red never becomes the brand.</p>
+          </div>
+        </div>
+        <figure class="case-media reveal">
+          <img src="assets/zapasnoy-klyuch/plan.png" alt="One safe recovery step inside iPhone Settings" width="800" height="1200" loading="lazy" decoding="async">
+          <figcaption>After the screen is named, there is one path: do not guess the password again, then one step in Settings. Only Apple ID is written out this far.</figcaption>
+        </figure>
+      </div>
+      <div class="section reveal">
+        <p class="section-label">What this is not</p>
+        <h2>A working read, not a launched product</h2>
+        <p>I checked the reader against three fixture screens: Apple ID with a wrong password, Google asking for a code, and WhatsApp asking for a phone number. All three were named correctly, in the browser, without uploading the image.</p>
+        <p>Google, WhatsApp, Facebook and Gosuslugi stop at a named screen and a warning. They do not yet have a step-by-step plan. I am not going to invent a completion rate for a prototype nobody has used alone.</p>
+        <div class="results-grid">
+          <div class="result-card">
+            <p class="result-title">Before</p>
+            <p class="result-value">Call, then wait</p>
+          </div>
+          <div class="result-card">
+            <p class="result-title">In the prototype</p>
+            <p class="result-value">Screen gets a name</p>
+          </div>
+          <div class="result-card">
+            <p class="result-title">Still open</p>
+            <p class="result-value">Only Apple is guided</p>
+          </div>
+          <div class="result-card">
+            <p class="result-title">Shipped users</p>
+            <p class="result-value">None</p>
+          </div>
+        </div>
+      </div>
+      <div class="section reveal">
+        <p class="section-label">What I learned</p>
+        <h2>Detection is the cheap part</h2>
+        <p>Naming the logo does not make her press the next control. The design has to show which words it trusted, admit when two services are on the same screen, and then offer one action that cannot delete her photos.</p>
+        <p>The references I like for a portfolio site are the wrong material for this. Giant type and acid yellow would make the tool look like a studio. She needs paper, a large sentence, and a button that means go.</p>
+      </div>
+    </section>
+  </main>
+  <footer class="footer">
+    <p>&copy; 2026 Anton Tolkunov</p>
+    <p><a href="mailto:antontolkunov@me.com">antontolkunov@me.com</a></p>
+  </footer>
+  <script>
+    (function () {
+      const toggle = document.querySelector('[data-theme-toggle]');
+      const root = document.documentElement;
+      const sunSVG = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>';
+      const moonSVG = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>';
+      let theme = 'light';
+      root.setAttribute('data-theme', theme);
+      if (toggle) {
+        toggle.innerHTML = sunSVG;
+        toggle.addEventListener('click', () => {
+          theme = theme === 'dark' ? 'light' : 'dark';
+          root.setAttribute('data-theme', theme);
+          toggle.innerHTML = theme === 'dark' ? moonSVG : sunSVG;
+          toggle.setAttribute('aria-label', theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode');
+        });
+      }
+    })();
+    const revealEls = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((e) => {
+        if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); }
+      });
+    }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+    revealEls.forEach((el) => observer.observe(el));
+  </script>
+</body>
+</html>

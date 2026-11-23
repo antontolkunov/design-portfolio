@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="preconnect" href="https://api.fontshare.com">
+<link href="https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@700,800&f[]=satoshi@400,500,700&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { width: 1600px; height: 900px; overflow: hidden; }
+  body {
+    font-family: Satoshi, "Helvetica Neue", sans-serif;
+    background: #f5f4f0;
+    color: #1a1917;
+    padding: 64px 72px 56px;
+    display: grid;
+    grid-template-columns: 620px 1fr;
+    gap: 56px;
+  }
+  .kicker {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: #7a5c38;
+    margin-bottom: 22px;
+  }
+  h1 {
+    font-family: "Cabinet Grotesk", "Helvetica Neue", sans-serif;
+    font-weight: 800;
+    font-size: 58px;
+    line-height: 0.96;
+    letter-spacing: -0.035em;
+    max-width: 11ch;
+    margin-bottom: 22px;
+  }
+  .lede {
+    font-size: 20px;
+    line-height: 1.45;
+    color: #6b6a67;
+    max-width: 34ch;
+    margin-bottom: 36px;
+  }
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-bottom: 28px;
+  }
+  .stat {
+    background: #fafaf8;
+    border: 1px solid rgba(0,0,0,0.08);
+    border-radius: 14px;
+    padding: 16px 14px 14px;
+  }
+  .stat b {
+    display: block;
+    font-family: "Cabinet Grotesk", sans-serif;
+    font-size: 34px;
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    line-height: 1;
+    color: #7a5c38;
+    margin-bottom: 8px;
+  }
+  .stat span {
+    display: block;
+    font-size: 13px;
+    line-height: 1.35;
+    color: #6b6a67;
+  }
+  .ask {
+    margin-top: 8px;
+    font-size: 18px;
+    line-height: 1.4;
+    max-width: 32ch;
+    color: #1a1917;
+  }
+  .stage {
+    position: relative;
+    height: 780px;
+  }
+  .card {
+    position: absolute;
+    width: 250px;
+    background: #fff;
+    border: 1px solid rgba(0,0,0,0.08);
+    border-radius: 16px;
+    padding: 16px 16px 14px;
+    box-shadow: 0 10px 28px rgba(26,25,23,0.05);
+  }
+  .card .step {
+    display: block;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #6b6a67;
+    margin-bottom: 6px;
+  }
+  .card h4 {
+    font-family: "Cabinet Grotesk", sans-serif;
+    font-size: 18px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    margin-bottom: 4px;
+  }
+  .card p { font-size: 13px; line-height: 1.4; color: #6b6a67; }
+  .c1 { top: 18px; left: 18px; transform: rotate(-3deg); }
+  .c2 { top: 18px; left: 250px; transform: rotate(1.5deg); }
+  .c3 { top: 18px; left: 482px; transform: rotate(3deg); border-color: rgba(122,92,56,0.45); }
+  .c4 { top: 210px; left: 18px; transform: rotate(2deg); }
+  .c5 { top: 210px; left: 250px; transform: rotate(-1deg); }
+  .c6 { top: 210px; left: 482px; transform: rotate(-2.5deg); }
+  .result {
+    position: absolute;
+    left: 150px;
+    top: 430px;
+    width: 460px;
+    background: #fff;
+    border: 1px solid #7a5c38;
+    border-radius: 18px;
+    padding: 26px 28px 24px;
+    box-shadow: 0 18px 40px rgba(26,25,23,0.08);
+  }
+  .result .step { color: #7a5c38; }
+  .result h4 { font-size: 32px; margin-bottom: 8px; }
+  .result ul { list-style: none; margin-top: 14px; display: grid; gap: 8px; }
+  .result li {
+    font-size: 15px;
+    color: #6b6a67;
+    padding-left: 14px;
+    position: relative;
+    line-height: 1.35;
+  }
+  .result li::before {
+    content: "";
+    position: absolute;
+    left: 0; top: 0.45em;
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: #7a5c38;
+  }
+</style>
+</head>
+<body>
+  <div>
+    <p class="kicker">Cleaning tool · 6 steps to 2</p>
+    <h1>Six steps stood between people and the scan.</h1>
+    <p class="lede">They had heard enough storytelling by step 3 of 6. Nothing had happened yet.</p>
+    <div class="stats">
+      <div class="stat"><b>10/20</b><span>would leave and do something else</span></div>
+      <div class="stat"><b>8/20</b><span>would stay and wait on the scan</span></div>
+      <div class="stat"><b>2/20</b><span>wanted to read security articles</span></div>
+    </div>
+    <p class="ask">What is one step in your flow that exists because someone assumed users wanted it?</p>
+  </div>
+  <div class="stage" aria-hidden="true">
+    <article class="card c1"><span class="step">Step 1</span><h4>Onboarding intro</h4><p>Welcome screen before anything starts.</p></article>
+    <article class="card c2"><span class="step">Step 2</span><h4>Education carousel</h4><p>Six slides of threats and tips.</p></article>
+    <article class="card c3"><span class="step">Step 3 · drop-off</span><h4>DB update wait</h4><p>Virus definitions, still no scan.</p></article>
+    <article class="card c4"><span class="step">Step 4</span><h4>Scan</h4><p>The thing they came for.</p></article>
+    <article class="card c5"><span class="step">Step 5</span><h4>Threat list</h4><p>What was found, what to remove.</p></article>
+    <article class="card c6"><span class="step">Step 6</span><h4>Completion</h4><p>A result, finally.</p></article>
+    <article class="result">
+      <span class="step">What shipped</span>
+      <h4>Scan → Remove</h4>
+      <p>The database update moved to a silent background step. Education stayed available. It stopped blocking anyone.</p>
+      <ul>
+        <li>User-facing path cut from six steps to two</li>
+        <li>People can leave the scan without losing progress</li>
+      </ul>
+    </article>
+  </div>
+</body>
+</html>

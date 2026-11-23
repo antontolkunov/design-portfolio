@@ -218,24 +218,6 @@
       max-width: var(--content-wide);
       margin-inline: auto;
     }
-    .hero-label {
-      font-size: var(--text-xs);
-      font-weight: 600;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--color-text-muted);
-      margin-bottom: var(--space-6);
-      display: flex;
-      align-items: center;
-      gap: var(--space-3);
-    }
-    .hero-label::before {
-      content: '';
-      display: block;
-      width: 24px;
-      height: 1px;
-      background: var(--color-text-faint);
-    }
     .hero-headline {
       font-family: var(--font-display);
       font-size: var(--text-hero);
@@ -905,8 +887,7 @@
 
   <!-- HERO -->
   <section class="hero" aria-label="Introduction">
-    <p class="hero-label reveal">Senior Product Designer</p>
-    <h1 class="hero-headline reveal reveal-delay-1">Anton Tolkunov.<br><em>Senior Product Designer.</em></h1>
+    <h1 class="hero-headline reveal">Anton Tolkunov.<br><em>Senior Product Designer.</em></h1>
     <div class="hero-bottom">
       <p class="hero-tagline reveal reveal-delay-2">
         Bringing B2C clarity to complex product ecosystems.
@@ -948,6 +929,29 @@
     <div class="section-inner">
       <p class="section-label reveal">Selected Work</p>
       <div class="work-grid">
+
+        <a href="zapasnoy-klyuch.html" class="project-card card-md reveal" tabindex="0" aria-label="Spare Key">
+          <div class="card-thumb">
+            <img src="assets/zapasnoy-klyuch/read.png"
+                 alt="Spare Key naming an Apple ID password error"
+                 width="800" height="1200" loading="lazy" decoding="async">
+          </div>
+          <div class="card-body">
+            <div class="card-meta">
+              <span class="card-tag">Product design</span>
+              <span class="card-dot"></span>
+              <span class="card-tag">Prototype</span>
+            </div>
+            <h2 class="card-title">Spare Key</h2>
+            <p class="card-desc">A phone prototype that reads an error screenshot on the device and offers one safe next step. Built for a parent who calls instead of tapping. Not shipped.</p>
+          </div>
+          <div class="card-footer">
+            <span class="card-metric"><strong>On-device read</strong> · Sole designer · Concept</span>
+            <span class="card-arrow" aria-hidden="true">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
+            </span>
+          </div>
+        </a>
 
         <!-- CARD 1 — Vodafone Secure Net (XL) -->
         <a href="/vodafone-secure-net.html" class="project-card card-xl reveal" tabindex="0" aria-label="Vodafone Secure Net">

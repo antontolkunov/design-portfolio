@@ -7,6 +7,12 @@ Summary:
 - Design style: dark minimal editorial, responsive, with light/dark theme toggle.
 
 Recent update:
+- Hero has no eyebrow. The page opens on the name. Location stays in the contact line.
+- Article image for the 6-to-2 cleaning-tool story.
+  Landscape: assets/article-six-to-two.png
+  LinkedIn square, 2160×2160: assets/article-six-to-two-sq.png
+- 2026-10-21  Spare Key case and card retitled. Screenshots recaptured from the English UI.
+- 2026-10-20  Added zapasnoy-klyuch.html and a work-grid card. Concept prototype, not a shipped metric. Screenshots in assets/zapasnoy-klyuch/.
 - Favicon from the Figma export (16px black mark). Nearest-neighbor upscale to favicon.png (32) and apple-touch-icon.png (192). Linked on all live case pages.
 - Added a dedicated Mentorship section with social proof (100+ sessions),
   mentoring focus, and CTA link to ADPList booking.
