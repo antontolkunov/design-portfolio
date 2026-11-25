@@ -257,7 +257,7 @@
     }
     .hero-intro strong { color: var(--color-text); font-weight: 600; }
     .logo-wall {
-      margin-top: var(--space-12);
+      margin-top: 0;
       width: 100vw;
       margin-left: calc(50% - 50vw);
       margin-right: calc(50% - 50vw);
@@ -265,7 +265,7 @@
       mask-image: linear-gradient(to right, transparent, #000 6%, #000 94%, transparent);
       -webkit-mask-image: linear-gradient(to right, transparent, #000 6%, #000 94%, transparent);
     }
-    .logo-wall-heading {
+    .section-label.logo-wall-heading {
       margin-top: var(--space-10);
       margin-bottom: var(--space-6);
       justify-content: flex-start;
@@ -275,7 +275,7 @@
       display: flex;
       width: max-content;
       gap: var(--space-3);
-      align-items: center;
+      align-items: flex-start;
       animation: logo-marquee 32s linear infinite;
       padding-inline: var(--space-8);
     }
@@ -294,8 +294,20 @@
       filter: grayscale(1) contrast(0) brightness(0.58);
       opacity: 0.9;
     }
-    .logo-item.logo-panasonic img { height: 144px; }
-    .logo-item.logo-docsvision img { height: 96px; }
+    .logo-item.logo-panasonic,
+    .logo-item.logo-docsvision {
+      height: 48px;
+      overflow: hidden;
+      align-items: flex-start;
+    }
+    .logo-item.logo-panasonic img {
+      height: 144px;
+      margin-top: -47.9px;
+    }
+    .logo-item.logo-docsvision img {
+      height: 96px;
+      margin-top: -29.5px;
+    }
     @keyframes logo-marquee {
       from { transform: translateX(0); }
       to { transform: translateX(calc(-50% - (var(--space-3) / 2))); }

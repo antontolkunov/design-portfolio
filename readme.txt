@@ -7,6 +7,7 @@ Summary:
 - Design style: dark minimal editorial, responsive, with light/dark theme toggle.
 
 Recent update:
+- Logo marks share one line under "Companies that trust me". Panasonic and Docsvision are cropped to their ink so the empty SVG padding does not drop them.
 - Spare Key is off the homepage. The case file stays in the repo, with no card.
 - Hero has no eyebrow. The page opens on the name. Location stays in the contact line.
 - Article image for the 6-to-2 cleaning-tool story.
